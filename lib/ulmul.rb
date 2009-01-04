@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2009-01-04 15:52:34 takeshi>
+# Time-stamp: <2009-01-04 18:10:38 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 =begin
@@ -130,6 +130,12 @@ Show a help message.
  * References to figures and tables.
  * Citation.
 
+== How can I get the latest source tree of ULMUL?
+
+You can checkout the latest source tree of ULMUL anonymously from RubyForge with svn(1) command:
+
+ $ svn co svn://rubyforge.org/var/svn/ulmul/ulmul/trunk ulmul
+
 == Copying
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
@@ -151,7 +157,7 @@ Takeshi Nishimatsu (t_nissie{at}yahoo.co.jp)
 require "rubygems"
 require "date"
 require "math_ml/string"
-ULMUL_RB_VERSION = '0.1.0'
+ULMUL_RB_VERSION = '0.1.1'
 CONTENTS_RANGE_DEFAULT=2..3
 
 class String

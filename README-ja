@@ -140,6 +140,12 @@ class Ulmulの中の定数TABLEが状態遷移表です。
 これが正しい実装方法なのかよくわかりません。
 たぶんオートマトンとかを勉強した方がよいのだと思います。
 
+== 最新のソース・ツリーの入手方法
+ソース・ツリーはRubyForge.orgのSubversionレポジトリで管理されています。
+svn(1)コマンドを使って
+ $ svn co svn://rubyforge.org/var/svn/ulmul/ulmul/trunk ulmul
+とcheckoutできます。
+
 == 著作権表示
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
