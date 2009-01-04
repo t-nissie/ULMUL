@@ -1,0 +1,162 @@
+# README-ja for ULMUL -*-rd-*-
+= ULMUL (ulmul.rb) 取扱説明書
+ULMUL (ulmul.rb) は独自の軽量マークアップ言語 (Ultra Lightweight MarkUp Language) を
+(X)HTMLファイルへ変換します。文章中のTeXスタイルで書かれた数式をMathMLに変換できるのが特徴です。
+また、ウェブ・ブラウザ+CSS+XHTML+JavaScriptを使ったプレゼン環境
+HTML Slidy http://www.w3.org/Talks/Tools/Slidy/ に対応したhtmlかxhtmlも出力可能です。
+sourceforge.jpのWikiシンタックス http://sourceforge.jp/projects/sourceforge/wiki/Guide%2FWikiSyntax
+と同様なことができるようになることをめざして開発しています。
+
+http://ulmul.rubyforge.org/ がホームページです。
+http://rubyforge.org/projects/ulmul/ から関連するファイルをダウンロードすることができます。
+
+作者は作者のwebページと学会発表用のスライドを作るのにULMULを使っています。
+http://loto.sourceforge.net/feram/ のソースは
+http://loto.sourceforge.net/feram/README です。
+http://loto.sourceforge.net/feram/doc/film.xhtml というスライドは
+http://loto.sourceforge.net/feram/doc/film.txt から生成されました。
+
+
+== 特徴
+ * 文章中の２つのドル記号($)で挟まれた部分とEq.…/Eq.で挟まれた行が数式としてTeX形式からMathML形式に変換されます。
+   MathMLとはXMLで数式を記述するための規格です。込み入った規格なので人間が直接MathMLを記述する
+   ことは想定されていませんが、ULMULでやっているようにTeXなどからの変換により生成することができます。
+   Firefoxのバージョン3.0以上で読めるようです。
+   math_ml.rb http://www.hinet.mydns.jp/?mathml.rb を使っています。
+ * ウェブ・ブラウザ+CSS+XHTML+JavaScriptを使ったプレゼン環境
+   Slidy http://www.w3.org/Talks/Tools/Slidy/ に対応したhtmlかxhtmlも出力可能です。
+   ただし、PowerPointより優れたプレゼンができるかというと、そうとも限りません。
+ * =begin, =end はあってもなくてもかまいません。
+ * 行を#ではじめるとコメントになります。
+ * ライブラリとしても使えます。
+ * subs_rulesに俺ルールを加えることができます。
+ * 目次 (Contents) を自動的に生成できます。
+ * はじめの「= ABCD EFGH」がタイトルになります。Slidyの表紙にもなります。
+ * テキストファイルはutf-8で書きます。自然言語は--language=jaなどとオプションで指定できます。
+などが特徴です。
+
+== インストール方法
+２通りのインストール方法があります。
+=== I. setup.rbを使う方法
+パッケージ ulmul-X.Y.Z.tgz を次のようにインストールします:
+  $ tar zxf ulmul-X.Y.Z.tgz
+  $ cd ulmul-X.Y.Z
+  $ su
+  # ruby setup.rb
+なお、ULMULを使うにはeimxmlライブラリとmathmlライブラリとが必要です。
+=== II. RubyGemsを使えば簡単にインストールができます
+gemでインストールすればeimxmlライブラリとmathmlライブラリとは自動的にインストールされます:
+  $ su
+  # gem install ulmul
+
+== 必要なファイル
+ * ulmul.rb         Rubyスクリプト。
+ * slidy.js         Slidy用JavaScript。オリジナルをちょっとだけ改変。
+ * ulmul-slidy.css  Slidy用CSSファイル。オリジナルを大幅に改変。
+ * style.css        普通のウェブページ用CSSファイル。
+もしあなたがULMULをgemでインストールしたなら、上記のファイル
+は /usr/local/lib/ruby/gems/1.8/gems/ulmul-X.Y.Z/
+もしくは /usr/lib/ruby/gems/1.8/gems/ulmul-X.Y.Z/
+以下にあるかもしれません。
+
+== ULMULテキストの書き方
+ULMULテキストのエンコーディングにはutf-8を使ってください。
+=== 各行の種類
+==== 空行 (empty)
+空行は段落を分割します。
+==== ヘディング (heading)
+"= ", "== ", "=== ", "==== ", "===== ", または "====== " で始めてください。
+「= ABCD EFGH」ならABCD EFGHがタイトルになります。Slidyの表紙にもなります。
+==== アスタリスクで始まる行は箇条書きになります (asterisk)
+６段までネストした箇条書きが可能です:
+ " *"
+ "   *"
+ "     *"
+ "       *"
+ "         *"
+==== オフセットされて書かれた行はそのまま出力 (verbatim, pre) されます (offset)
+１つスペースを置いて書き始めた行はverbatimになります。
+==== 終わり (end)
+EOF と "=end" が出てくると処理が終了します。
+==== 無視される行 (ignore)
+Lines starting with"#" and "=begin" are ignored.
+==== その他の入力行 (normal)
+地の文になります。
+=== その他のルール
+ * "=end"より後の行はすべて無視されます。
+ * あなたのオリジナル・ルールを @subs_rules に加えることができます。
+=== 数式の書き方
+文章中の２つのドル記号($)で挟まれた部分がTeX形式からMathML形式に変換されます。
+また、Eq.…/Eq.で挟まれた行も次の例のように処理されます
+
+入力:
+ Mass $m$ can be converted into energy $E$ as
+ Eq. 1
+            E=mc^2.
+ /Eq.
+
+出力:
+
+Mass $m$ can be converted into energy $E$ as
+Eq. 1
+            E=mc^2.
+/Eq.
+
+=== 図の挿入方法
+入力:
+ Fig. 1 ruby.jpg
+   The is a dummy figure for an example.
+ /Fig.
+
+出力:
+Fig. 1 ruby.jpg
+  The is a dummy figure for an example.
+/Fig.
+
+== 使用方法
+=== 例
+ $ ruby ulmul.rb foo.txt
+ $ ruby ulmul.rb --style=style.css --name="John Smith" foo.ulmul > foo.html
+ $ ./ulmul.rb --style=ulmul-slidy.css --javascript=slidy.js \
+   --name="Takeshi Nishimatsu" presentation.txt > presentation.xhtml
+=== コマンド・ライン・オプション
+==== -s, --style
+スタイルシートのファイル名を指定します。--style=style.css などがよいでしょう。
+==== -n, --name
+あなたの名前を指定します。著作権表示に使われます。
+==== -j, --javascript
+JavaScriptのファイル名を指定します。
+==== -l, --language
+自然言語の種類を指定します。既定値は"en"です。日本語の場合は-l jaとします。
+==== -c, --contents-range
+目次の深さを指定します。既定値は"2..3"です。
+目次が必要なければ-c 3..2とします。
+==== --help
+ヘルプ情報が表示されます。
+
+== ulmul.rbの仕組み
+入力の各行をイベントとして状態遷移しています。
+class Ulmulの中の定数TABLEが状態遷移表です。
+これが正しい実装方法なのかよくわかりません。
+たぶんオートマトンとかを勉強した方がよいのだと思います。
+
+== 著作権表示
+ulmul.rb is distributed in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+You can copy, modify and redistribute ulmul.rb,
+but only under the conditions described in
+the GNU General Public License (the "GPL").
+
+W3C has copyrights for slidy.js and ulmul-slidy.css (originally
+named slidy.css). Takeshi Nishimatsu modified them.
+You can download the original package, slidy.zip, from
+http://www.w3.org/Talks/Tools/Slidy/ . You can find
+their licenses at http://www.w3.org/Consortium/Legal/copyright-documents
+and http://www.w3.org/Consortium/Legal/copyright-software .
+
+== 作者
+西松タケシ (t_nissie{at}yahoo.co.jp)
+
+# Local variables:
+#   compile-command: "rake README-ja.xhtml"
+# End:
