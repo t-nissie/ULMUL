@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2009-01-04 18:10:38 takeshi>
+# Time-stamp: <2010-02-12 00:28:39 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 =begin
@@ -157,7 +158,7 @@ Takeshi Nishimatsu (t_nissie{at}yahoo.co.jp)
 require "rubygems"
 require "date"
 require "math_ml/string"
-ULMUL_RB_VERSION = '0.1.1'
+ULMUL_RB_VERSION = '0.2.0'
 CONTENTS_RANGE_DEFAULT=2..3
 
 class String

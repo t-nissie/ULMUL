@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2009-01-04 11:56:08 takeshi>
+# Time-stamp: <2010-02-12 00:40:43 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -65,11 +65,11 @@ task :ulmul_version_rb do
 end
 
 desc "Create README-en.xhtml"
-file "README-en.xhtml" => ["bin/ulmul.rb", "style.css", "lib/ulmul.rb"] do |t|
-  sh "ruby #{t.prerequisites[0]} -c 2..3 -s #{t.prerequisites[1]} #{t.prerequisites[2]} > #{t.name}"
+file "README-en.xhtml" => ["bin/ulmul2html", "style.css", "lib/ulmul.rb"] do |t|
+  sh "ruby -I lib #{t.prerequisites[0]} -c 2..3 -s #{t.prerequisites[1]} #{t.prerequisites[2]} > #{t.name}"
 end
 
 desc "Create README-ja.xhtml"
-file "README-ja.xhtml" => ["bin/ulmul.rb", "style.css", "README-ja"] do |t|
-  sh "ruby #{t.prerequisites[0]} -c 2..3 -s #{t.prerequisites[1]} #{t.prerequisites[2]} > #{t.name}"
+file "README-ja.xhtml" => ["bin/ulmul2html", "style.css", "README-ja"] do |t|
+  sh "ruby -I lib #{t.prerequisites[0]} -c 2..3 -s #{t.prerequisites[1]} #{t.prerequisites[2]} > #{t.name}"
 end
