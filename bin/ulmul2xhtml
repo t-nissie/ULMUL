@@ -1,0 +1,69 @@
+#!/usr/bin/env ruby
+# ulmul2html
+# Time-stamp: <2010-02-12 00:34:45 takeshi>
+# Author: Takeshi Nishimatsu
+##
+=begin
+= ulmul2html
+== Usage
+=== Examples
+ % ulmul2html foo.txt
+ % ulmul2html --style=style.css --name="John Smith" foo.ulmul > foo.html
+ % ulmul2html --style=ulmul-slidy.css --javascript=slidy.js \
+   --name="Takeshi Nishimatsu" presentation.txt > presentation.xhtml
+=== Command options
+==== -s, --style
+Specify stylesheet filename.
+==== -n, --name
+Specify your name for copyright notices.
+==== -j, --javascript
+Specify JavaScript filename.
+==== -l, --language
+Specify natural language. Its default is "en".
+==== -c, --contents-range
+Range of "Contents". Its default is "2..3".
+If you do not need "Contents" at the beginning of the
+output HTML file, set it 3..2.
+==== --help
+Show a help message.
+=end
+require "ulmul"
+require "optparse"
+name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
+language = "en"
+stylesheets = []
+javascripts = []
+contents_range = CONTENTS_RANGE_DEFAULT
+opts = OptionParser.new
+def opts.usage
+  return to_s.sub(/options/,'options] [filename')
+end
+opts.on("-s STYLESHEET_FILENAME","--style STYLESHEET_FILENAME",
+        "Specify stylesheet filename."){|v| stylesheets<<v}
+opts.on("-n YOUR_NAME","--name YOUR_NAME","Specify your name."){|v| name=v}
+opts.on("-j JAVASCRIPT_FILENAME","--javascript JAVASCRIPT_FILENAME",
+        "Specify JavaScript filename."){|v| javascripts<<v}
+opts.on("-l LANGUAGE","--language LANGUAGE",String,
+        "Specify natural language. Its defalt is 'en'."){|v| language=v[0..1].downcase}
+opts.on("-c CONTENTS_RANGE","--contents-range RANGE_OF_CONTENTS_RANGE","Range of Contents."){|v|
+  begin
+    if eval(v).instance_of?(Range)
+      contents_range=eval(v)
+    else
+      raise NameError
+    end
+  rescue NameError
+    raise("Cannot evaluate given \"#{v}\" as a Range")
+  end
+}
+opts.on_tail("-h", "--help", "Show this message."){puts opts.usage; exit}
+
+opts.parse!(ARGV)
+
+u=Ulmul.new(contents_range)
+u.parse(ARGF)
+puts u.html(stylesheets,javascripts,name,language)
+
+# Local variables:
+#   compile-command: "ruby -I ../lib ./ulmul2html ulmul2html"
+# End:
