@@ -1,0 +1,72 @@
+= XHTML vs HTML5
+XHTMLとHTML5とを比較
+
+== XHTML
+=== XHTML+MathMLの例
+ <?xml version="1.0" encoding="utf-8"?>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+    "http://www.w3.org/Math/DTD/mathml2/xhtml-math11-f.dtd">
+ <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja">
+   <head>
+     <title>XHTML+MathMLの例</title>
+   </head>
+   <body>
+   <p>XHTML+MathMLの例だよ。</p>
+   <p>
+   質量<math display='inline' xmlns='http://www.w3.org/1998/Math/MathML'><mi>m</mi></math>は
+   エネルギー<math display='inline' xmlns='http://www.w3.org/1998/Math/MathML'><mi>E</mi></math>に
+   <math display='block' xmlns='http://www.w3.org/1998/Math/MathML'>
+     <mi>E</mi>
+     <mo>=</mo>
+     <mi>m</mi>
+     <msup>
+     <mi>c</mi>
+     <mn>2</mn>
+     </msup>
+   </math>
+   と転換されるよ。
+   </p>
+   </body>
+ </html>
+
+=== 比較
+ * 拡張子は.xhtml
+ * httpサーバからapplication/xhtml+xmlのMIMEタイプで送信される
+ * DTDを使ってvalid XML documentかどうかチェックされる
+ * もちろん well-formed XML document
+
+== HTML5
+=== HTML5の例（数式付き）
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset=utf-8>
+     <title>HTML5の例</title>
+   </head>
+   <body>
+   <p>HTML5の例だよ。</p>
+   <p>
+   質量<math display='inline'><mi>m</mi></math>は
+   エネルギー<math display='inline'><mi>E</mi></math>に
+   <math display='block'>
+     <mi>E</mi>
+     <mo>=</mo>
+     <mi>m</mi>
+     <msup>
+     <mi>c</mi>
+     <mn>2</mn>
+     </msup>
+   </math>
+   と転換されるよ。
+   </p>
+   </body>
+ </html>
+
+=== 比較
+ * 拡張子は.html
+ * httpサーバからtext/htmlのMIMEタイプで送信される
+
+# Local variables:
+#   compile-command: "rake XHTML-vs-HTML5.ja.html"
+#   mode: rd
+# End:
