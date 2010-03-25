@@ -29,11 +29,18 @@ XHTMLとHTML5とを比較
    </body>
  </html>
 
-=== 比較
+=== 留意点
  * 拡張子は.xhtml
  * httpサーバからapplication/xhtml+xmlのMIMEタイプで送信される
  * DTDを使ってvalid XML documentかどうかチェックされる
  * もちろん well-formed XML document
+ * 文書はhtmlをルート要素（root element＝一番の親要素）として記述
+ * このルート要素において、xmlns属性でXHTMLのXML名前空間を指定
+ * ルート要素の前に有効な文書型宣言を行なう
+
+=== 参考文献
+[Kanzaki] http://www.kanzaki.com/docs/html/xhtml1.html
+
 
 == HTML5
 === HTML5の例（数式付き）
@@ -62,9 +69,14 @@ XHTMLとHTML5とを比較
    </body>
  </html>
 
-=== 比較
+=== 留意点
  * 拡張子は.html
  * httpサーバからtext/htmlのMIMEタイプで送信される
+
+
+== 疑問点
+ * <hr> or <hr/> ?
+ * MathMLでよく使う<none/>は？
 
 # Local variables:
 #   compile-command: "rake XHTML-vs-HTML5.ja.html"
