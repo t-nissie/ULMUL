@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2010-02-12 00:40:43 takeshi>
+# Time-stamp: <2010-03-29 15:24:37 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -48,9 +48,9 @@ end
 # end
 
 desc "Publish to RubyForge"
-task :rubyforge => ["README-en.xhtml",
-                    "README-ja.xhtml",
-                    "style.css", "index.html", "favicon.ico", "ruby.jpg"] do |t|
+task :rubyforge => ["index.en.html",
+                    "index.ja.html",
+                    "style.css", "favicon.ico", "ruby.jpg"] do |t|
   t.prerequisites.each do |f|
     sh "scp #{f} t-nissie@rubyforge.org:/var/www/gforge-projects/ulmul/"
   end
@@ -64,12 +64,12 @@ task :ulmul_version_rb do
   FileUtils.copy_file('lib/ulmul.rb', ULMUL_PACKAGE_DIR + '/ulmul-' + ULMUL_RB_VERSION + '.rb')
 end
 
-desc "Create README-en.xhtml"
-file "README-en.xhtml" => ["bin/ulmul2html", "style.css", "lib/ulmul.rb"] do |t|
+desc "Create index.en.html"
+file "index.en.html" => ["bin/ulmul2html5", "style.css", "lib/ulmul.rb"] do |t|
   sh "ruby -I lib #{t.prerequisites[0]} -c 2..3 -s #{t.prerequisites[1]} #{t.prerequisites[2]} > #{t.name}"
 end
 
-desc "Create README-ja.xhtml"
-file "README-ja.xhtml" => ["bin/ulmul2html", "style.css", "README-ja"] do |t|
+desc "Create index.ja.html"
+file "index.ja.html" => ["bin/ulmul2html5", "style.css", "README-ja"] do |t|
   sh "ruby -I lib #{t.prerequisites[0]} -c 2..3 -s #{t.prerequisites[1]} #{t.prerequisites[2]} > #{t.name}"
 end
