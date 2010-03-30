@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2010-03-30 16:24:26 takeshi>
+# Time-stamp: <2010-03-30 22:45:09 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 =begin
@@ -159,7 +159,6 @@ Takeshi Nishimatsu (t_nissie{at}yahoo.co.jp)
 require "rubygems"
 require "date"
 require "math_ml/string"
-ULMUL_RB_VERSION = '0.2.0'
 
 class String
   def apply_subs_rules(rules)
@@ -226,6 +225,7 @@ class Contents
 end
 
 class Ulmul
+  VERSION = '0.3.0'
   CONTENTS_HERE="<!-- Contents -->"
   CONTENTS_RANGE_DEFAULT=2..3
   TABLE={

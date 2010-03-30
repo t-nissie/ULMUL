@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2010-03-30 18:24:04 takeshi>
+# Time-stamp: <2010-03-30 22:53:19 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -14,7 +14,7 @@ require 'archive/tar/minitar'
 require 'zlib'
 
 spec = eval(File.read("ulmul.gemspec"))
-spec.version = ULMUL_RB_VERSION
+spec.version = Ulmul::VERSION
 ULMUL_PACKAGE_DIR = '..'
 # RDOC_OPTS = %w(--title ulmul --line-numbers)
 # spec.rdoc_options = RDOC_OPTS
@@ -56,20 +56,12 @@ task :rubyforge => ["index.en.html",
   end
 end
 
-desc "Build Packages"
-task :package => [ :ulmul_version_rb ]
-
-desc "Copy lib/ulmul.rb ../ulmul-X.Y.Z.rb"
-task :ulmul_version_rb do
-  FileUtils.copy_file('lib/ulmul.rb', ULMUL_PACKAGE_DIR + '/ulmul-' + ULMUL_RB_VERSION + '.rb')
-end
-
 desc "Create index.en.html"
 file "index.en.html" => ["bin/ulmul2html5", "ulmul2html5.css", "lib/ulmul.rb"] do |t|
-  sh "ruby -I lib #{t.prerequisites[0]} -c 2..3       #{t.prerequisites[2]} > #{t.name}"
+  sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu'       #{t.prerequisites[2]} > #{t.name}"
 end
 
 desc "Create index.ja.html"
 file "index.ja.html" => ["bin/ulmul2html5", "ulmul2html5.css", "README-ja"] do |t|
-  sh "ruby -I lib #{t.prerequisites[0]} -c 2..3 -l ja #{t.prerequisites[2]} > #{t.name}"
+  sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -l ja #{t.prerequisites[2]} > #{t.name}"
 end
