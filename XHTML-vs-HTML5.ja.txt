@@ -37,6 +37,8 @@ XHTMLとHTML5とを比較
  * 文書はhtmlをルート要素（root element＝一番の親要素）として記述
  * このルート要素において、xmlns属性でXHTMLのXML名前空間を指定
  * ルート要素の前に有効な文書型宣言を行なう
+ * １行目のxml宣言はMUSTではない http://www.spacewalker.jp/webtips/xhtmlviewmode/
+ * 拡張子を.htmlにしてhttpサーバからtext/htmlのMIMEタイプで送信されるようにすればたいていのブラウザが読んでくれるみたい
 
 === 参考文献
 [Kanzaki] http://www.kanzaki.com/docs/html/xhtml1.html

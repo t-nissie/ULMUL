@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2010-03-30 12:41:01 takeshi>
+# Time-stamp: <2010-03-30 16:24:26 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 =begin
@@ -492,25 +492,31 @@ class Ulmul
     stylesheets.each{|s| style_lines << "<link rel=\"stylesheet\" href=\"#{s}\" type=\"text/css\" />\n"}
     javascript_lines=""
     javascripts.each{|j| javascript_lines << "<script src=\"#{j}\" type=\"text/javascript\"></script>\n"}
-    if @is_mathml
-      doctype_lines='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
-                     "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd">'
-      html_line="<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"#{language}\" dir=\"ltr\">"
+    if @mode=='ulmul2html5'
+      xml_line=''
+      meta_charset_line="<meta charset=utf-8>\n  "
+      doctype_lines='<!DOCTYPE html>'
+      html_line='<html>'
     else
-      doctype_lines='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+      xml_line="<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
+      meta_charset_line="<meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n  "
+      if @is_mathml
+        doctype_lines='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+                     "http://www.w3.org/Math/DTD/mathml2/xhtml-math11-f.dtd">'
+        html_line="<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"#{language}\" dir=\"ltr\">"
+      else
+        doctype_lines='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
-      html_line="<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"#{language}\" lang=\"#{language}\" dir=\"ltr\">"
+        html_line="<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"#{language}\" lang=\"#{language}\" dir=\"ltr\">"
+      end
     end
-    return "<?xml version=\"1.0\" encoding=\"utf-8\"?>
-#{doctype_lines}
-
+    return "#{xml_line}#{doctype_lines}
 #{html_line}
 <head>
-  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
-  <title>#{@title}</title>
+  #{meta_charset_line}<title>#{@title}</title>
   <meta name=\"author\" content=\"#{name}\" />
   <meta name=\"copyright\" content=\"Copyright &#169; #{Date.today.year} #{name}\" />
-  #{style_lines}#{javascript_lines}<link rel=\"shortcut icon\" href=\"favicon.ico\" />
+  #{style_lines}#{javascript_lines}  <link rel=\"shortcut icon\" href=\"favicon.ico\" />
 </head>
 <body>
 #{body()}

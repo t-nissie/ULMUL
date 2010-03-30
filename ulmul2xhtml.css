@@ -1,6 +1,6 @@
 /* -*-CSS-*-
  * style.css for index.??.html of ulmul
- * Time-stamp: <2010-03-29 15:25:15 takeshi>
+ * Time-stamp: <2010-03-30 16:08:16 takeshi>
  * Author: Takeshi NISHIMATSU
  */
 body
@@ -62,4 +62,18 @@ pre
   white-space:      pre;
   color:            darkblue;
   background-color: #f3f3f3;
+}
+
+div.figure img{
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+div.figure div.figcaption{
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }

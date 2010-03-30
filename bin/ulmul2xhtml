@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul2xhtml
-# Time-stamp: <2010-03-30 11:44:32 takeshi>
+# Time-stamp: <2010-03-30 16:06:01 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 =begin
@@ -60,7 +60,7 @@ opts.on_tail("-h", "--help", "Show this message."){puts opts.usage; exit}
 
 opts.parse!(ARGV)
 
-u=Ulmul.new(contents_range)
+u=Ulmul.new(contents_range,'ulmul2xhtml')
 u.parse(ARGF)
 puts u.html(stylesheets,javascripts,name,language)
 
