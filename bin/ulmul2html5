@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul2html5
-# Time-stamp: <2010-03-30 16:05:52 takeshi>
+# Time-stamp: <2010-03-30 18:42:10 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 =begin
@@ -59,6 +59,7 @@ opts.on("-c CONTENTS_RANGE","--contents-range RANGE_OF_CONTENTS_RANGE","Range of
 opts.on_tail("-h", "--help", "Show this message."){puts opts.usage; exit}
 
 opts.parse!(ARGV)
+stylesheets=['ulmul2html5.css'] if stylesheets==[]
 
 u=Ulmul.new(contents_range,'ulmul2html5')
 u.parse(ARGF)

@@ -114,11 +114,17 @@ Fig. 1 ruby.jpg
 /Fig.
 
 == 使用方法
+ulmul2xhtmlとulmul2html5の２つのコマンドがあります。
+どちらも出力を.htmlの拡張子を持ったファイルにリダイレクトして
+httpサーバからtext/htmlのMIMEタイプで送信されるようにすれば
+たいていのブラウザが読んでくれるみたいです。
+１行目のxml宣言を取るとうまく表示される場合もあるようです。
+
 === 例
- $ ruby ulmul.rb foo.txt
- $ ruby ulmul.rb --style=style.css --name="John Smith" foo.ulmul > foo.html
- $ ./ulmul.rb --style=ulmul-slidy.css --javascript=slidy.js \
-   --name="Takeshi Nishimatsu" presentation.txt > presentation.xhtml
+ $ ulmul2xhtml without-equations.txt > without-equations.html   # XHTML1.0 Transitional
+ $ ulmul2xhtml with-equations.txt    > with-equations.html      # XHTML1.1 + MathML2.0
+ $ ulmul2html5 with-equations.txt    > with-equations.html      # HTML5
+
 === コマンド・ライン・オプション
 ==== -s, --style
 スタイルシートのファイル名を指定します。--style=style.css などがよいでしょう。
@@ -164,5 +170,5 @@ and http://www.w3.org/Consortium/Legal/copyright-software .
 西松タケシ (t_nissie{at}yahoo.co.jp)
 
 # Local variables:
-#   compile-command: "rake README-ja.xhtml"
+#   compile-command: "rake index.ja.html"
 # End:
