@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2010-03-30 11:58:39 takeshi>
+# Time-stamp: <2010-03-30 12:41:01 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 =begin
@@ -97,6 +97,7 @@ Input:
 Output:
 Fig. 1 ruby.jpg
   The is a dummy figure for an example.
+  Cute red logo of Ruby, isn't it?
 /Fig.
 
 
@@ -538,3 +539,6 @@ class Ulmul
     end
   end
 end
+# Local variables:
+#   compile-command: "ruby -I . ../bin/ulmul2html5 -c 2..3 -s ulmul2html5.css ulmul.rb > ../index.en.html"
+# End:
