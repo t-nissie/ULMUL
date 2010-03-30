@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2010-03-29 15:30:16 takeshi>
+# Time-stamp: <2010-03-30 12:05:41 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -65,11 +65,11 @@ task :ulmul_version_rb do
 end
 
 desc "Create index.en.html"
-file "index.en.html" => ["bin/ulmul2html5", "style.css", "lib/ulmul.rb"] do |t|
+file "index.en.html" => ["bin/ulmul2html5", "ulmul2html5.css", "lib/ulmul.rb"] do |t|
   sh "ruby -I lib #{t.prerequisites[0]} -c 2..3 -s #{t.prerequisites[1]}       #{t.prerequisites[2]} > #{t.name}"
 end
 
 desc "Create index.ja.html"
-file "index.ja.html" => ["bin/ulmul2html5", "style.css", "README-ja"] do |t|
+file "index.ja.html" => ["bin/ulmul2html5", "ulmul2html5.css", "README-ja"] do |t|
   sh "ruby -I lib #{t.prerequisites[0]} -c 2..3 -s #{t.prerequisites[1]} -l ja #{t.prerequisites[2]} > #{t.name}"
 end
