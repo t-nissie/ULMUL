@@ -1,0 +1,65 @@
+/* -*-CSS-*-
+ * style.css for index.??.html of ulmul
+ * Time-stamp: <2010-03-29 15:25:15 takeshi>
+ * Author: Takeshi NISHIMATSU
+ */
+body
+{
+  color:       black;
+  font-family: verdana, arial, helvetica, sans-serif;
+}
+
+h1, h2, h3, h4, h6
+{
+  font-family: verdana, arial, helvetica, sans-serif;
+}
+
+h1
+{
+  color:            darkblue;
+  background-color: #f0f0ff;
+}
+
+h2
+{
+  border-top:       blue 5px solid;
+  border-bottom:    blue 1px solid;
+  padding-left:     8px;
+  background-color: #f0f0ff;
+}
+
+h3
+{
+  border-top:    blue 2px solid;
+  border-bottom: blue 1px solid;
+  padding-left:  4px;
+}
+
+h4
+{
+  border-top:    blue 1px solid;
+  padding-left:  4px;
+  background-color: #f0f0ff;
+}
+
+h5
+{
+  font-size:     larger;
+  font-family:   courier, verdana, arial, helvetica, sans-serif;
+  padding-top:   10px;
+  color:         darkblue;
+}
+
+pre
+{
+  font-family:      monospace, courier, verdana, arial, helvetica, sans-serif;
+  padding-right:    0.5em;
+  padding-left:     0.5em;
+  padding-top:      0.1ex;
+  padding-bottom:   0.1ex;
+  margin-left:      0.5em;
+  margin-right:     1.0em;
+  white-space:      pre;
+  color:            darkblue;
+  background-color: #f3f3f3;
+}
