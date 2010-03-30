@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
-# ulmul2html
-# Time-stamp: <2010-02-12 00:34:45 takeshi>
+# ulmul2html5
+# Time-stamp: <2010-03-30 11:44:39 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 =begin
@@ -33,7 +33,7 @@ name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
 language = "en"
 stylesheets = []
 javascripts = []
-contents_range = CONTENTS_RANGE_DEFAULT
+contents_range = Ulmul::CONTENTS_RANGE_DEFAULT
 opts = OptionParser.new
 def opts.usage
   return to_s.sub(/options/,'options] [filename')

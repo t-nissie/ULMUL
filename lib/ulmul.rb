@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2010-03-29 15:32:24 takeshi>
+# Time-stamp: <2010-03-30 11:58:39 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 =begin
@@ -159,7 +159,6 @@ require "rubygems"
 require "date"
 require "math_ml/string"
 ULMUL_RB_VERSION = '0.2.0'
-CONTENTS_RANGE_DEFAULT=2..3
 
 class String
   def apply_subs_rules(rules)
@@ -227,6 +226,7 @@ end
 
 class Ulmul
   CONTENTS_HERE="<!-- Contents -->"
+  CONTENTS_RANGE_DEFAULT=2..3
   TABLE={
     'ignore'   => {'ground'    => [],
                    'itemize'   => [],
@@ -312,7 +312,7 @@ class Ulmul
                    'figure'    => [:figure_end, 'ground']}
   }
 
-  def initialize(contents_range=CONTENTS_RANGE_DEFAULT)
+  def initialize(contents_range=CONTENTS_RANGE_DEFAULT,mode='ulmul2html5')
     @contents_range        = contents_range
     @contents              = Contents.new()
     @state                 = 'ground'
@@ -326,6 +326,19 @@ class Ulmul
                               [/(https:\S*)(\s|$)/, '<a href="\1">\1</a>\2']]
     @contents.itemize_begin(nil)
     @is_mathml = false
+
+    @mode=mode
+    if @mode=='ulmul2html5'
+      @figure_open  =  '<figure>'
+      @figure_close = '</figure>'
+      @caption_open  =  '<figcaption>'
+      @caption_close = '</figcaption>'
+    else
+      @figure_open  =  '<div class="figure">'
+      @figure_close = '</div>'
+      @caption_open  =  '<div class="figcaption">'
+      @caption_close = '</div>'
+    end
   end
   attr_accessor :subs_rules
 
@@ -344,9 +357,9 @@ class Ulmul
 
   def figure_begin(e)
     dummy, @figure_label, @figure_file = e.line.split
-    @body << "<div class=\"figure\">
+    @body << "#{@figure_open}
   <img src=\"#{@figure_file}\" alt=\"#{@figure_file}\" />
-  <div class=\"caption\">\n"
+  #{@caption_open}\n"
   end
 
   def figure_continue(e)
@@ -356,7 +369,7 @@ class Ulmul
   end
 
   def figure_end(e)
-    @body << @figure_caption << "  </div>\n" <<  "</div>\n"
+    @body << @figure_caption << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
     @figure_caption =''
   end
 
