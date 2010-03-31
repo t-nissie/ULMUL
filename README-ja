@@ -104,14 +104,18 @@ ulmul2xhtmlとulmul2html5の２つのコマンドがあります。
 
 2010年4月現在、ulmul2xhtmlの出力を.htmlの拡張子を持ったファイルにリダイレクトして
 httpサーバからtext/htmlのMIMEタイプで送信されるようにすれば
-たいていのブラウザが数式を表示してくれるようです。
-１行目のxml宣言を取るとうまく表示される場合もあるようです。
+いくつかのブラウザが数式を表示してくれるようです。
+１行目のxml宣言を取るとさらにうまく表示される場合もあります。
+
+Firefox3.6でHTML5を表示するには、URLとして about:config を入力して、
+html5.enableをfalseからtrueに変更してください。
 
 IE8はMathMLで書かれた数式を含んだHTML5をうまく表示できないようです。
 
 === 例
  $ ulmul2xhtml without-equations.txt > without-equations.html   # XHTML1.0 Transitional
  $ ulmul2xhtml with-equations.txt    > with-equations.html      # XHTML1.1 + MathML2.0
+ $ ulmul2xhtml -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j slidy.js presentation.txt > presentation.xhtml
  $ ulmul2html5 with-equations.txt    > with-equations.html      # HTML5
 
 === コマンド・ライン・オプション
