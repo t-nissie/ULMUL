@@ -1,34 +1,24 @@
-# README-ja for ULMUL -*-rd-*-
-= ULMUL (ulmul.rb) 取扱説明書
-ULMUL (ulmul.rb) は独自の軽量マークアップ言語 (Ultra Lightweight MarkUp Language) を
-(X)HTMLファイルへ変換します。文章中のTeXスタイルで書かれた数式をMathMLに変換できるのが特徴です。
-また、ウェブ・ブラウザ+CSS+XHTML+JavaScriptを使ったプレゼン環境
-HTML Slidy http://www.w3.org/Talks/Tools/Slidy/ に対応したhtmlかxhtmlも出力可能です。
-sourceforge.jpのWikiシンタックス http://sourceforge.jp/projects/sourceforge/wiki/Guide%2FWikiSyntax
-と同様なことができるようになることをめざして開発しています。
+= ULMUL取扱説明書
+ULMULは独自の軽量マークアップ言語 (Ultra Lightweight MarkUp Language) です。
+コマンドulmul2html5でHTML5に、ulmul2xhtmlでXHTMLに変換できます。
+文章中のTeXスタイルで書かれた数式をMathMLに変換できるのが特徴です。
+Rubyで書かれています。ulmul.rbをライブラリとして利用することも可能です。
 
-http://ulmul.rubyforge.org/ がホームページです。
-http://rubyforge.org/projects/ulmul/ から関連するファイルをダウンロードすることができます。
+ホームページ: http://ulmul.rubyforge.org/
 
-作者は作者のwebページと学会発表用のスライドを作るのにULMULを使っています。
-http://loto.sourceforge.net/feram/ のソースは
-http://loto.sourceforge.net/feram/README です。
-http://loto.sourceforge.net/feram/doc/film.xhtml というスライドは
-http://loto.sourceforge.net/feram/doc/film.txt から生成されました。
-
+ダウンロード: http://rubyforge.org/projects/ulmul/ または http://rubygems.org/gems/ulmul
 
 == 特徴
  * 文章中の２つのドル記号($)で挟まれた部分とEq.…/Eq.で挟まれた行が数式としてTeX形式からMathML形式に変換されます。
    MathMLとはXMLで数式を記述するための規格です。込み入った規格なので人間が直接MathMLを記述する
    ことは想定されていませんが、ULMULでやっているようにTeXなどからの変換により生成することができます。
-   Firefoxのバージョン3.0以上で読めるようです。
+   Firefoxのバージョン3.0以上やIE+MathPlayerで読めるようです。
    math_ml.rb http://www.hinet.mydns.jp/?mathml.rb を使っています。
  * ウェブ・ブラウザ+CSS+XHTML+JavaScriptを使ったプレゼン環境
-   Slidy http://www.w3.org/Talks/Tools/Slidy/ に対応したhtmlかxhtmlも出力可能です。
-   ただし、PowerPointより優れたプレゼンができるかというと、そうとも限りません。
+   Slidy http://www.w3.org/Talks/Tools/Slidy/ に対応したxhtmlが出力可能。
  * =begin, =end はあってもなくてもかまいません。
  * 行を#ではじめるとコメントになります。
- * ライブラリとしても使えます。
+ * ulmul.rbをライブラリとしても使えます。
  * subs_rulesに俺ルールを加えることができます。
  * 目次 (Contents) を自動的に生成できます。
  * はじめの「= ABCD EFGH」がタイトルになります。Slidyの表紙にもなります。
@@ -41,23 +31,11 @@ http://loto.sourceforge.net/feram/doc/film.txt から生成されました。
 パッケージ ulmul-X.Y.Z.tgz を次のようにインストールします:
   $ tar zxf ulmul-X.Y.Z.tgz
   $ cd ulmul-X.Y.Z
-  $ su
-  # ruby setup.rb
+  $ sudo ruby setup.rb
 なお、ULMULを使うにはeimxmlライブラリとmathmlライブラリとが必要です。
 === II. RubyGemsを使えば簡単にインストールができます
 gemでインストールすればeimxmlライブラリとmathmlライブラリとは自動的にインストールされます:
-  $ su
-  # gem install ulmul
-
-== 必要なファイル
- * ulmul.rb         Rubyスクリプト。
- * slidy.js         Slidy用JavaScript。オリジナルをちょっとだけ改変。
- * ulmul-slidy.css  Slidy用CSSファイル。オリジナルを大幅に改変。
- * style.css        普通のウェブページ用CSSファイル。
-もしあなたがULMULをgemでインストールしたなら、上記のファイル
-は /usr/local/lib/ruby/gems/1.8/gems/ulmul-X.Y.Z/
-もしくは /usr/lib/ruby/gems/1.8/gems/ulmul-X.Y.Z/
-以下にあるかもしれません。
+  $ sudo gem install ulmul
 
 == ULMULテキストの書き方
 ULMULテキストのエンコーディングにはutf-8を使ってください。
@@ -82,12 +60,14 @@ EOF と "=end" が出てくると処理が終了します。
 Lines starting with"#" and "=begin" are ignored.
 ==== その他の入力行 (normal)
 地の文になります。
+
 === その他のルール
  * "=end"より後の行はすべて無視されます。
  * あなたのオリジナル・ルールを @subs_rules に加えることができます。
+
 === 数式の書き方
 文章中の２つのドル記号($)で挟まれた部分がTeX形式からMathML形式に変換されます。
-また、Eq.…/Eq.で挟まれた行も次の例のように処理されます
+また、Eq.…/Eq.で挟まれた行も次の例のように処理されます。
 
 入力:
  Mass $m$ can be converted into energy $E$ as
@@ -102,6 +82,12 @@ Eq. 1
             E=mc^2.
 /Eq.
 
+数式を正しくご覧いただくには
+ * Firefox
+ * IE8 + MathPlayer http://www.dessci.com/en/products/mathplayer/
+などのブラウザを試してみて下さい。
+
+
 === 図の挿入方法
 入力:
  Fig. 1 ruby.jpg
@@ -115,10 +101,13 @@ Fig. 1 ruby.jpg
 
 == 使用方法
 ulmul2xhtmlとulmul2html5の２つのコマンドがあります。
-どちらも出力を.htmlの拡張子を持ったファイルにリダイレクトして
+
+2010年4月現在、ulmul2xhtmlの出力を.htmlの拡張子を持ったファイルにリダイレクトして
 httpサーバからtext/htmlのMIMEタイプで送信されるようにすれば
-たいていのブラウザが読んでくれるみたいです。
+たいていのブラウザが数式を表示してくれるようです。
 １行目のxml宣言を取るとうまく表示される場合もあるようです。
+
+IE8はMathMLで書かれた数式を含んだHTML5をうまく表示できないようです。
 
 === 例
  $ ulmul2xhtml without-equations.txt > without-equations.html   # XHTML1.0 Transitional
@@ -126,6 +115,8 @@ httpサーバからtext/htmlのMIMEタイプで送信されるようにすれば
  $ ulmul2html5 with-equations.txt    > with-equations.html      # HTML5
 
 === コマンド・ライン・オプション
+==== --help
+ヘルプ情報が表示されます。
 ==== -s, --style
 スタイルシートのファイル名を指定します。--style=style.css などがよいでしょう。
 ==== -n, --name
@@ -137,14 +128,16 @@ JavaScriptのファイル名を指定します。
 ==== -c, --contents-range
 目次の深さを指定します。既定値は"2..3"です。
 目次が必要なければ-c 3..2とします。
-==== --help
-ヘルプ情報が表示されます。
+
+=== 使用例
+ * http://loto.sourceforge.net/feram/
+   * ソースは http://loto.sourceforge.net/feram/README
+ * http://loto.sourceforge.net/feram/doc/film.xhtml
+   * ソースは http://loto.sourceforge.net/feram/doc/film.txt
 
 == ulmul.rbの仕組み
 入力の各行をイベントとして状態遷移しています。
-class Ulmulの中の定数TABLEが状態遷移表です。
-これが正しい実装方法なのかよくわかりません。
-たぶんオートマトンとかを勉強した方がよいのだと思います。
+定数Ulmul::TABLEが状態遷移表です。
 
 == 最新のソース・ツリーの入手方法
 ソース・ツリーはRubyForge.orgのSubversionレポジトリで管理されています。
@@ -170,5 +163,6 @@ and http://www.w3.org/Consortium/Legal/copyright-software .
 西松タケシ (t_nissie{at}yahoo.co.jp)
 
 # Local variables:
+#   mode: rd
 #   compile-command: "rake index.ja.html"
 # End:
