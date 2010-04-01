@@ -1,0 +1,154 @@
+= ULMUL (ulmul.rb)
+ULMUL (ulmul.rb) is a converter from Ultra Lightweight MarkUp Language to
+(X)HTML. You can create HTML files, Slidy HTML files and MathML XHTML
+files very easily.
+
+The author is using ULMUL to generate his web pages.
+http://loto.sourceforge.net/feram/ is converted from
+http://loto.sourceforge.net/feram/README .
+http://loto.sourceforge.net/feram/doc/film.xhtml is converted from 
+http://loto.sourceforge.net/feram/doc/film.txt .
+
+== Where is the homepage of ULMUL?
+http://ulmul.rubyforge.org/
+
+== Where can I download ulmul.rb?
+Go to http://rubyforge.org/projects/ulmul .
+
+== How can I install ULMUL?
+There are two different ways to install ULMUL.
+=== I. Conservative way; use setup.rb
+ulmul-X.Y.Z.tgz package can be installed as:
+  $ tar zxf ulmul-X.Y.Z.tgz
+  $ cd ulmul-X.Y.Z
+  $ su
+  # ruby setup.rb
+Note that the eimxml and mathml libraries are required.
+=== II. RubyGems users can take an easy way
+There is an easy way, if you are a RubyGems user:
+  $ su
+  # gem install ulmul
+If you do not have the eimxml and mathml libraries, gem will download and install the
+library automatically.
+
+=== Files
+ * ulmul.rb         Ruby script.
+ * slidy.js         JavaScript for Slidy. Slightly modified from the original.
+ * ulmul-slidy.css　CSS file for Slidy.  Largely modified from the original.
+ * style.css        Example CSS file for normal web pages.
+If you installed ULMUL with gem, you may find these files in
+/usr/local/lib/ruby/gems/1.8/gems/ulmul-X.Y.Z/
+or    /usr/lib/ruby/gems/1.8/gems/ulmul-X.Y.Z/ .
+
+== How can I write a ULMUL text?
+The encode of input file must be utf-8.
+=== Events (each input line)
+==== empty
+Empty lines devide paragraphs.
+==== heading
+Starting with "= ", "== ", "=== ", "==== ", "===== ", and "====== ".
+"= " will be used for the title.
+==== asterisk
+Lines starting with
+ " *"
+ "   *"
+ "     *"
+ "       *"
+ "         *"
+become itemize.
+==== offset
+Lines starting with some spaces but not asterisks become verbatim lines.
+==== end
+EOF or "=end" end the process.
+==== ignore
+Lines starting with"#" and "=begin" are ignored.
+==== normal
+Other lines.
+=== Other rules
+ * Lines after "=end" are ignored.
+ * Add your substitution rules to @subs_rules.
+=== Equations
+Input:
+ Mass $m$ can be converted into energy $E$ as
+ Eq. 1
+            E=mc^2.
+ /Eq.
+
+Output:
+
+Mass $m$ can be converted into energy $E$ as
+Eq. 1
+            E=mc^2.
+/Eq.
+
+=== Figures
+Input:
+ Fig. 1 ruby.jpg
+   The is a dummy figure for an example.
+ /Fig.
+
+Output:
+Fig. 1 ruby.jpg
+  The is a dummy figure for an example.
+  Cute red logo of Ruby, isn't it?
+/Fig.
+
+
+== Usage
+=== Examples
+ $ ulmul2xhtml without-equations.txt > without-equations.html   # XHTML1.0 Transitional
+ $ ulmul2xhtml with-equations.txt    > with-equations.html      # XHTML1.1 + MathML2.0
+ $ ulmul2xhtml -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j slidy.js presentation.txt > presentation.xhtml
+ $ ulmul2html5 with-equations.txt    > with-equations.html      # HTML5
+
+=== Command options
+==== -s, --style
+Specify stylesheet filename.
+==== -n, --name
+Specify your name for copyright notices.
+==== -j, --javascript
+Specify JavaScript filename.
+==== -l, --language
+Specify natural language. Its default is "en".
+==== -c, --contents-range
+Range of "Contents". Its default is "2..3".
+If you do not need "Contents" at the beginning of the
+output HTML file, set it 3..2.
+==== --help
+Show a help message.
+
+== TODO
+ * rescue syntax errors (raises) in an input file and report the
+   errors as #{$FILENAME}:#{file.lineno}:...
+ * Unit test, tests/ulmul_test.rb
+ * @body must be XML object, not a String.
+ * Tables.
+ * References to figures and tables.
+ * Citation.
+
+== How can I get the latest source tree of ULMUL?
+
+You can checkout the latest source tree of ULMUL anonymously from RubyForge with svn(1) command:
+
+ $ svn co svn://rubyforge.org/var/svn/ulmul/ulmul/trunk ulmul
+
+== Copying
+ulmul.rb is distributed in the hope that
+it will be useful, but WITHOUT ANY WARRANTY.
+You can copy, modify and redistribute ulmul.rb,
+but only under the conditions described in
+the GNU General Public License (the "GPL").
+
+W3C has copyrights for slidy.js and ulmul-slidy.css (originally
+named slidy.css). Takeshi Nishimatsu modified them.
+You can download the original package, slidy.zip, from
+http://www.w3.org/Talks/Tools/Slidy/ . You can find
+their licenses at http://www.w3.org/Consortium/Legal/copyright-documents
+and http://www.w3.org/Consortium/Legal/copyright-software .
+
+== Author of ULMUL
+Takeshi Nishimatsu (t_nissie{at}yahoo.co.jp)
+
+# Local variables:
+#   compile-command: "ruby -I . ../bin/ulmul2html5 -c 2..3 -s ulmul2html5.css ulmul.rb > ../index.en.html"
+# End:
