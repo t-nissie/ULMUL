@@ -81,6 +81,6 @@ XHTMLとHTML5とを比較
  * MathMLでよく使う<none/>は？
 
 # Local variables:
-#   compile-command: "rake XHTML-vs-HTML5.ja.html"
 #   mode: rd
+#   compile-command: "rake XHTML-vs-HTML5.ja.html"
 # End:
