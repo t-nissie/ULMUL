@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2010-04-01 09:23:14 takeshi>
+# Time-stamp: <2010-04-07 17:15:42 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -341,9 +341,9 @@ class Ulmul
     javascripts.each{|j| javascript_lines << "<script src=\"#{j}\" type=\"text/javascript\"></script>\n"}
     if @mode=='ulmul2html5'
       xml_line=''
-      meta_charset_line="<meta charset=utf-8>\n  "
-      doctype_lines='<!DOCTYPE html>'
-      html_line='<html>'
+      meta_charset_line="<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n  "
+      doctype_lines="<!DOCTYPE html>"
+      html_line="<html lang=\"#{language}\">"
     else
       xml_line="<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
       meta_charset_line="<meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n  "
