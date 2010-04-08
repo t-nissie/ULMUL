@@ -1,19 +1,17 @@
-= ULMUL (ulmul.rb)
-ULMUL (ulmul.rb) is a converter from Ultra Lightweight MarkUp Language to
-(X)HTML. You can create HTML files, Slidy HTML files and MathML XHTML
-files very easily.
+= ULMUL (Ultra Lightweight MarkUp Language)
+"ULMUL" is an original Ultra Lightweight MarkUp Language.
+ULMUL can be converted into HTML5 with "ulmul2html5" command
+and into XHTML with "ulmul2xhtml" command. TeX stile
+equations are converted into MathML. ULMUL is written in Ruby.
+You can also use ulmul.rb as a lirary.
 
-The author is using ULMUL to generate his web pages.
-http://loto.sourceforge.net/feram/ is converted from
-http://loto.sourceforge.net/feram/README .
-http://loto.sourceforge.net/feram/doc/film.xhtml is converted from 
-http://loto.sourceforge.net/feram/doc/film.txt .
+Homepage of ULMUL: http://ulmul.rubyforge.org/
 
-== Where is the homepage of ULMUL?
-http://ulmul.rubyforge.org/
+Download ULMUL from: http://rubyforge.org/projects/ulmul or http://rubygems.org/gems/ulmul
 
-== Where can I download ulmul.rb?
-Go to http://rubyforge.org/projects/ulmul .
+
+== Features
+ * Equations between two dollar marks ($) and Eq.
 
 == How can I install ULMUL?
 There are two different ways to install ULMUL.
