@@ -77,8 +77,9 @@ XHTMLとHTML5とを比較
 
 
 == 疑問点
- * <hr> or <hr/> ?
- * MathMLでよく使う<none/>は？
+ * HTML5 は <hr> or <hr/> ？
+ * MathMLでよく使う<none/>はHTML5で使ってよいの？
+ * HTML5で<p></p>の中に<math></math>を書いちゃいけないの？
 
 # Local variables:
 #   mode: rd
