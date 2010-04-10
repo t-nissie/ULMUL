@@ -83,20 +83,21 @@ Eq. 1
 /Eq.
 
 数式を正しくご覧いただくには
- * Firefox
+ * Firefox http://mozilla.jp/firefox/
  * IE8 + MathPlayer http://www.dessci.com/en/products/mathplayer/
 などのブラウザを試してみて下さい。
-
 
 === 図の挿入方法
 入力:
  Fig. 1 ruby.jpg
    The is a dummy figure for an example.
+   Cute red logo of Ruby, isn't it?
  /Fig.
 
 出力:
 Fig. 1 ruby.jpg
   The is a dummy figure for an example.
+  Cute red logo of Ruby, isn't it?
 /Fig.
 
 == 使用方法

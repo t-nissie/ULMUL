@@ -4,12 +4,11 @@ ULMUL texts can be converted into HTML5 with "ulmul2html5" command
 and into XHTML with "ulmul2xhtml" command.
 TeX stile equations are converted into MathML.
 ULMUL is written in Ruby.
-You can also use ulmul.rb as a lirary.
+You can also use ulmul.rb as a library.
 
 Homepage of ULMUL: http://ulmul.rubyforge.org/
 
 Download ULMUL from: http://rubyforge.org/projects/ulmul or http://rubygems.org/gems/ulmul
-
 
 == Features
  * TeX style equations between two dollar marks ($) and between Eq. and /Eq.
@@ -24,7 +23,7 @@ Download ULMUL from: http://rubyforge.org/projects/ulmul or http://rubygems.org/
  * Use utf-8 for ULMUL texts.
    Specify your natural language with a --language option, e.g. --language=en.
 
-== Install of ULMUL
+== Installation of ULMUL
 There are two different ways to install ULMUL.
 === I. Conservative way; use setup.rb
 ulmul-X.Y.Z.tgz package can be installed as:
@@ -44,7 +43,7 @@ library automatically.
 The encode of input file must be utf-8.
 === lines
 ==== empty
-Empty lines devide paragraphs.
+Empty lines divide paragraphs.
 ==== heading
 Starting with "= ", "== ", "=== ", "==== ", "===== ", and "====== ".
 "= " will be used for the title.
@@ -81,10 +80,16 @@ Eq. 1
             E=mc^2.
 /Eq.
 
+To view the equations in MathML correctly, please use
+ * Firefox http://mozilla.jp/firefox/
+ * IE8 + MathPlayer http://www.dessci.com/en/products/mathplayer/
+ * etc.
+
 === Figures
 Input:
  Fig. 1 ruby.jpg
    The is a dummy figure for an example.
+   Cute red logo of Ruby, isn't it?
  /Fig.
 
 Output:
@@ -93,8 +98,15 @@ Fig. 1 ruby.jpg
   Cute red logo of Ruby, isn't it?
 /Fig.
 
-
 == Usage
+There are ulmul2xhtml and ulmul2html5 commands.
+
+Use .html extensions even for ulmul2xhtml outputs.
+
+To view HTML5 documents,
+change the setting of the "html5.enable" entry to "true" in "about:config".
+See http://kb.mozillazine.org/About:config for details.
+
 === Examples
  $ ulmul2xhtml without-equations.txt > without-equations.html   # XHTML1.0 Transitional
  $ ulmul2xhtml with-equations.txt    > with-equations.html      # XHTML1.1 + MathML2.0
@@ -102,6 +114,8 @@ Fig. 1 ruby.jpg
  $ ulmul2html5 with-equations.txt    > with-equations.html      # HTML5
 
 === Command options
+==== --help
+Show a help message.
 ==== -s, --style
 Specify stylesheet filename.
 ==== -n, --name
@@ -114,8 +128,12 @@ Specify natural language. Its default is "en".
 Range of "Contents". Its default is "2..3".
 If you do not need "Contents" at the beginning of the
 output HTML file, set it 3..2.
-==== --help
-Show a help message.
+
+=== ULMUL and Slidy examples
+ * http://loto.sourceforge.net/feram/
+   * Its source is http://loto.sourceforge.net/feram/README
+ * http://loto.sourceforge.net/feram/doc/film.xhtml
+   * It is a Slidy presentation made from http://loto.sourceforge.net/feram/doc/film.txt
 
 == TODO
  * rescue syntax errors (raises) in an input file and report the
@@ -123,14 +141,12 @@ Show a help message.
  * Unit test, tests/ulmul_test.rb
  * @body must be XML object, not a String.
  * Tables.
- * References to figures and tables.
+ * References to figures, tables and code.
  * Citation.
  * Include highlighted code between Code.../Code.
 
-== How can I get the latest source tree of ULMUL?
-
+== Subversion repository
 You can checkout the latest source tree of ULMUL anonymously from RubyForge with svn(1) command:
-
  $ svn co svn://rubyforge.org/var/svn/ulmul/ulmul/trunk ulmul
 
 == Copying
@@ -151,5 +167,6 @@ and http://www.w3.org/Consortium/Legal/copyright-software .
 Takeshi Nishimatsu (t_nissie{at}yahoo.co.jp)
 
 # Local variables:
-#   compile-command: "ruby -I . ../bin/ulmul2html5 -c 2..3 -s ulmul2html5.css ulmul.rb > ../index.en.html"
+#   mode: rd
+#   compile-command: "rake index.en.html"
 # End:
