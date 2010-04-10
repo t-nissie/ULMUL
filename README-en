@@ -1,8 +1,9 @@
 = ULMUL (Ultra Lightweight MarkUp Language)
 "ULMUL" is an original Ultra Lightweight MarkUp Language.
-ULMUL can be converted into HTML5 with "ulmul2html5" command
-and into XHTML with "ulmul2xhtml" command. TeX stile
-equations are converted into MathML. ULMUL is written in Ruby.
+ULMUL texts can be converted into HTML5 with "ulmul2html5" command
+and into XHTML with "ulmul2xhtml" command.
+TeX stile equations are converted into MathML.
+ULMUL is written in Ruby.
 You can also use ulmul.rb as a lirary.
 
 Homepage of ULMUL: http://ulmul.rubyforge.org/
@@ -11,9 +12,19 @@ Download ULMUL from: http://rubyforge.org/projects/ulmul or http://rubygems.org/
 
 
 == Features
- * Equations between two dollar marks ($) and Eq.
+ * TeX style equations between two dollar marks ($) and between Eq. and /Eq.
+   will be converted into MathML. You can use Firefox version 3.x, IE+MathPlayer,
+   etc. to read MathML.
+ * ulmul2xhtml output is good with the Slidy presentation environment
+   http://www.w3.org/Talks/Tools/Slidy/ using Firefox+CSS+XHTML+JavaScript.
+ * Lines starting from "#" are comments.
+ * You can add your conversion rules to @subs_rules.
+ * List of contents will be automatically generated.
+ * "= ABC EFGH" will be the document title and the cover page of Slidy.
+ * Use utf-8 for ULMUL texts.
+   Specify your natural language with a --language option, e.g. --language=en.
 
-== How can I install ULMUL?
+== Install of ULMUL
 There are two different ways to install ULMUL.
 === I. Conservative way; use setup.rb
 ulmul-X.Y.Z.tgz package can be installed as:
@@ -29,18 +40,9 @@ There is an easy way, if you are a RubyGems user:
 If you do not have the eimxml and mathml libraries, gem will download and install the
 library automatically.
 
-=== Files
- * ulmul.rb         Ruby script.
- * slidy.js         JavaScript for Slidy. Slightly modified from the original.
- * ulmul-slidy.css　CSS file for Slidy.  Largely modified from the original.
- * style.css        Example CSS file for normal web pages.
-If you installed ULMUL with gem, you may find these files in
-/usr/local/lib/ruby/gems/1.8/gems/ulmul-X.Y.Z/
-or    /usr/lib/ruby/gems/1.8/gems/ulmul-X.Y.Z/ .
-
-== How can I write a ULMUL text?
+== How to write ULMUL texts
 The encode of input file must be utf-8.
-=== Events (each input line)
+=== lines
 ==== empty
 Empty lines devide paragraphs.
 ==== heading
@@ -123,6 +125,7 @@ Show a help message.
  * Tables.
  * References to figures and tables.
  * Citation.
+ * Include highlighted code between Code.../Code.
 
 == How can I get the latest source tree of ULMUL?
 
