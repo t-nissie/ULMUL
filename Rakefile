@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2010-04-01 08:37:35 takeshi>
+# Time-stamp: <2010-04-10 17:43:20 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -50,18 +50,21 @@ end
 desc "Publish to RubyForge"
 task :rubyforge => ["index.en.html",
                     "index.ja.html",
-                    "style.css", "favicon.ico", "ruby.jpg"] do |t|
+                    "index.var",
+                    "ulmul2xhtml.css", "favicon.ico", "ruby.jpg"] do |t|
   t.prerequisites.each do |f|
-    sh "scp #{f} t-nissie@rubyforge.org:/var/www/gforge-projects/ulmul/"
+    sh "scp #{f}          t-nissie@rubyforge.org:/var/www/gforge-projects/ulmul/"
   end
+  sh   "scp index.en.html t-nissie@rubyforge.org:/var/www/gforge-projects/ulmul/index.html"
+  sh   "scp dot.htaccess  t-nissie@rubyforge.org:/var/www/gforge-projects/ulmul/.htaccess"
 end
 
 desc "Create index.en.html"
 file "index.en.html" => ["bin/ulmul2xhtml", "ulmul2xhtml.css", "README-en", "lib/ulmul.rb"] do |t|
-  sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -l en #{t.prerequisites[2]} > #{t.name}"
+  sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -l en #{t.prerequisites[2]} | sed -e 's%</h1>%</h1><div class=\"navi\">[<a href=\"index.en.html\">English</a>/<a href=\"index.ja.html\">Japanese</a>]</div>%' > #{t.name}"
 end
 
 desc "Create index.ja.html"
 file "index.ja.html" => ["bin/ulmul2xhtml", "ulmul2xhtml.css", "README-ja", "lib/ulmul.rb"] do |t|
-  sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -l ja #{t.prerequisites[2]} > #{t.name}"
+  sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -l ja #{t.prerequisites[2]} | sed -e 's%</h1>%</h1><div class=\"navi\">[<a href=\"index.en.html\">English</a>/<a href=\"index.ja.html\">Japanese</a>]</div>%' > #{t.name}"
 end

@@ -1,6 +1,6 @@
 /* -*-CSS-*-
  * style.css for index.??.html of ulmul
- * Time-stamp: <2010-03-30 16:08:16 takeshi>
+ * Time-stamp: <2010-04-10 17:45:16 takeshi>
  * Author: Takeshi NISHIMATSU
  */
 body
@@ -77,3 +77,6 @@ div.figure div.figcaption{
     margin-right: auto;
     display: block;
 }
+
+div.navi { text-align: right;
+	   margin-right: 1.0em; }
