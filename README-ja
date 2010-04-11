@@ -116,7 +116,7 @@ IE8はMathMLで書かれた数式を含んだHTML5をうまく表示できない
 === 例
  $ ulmul2xhtml without-equations.txt > without-equations.html   # XHTML1.0 Transitional
  $ ulmul2xhtml with-equations.txt    > with-equations.html      # XHTML1.1 + MathML2.0
- $ ulmul2xhtml -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j slidy.js presentation.txt > presentation.xhtml
+ $ ulmul2xhtml -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j ulmul-slidy.js presentation.txt > presentation.xhtml
  $ ulmul2html5 with-equations.txt    > with-equations.html      # HTML5
 
 === コマンド・ライン・オプション
@@ -157,8 +157,9 @@ You can copy, modify and redistribute ulmul.rb,
 but only under the conditions described in
 the GNU General Public License (the "GPL").
 
-W3C has copyrights for slidy.js and ulmul-slidy.css (originally
-named slidy.css). Takeshi Nishimatsu modified them.
+W3C has copyrights for ulmul-slidy.js and ulmul-slidy.css.
+Their original names were slidy.js and slidy.css, respectively.
+Takeshi Nishimatsu slightly modified them.
 You can download the original package, slidy.zip, from
 http://www.w3.org/Talks/Tools/Slidy/ . You can find
 their licenses at http://www.w3.org/Consortium/Legal/copyright-documents
