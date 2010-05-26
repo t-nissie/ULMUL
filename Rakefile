@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2010-04-10 17:43:20 takeshi>
+# Time-stamp: <2010-05-26 17:48:08 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -57,6 +57,12 @@ task :rubyforge => ["index.en.html",
   end
   sh   "scp index.en.html t-nissie@rubyforge.org:/var/www/gforge-projects/ulmul/index.html"
   sh   "scp dot.htaccess  t-nissie@rubyforge.org:/var/www/gforge-projects/ulmul/.htaccess"
+end
+
+desc "Create presentation.en.xhtml from README-en"
+file "presentation.en.xhtml" => ["bin/ulmul2xhtml", "ulmul-slidy.css", "README-en",
+                                                    "ulmul-slidy.js", "lib/ulmul.rb"] do |t|
+  sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -s #{t.prerequisites[1]} -j #{t.prerequisites[3]} -l en #{t.prerequisites[2]} > #{t.name}"
 end
 
 desc "Create index.en.html"
