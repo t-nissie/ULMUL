@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2010-04-01 15:25:05 takeshi>
+# Time-stamp: <2010-05-25 21:34:42 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -18,7 +18,9 @@ Gem::Specification.new do |s|
                         'README-en' << 'index.en.html' <<
                         'README-ja' << 'index.ja.html' <<
                         'Rakefile' << 'ulmul.gemspec' << 'setup.rb' <<
-                        'ruby.jpg' << 'slidy.js' << 'ulmul-slidy.css'
+                        'ruby.jpg' <<
+                        'ulmul-slidy.js' <<
+                        'ulmul-slidy.css'
   s.author            = 'Takeshi Nishimatsu'
   s.email             = 't-nissie@imr.tohoku.ac.jp'
   s.rubyforge_project = 'ulmul'

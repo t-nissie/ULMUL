@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2010-04-07 17:15:42 takeshi>
+# Time-stamp: <2010-05-26 17:04:08 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -72,7 +72,7 @@ class Contents
 end
 
 class Ulmul
-  VERSION = '0.3.0'
+  VERSION = '0.4.0'
   CONTENTS_HERE="<!-- Contents -->"
   CONTENTS_RANGE_DEFAULT=2..3
   TABLE={
