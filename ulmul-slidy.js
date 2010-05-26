@@ -1,6 +1,6 @@
-/* slidy.js
+/* ulmul-slidy.js
 
-   Copyright (c) 2005 W3C (MIT, ERCIM, Keio), All Rights Reserved.
+   Copyright (c) 2005-2009 W3C (MIT, ERCIM, Keio), All Rights Reserved.
    W3C liability, trademark, document use and software licensing
    rules apply, see:
 
@@ -8,7 +8,7 @@
    http://www.w3.org/Consortium/Legal/copyright-software
 
 
-   Slightly modified by Takeshi Nishimatsu in 2007-09-21:
+   From slidy.js to ulmul-slidy.js, slightly modified by Takeshi Nishimatsu in 2007-09-21:
    Original: if (node.nodeName == "H1" || node.nodeName == "h1")
    This one: if (node.nodeName == "H1" || node.nodeName == "h1" || node.nodeName == "H2" || node.nodeName == "h2")
 
@@ -17,24 +17,54 @@
 var ns_pos = (typeof window.pageYOffset!='undefined');
 var khtml = ((navigator.userAgent).indexOf("KHTML") >= 0 ? true : false);
 var opera = ((navigator.userAgent).indexOf("Opera") >= 0 ? true : false);
+var ie = (typeof document.all != "undefined" && !opera);
 var ie7 = (!ns_pos && navigator.userAgent.indexOf("MSIE 7") != -1);
+var ie8 = (!ns_pos && navigator.userAgent.indexOf("MSIE 8") != -1);
+var slidy_started = false;
 
-window.onload = startup; // equivalent to onload on body element
+if (ie && !ie8)
+  document.write("<iframe id='historyFrame' src='javascript:\"<html"+"></"+"html>\"' height='1' width='1' style='position:absolute;left:-800px'></iframe>");
 
 // IE only event handlers to ensure all slides are printed
 // I don't yet know how to emulate these for other browsers
-window.onbeforeprint = beforePrint;
-window.onafterprint = afterPrint;
+if (typeof beforePrint != 'undefined')
+{
+  window.onbeforeprint = beforePrint;
+  window.onafterprint = afterPrint;
+}
 
-// hack to hide slides while loading
-setTimeout(hideAll, 50);
+// to avoid a clash with other scripts or onload attribute on <body>
+// we use something smarter than window.onload
+//window.onload = startup;
 
-function hideAll()
+
+if (ie)
+  setTimeout(ieSlidyInit, 100);
+else if (document.addEventListener)
+  document.addEventListener("DOMContentLoaded", startup, false);
+
+function ieSlidyInit()
+{
+  if (//document.readyState == "interactive" ||
+      document.readyState == "complete" ||
+      document.readyState == "loaded")
+  {
+    startup();
+  }
+  else
+  {
+    setTimeout(ieSlidyInit, 100);
+  }
+}
+
+setTimeout(hideSlides, 50);
+
+function hideSlides()
 {
   if (document.body)
     document.body.style.visibility = "hidden";
   else
-    setTimeout(hideAll, 50);
+    setTimeout(hideSlides, 50);
 }
 
 var slidenum = 0;     // integer slide count: 0, 1, 2, ...
@@ -64,7 +94,6 @@ var sizeIndex = 0;
 var sizeAdjustment = 0;
 var sizes = new Array("10pt", "12pt", "14pt", "16pt", "18pt", "20pt",
                       "22pt", "24pt", "26pt", "28pt", "30pt", "32pt");
-
 var okayForIncremental = incrementalElementList();
 
 // needed for efficient resizing
@@ -93,8 +122,22 @@ var strings_es = {
    };
 
 strings_es[helpText] =
-    "Utilice el ratón, barra espaciadora, teclas Izda/Dhca, " +
+    "Utilice el ratón, barra espaciadora, teclas Izda/Dcha, " +
     "o Re pág y Av pág. Use S y B para cambiar el tamaño de fuente.";
+
+var strings_ca = {
+ "slide":"pàg..",
+ "help?":"Ajuda",
+ "contents?":"Índex",
+ "table of contents":"taula de continguts",
+ "Table of Contents":"Taula de Continguts",
+ "restart presentation":"Reiniciar presentació",
+ "restart?":"Inici"
+  };
+
+strings_ca[helpText] =
+   "Utilitzi el ratolí, barra espaiadora, tecles Esq./Dta. " +
+   "o Re pàg y Av pàg. Usi S i B per canviar grandària de font.";
 
 var strings_nl = {
   "slide":"pagina",
@@ -121,8 +164,8 @@ var strings_de = {
    };
 
 strings_de[helpText] =
-    "Benutzen Sie die Maus, Leerschlag, die Cursortasten links/rechts" +
-    "oder Page up/Page Down zum Wechseln der Seiten und S und B für die Schriftgrösse.";
+    "Benutzen Sie die Maus, Leerschlag, die Cursortasten links/rechts oder " +
+    "Page up/Page Down zum Wechseln der Seiten und S und B für die Schriftgrösse.";
 
 var strings_pl = {
   "slide":"slajd",
@@ -149,9 +192,9 @@ var strings_fr = {
   };
 
 strings_fr[helpText] =
-    "Naviguez avec la souris, la barre d'espace, les flèches" +
+    "Naviguez avec la souris, la barre d'espace, les flèches " +
     "gauche/droite ou les touches Pg Up, Pg Dn. Utilisez " +
-    "les touches S et B pour modifier la taille de la police.";
+    "les touches S et B pour modifier la taille de la police.";
 
 var strings_hu = {
   "slide":"oldal",
@@ -164,8 +207,10 @@ var strings_hu = {
    };
 
 strings_hu[helpText] =
-    "Az oldalak közti lépkedéshez kattintson az egérrel, vagy használja a szóköz, a bal, vagy a jobb nyíl, " +
-    "illetve a Page Down, Page Up billentyűket. Az S és a B billentyűkkel változtathatja a szöveg méretét.";
+    "Az oldalak közti lépkedéshez kattintson az egérrel, vagy " +
+    "használja a szóköz, a bal, vagy a jobb nyíl, illetve a Page Down, " +
+    "Page Up billentyűket. Az S és a B billentyűkkel változtathatja " +
+    "a szöveg méretét.";
 
 var strings_it = {
   "slide":"pag.",
@@ -210,11 +255,40 @@ strings_ja[helpText] =
     "マウス左クリック ・ スペース ・ 左右キー " +
     "または Page Up ・ Page Downで操作， S ・ Bでフォントサイズ変更";
 
+var strings_zh = {
+  "slide":"幻灯片",
+  "help?":"帮助?",
+  "contents?":"内容?",
+  "table of contents":"目录",
+  "Table of Contents":"目录",
+  "restart presentation":"重新启动展示",
+  "restart?":"重新启动?"
+};
+
+strings_zh[helpText] =
+  "用鼠标点击, 空格条, 左右箭头, Pg Up 和 Pg Dn 导航. " +
+  "用 S, B 改变字体大小.";
+
+var strings_ru = {
+  "slide":"слайд",
+  "help?":"помощь?",
+  "contents?":"содержание?",
+  "table of contents":"оглавление",
+  "Table of Contents":"Оглавление",
+  "restart presentation":"перезапустить презентацию",
+  "restart?":"перезапуск?"
+   };
+
+strings_ru[helpText] =
+    "Перемещайтесь кликая мышкой, используя клавишу пробел, стрелки" +
+    "влево/вправо или Pg Up и Pg Dn. Клавиши S и B меняют размер шрифта.";
+
 
 // each such language array is declared in the localize array
 // used indirectly as in help.innerHTML = "help".localize();
 var localize = {
      "es":strings_es,
+     "ca":strings_ca,
      "nl":strings_nl,
      "de":strings_de,
      "pl":strings_pl,
@@ -222,12 +296,21 @@ var localize = {
      "hu":strings_hu,
      "it":strings_it,
      "el":strings_el,
-     "jp":strings_ja
+     "jp":strings_ja,
+     "zh":strings_zh,
+     "ru":strings_ru
    };
 
 /* general initialization */
 function startup()
 {
+   if (slidy_started)
+   {
+      alert("already started");
+      return;
+   }
+   slidy_started = true;
+
    // find human language from html element
    // for use in localizing strings
    lang = document.body.parentNode.getAttribute("lang");
@@ -284,7 +367,9 @@ function startup()
    document.onkeydown = keyDown;
    window.onresize  = resized;
    window.onscroll = scrolled;
+   window.onunload = unloaded;
    singleSlideView();
+
 
    setLocation();
    resized();
@@ -293,6 +378,7 @@ function startup()
      setTimeout("ieHack()", 100);
 
    showToolbar();
+   setInterval("checkLocation()", 200); // for back button detection
 }
 
 // add localize method to all strings for use
@@ -351,6 +437,11 @@ function ieHack()
 {
    window.resizeBy(0,-1);
    window.resizeBy(0, 1);
+}
+
+function unloaded(e)
+{
+  //alert("unloaded");
 }
 
 // Firefox reload SVG bug work around
@@ -518,23 +609,6 @@ function showToolbar()
    catch (e)
    {
    }
-}
-
-function test()
-{
-   var s = "docH: " + documentHeight() +
-       " winH: " + lastHeight +
-       " yoffset: " + scrollYOffset() +
-       " toolbot: " + (documentHeight() - lastHeight - scrollYOffset());
-
-   //alert(s);
-
-   var slide = slides[slidenum];
-   // IE getAttribute requires "class" to be "className"
-   var name = ns_pos ? "class" : "className";
-   var style = (slide.currentStyle ? slide.currentStyle["backgroundColor"] :
-       document.defaultView.getComputedStyle(slide, '').getPropertyValue("background-color"));
-   alert("class='" + slide.getAttribute(name) + "' backgroundColor: " + style);
 }
 
 function hideToolbar()
@@ -771,11 +845,17 @@ function keyDown(event)
 
     if (key == 34) // Page Down
     {
+       if (viewAll)
+         return true;
+
        nextSlide(false);
        return cancel(event);
     }
     else if (key == 33) // Page Up
     {
+       if (viewAll)
+         return true;
+
        previousSlide(false);
        return cancel(event);
     }
@@ -935,8 +1015,7 @@ function mouseButtonClick(e)
    }
    else leftclick = true;
 
-   // dismiss table of contents
-   hideTableOfContents();
+   //alert("selected text length = "+selectedTextLen);
 
    if (selectedTextLen > 0)
    {
@@ -946,12 +1025,16 @@ function mouseButtonClick(e)
       return false;
    }
 
+   // dismiss table of contents
+   hideTableOfContents();
+
    // check if target is something that probably want's clicks
    // e.g. embed, object, input, textarea, select, option
 
    if (mouseClickEnabled && leftclick &&
         target.nodeName != "EMBED" &&
         target.nodeName != "OBJECT" &&
+        target.nodeName != "VIDEO" &&
         target.nodeName != "INPUT" &&
         target.nodeName != "TEXTAREA" &&
         target.nodeName != "SELECT" &&
@@ -1086,6 +1169,22 @@ function lastSlide()
       setEosStatus(true);
       setLocation();
    }
+}
+
+// first slide is 0
+function gotoSlide(num)
+{
+  //alert("going to slide " + (num+1));
+  var slide = slides[slidenum];
+  hideSlide(slide);
+  slidenum = num;
+  slide = slides[slidenum];
+  lastShown = null;
+  setVisibilityAllIncremental("hidden");
+  setEosStatus(!nextIncrementalItem(lastShown));
+  document.title = title + " (" + (slidenum+1) + ")";
+  showSlide(slide);
+  showSlideNumber();
 }
 
 function setEosStatus(state)
@@ -1248,35 +1347,49 @@ function hasToken(str, token)
 
 function getClassList(element)
 {
-  if (typeof window.pageYOffset =='undefined')
-    return element.getAttribute("className");
+  if (typeof element.className != 'undefined')
+    return element.className;
 
-  return element.getAttribute("class");
+  var clsname = (ns_pos||ie8) ? "class" : "className";
+  return element.getAttribute(clsname);
 }
 
 function hasClass(element, name)
 {
   var regexp = new RegExp("(^| )" + name + "\W*");
 
-  if (regexp.test(getClassList(element)))
-    return true;
+  if (typeof element.className != 'undefined')
+    return regexp.test(element.className);
 
-  return false;
-
+  var clsname = (ns_pos||ie8) ? "class" : "className";
+  return regexp.test(element.getAttribute(clsname));
 }
 
 function removeClass(element, name)
 {
-  // IE getAttribute requires "class" to be "className"
-  var clsname = ns_pos ? "class" : "className";
-  var clsval = element.getAttribute(clsname);
-
   var regexp = new RegExp("(^| )" + name + "\W*");
+  var clsval = "";
 
-  if (clsval)
+  if (typeof element.className != 'undefined')
   {
-    clsval = clsval.replace(regexp, "");
-    element.setAttribute(clsname, clsval);
+     clsval = element.className;
+
+     if (clsval)
+     {
+       clsval = clsval.replace(regexp, "");
+       element.className = clsval;
+     }
+  }
+  else
+  {
+    var clsname = (ns_pos||ie8) ? "class" : "className";
+    clsval = element.getAttribute(clsname);
+
+    if (clsval)
+    {
+      clsval = clsval.replace(regexp, "");
+      element.setAttribute(clsname, clsval);
+    }
   }
 }
 
@@ -1284,10 +1397,15 @@ function addClass(element, name)
 {
   if (!hasClass(element, name))
   {
-    // IE getAttribute requires "class" to be "className"
-    var clsname = ns_pos ? "class" : "className";
-    var clsval = element.getAttribute(clsname);
-    element.setAttribute(clsname, (clsval ? clsval + " " + name : name));
+    if (typeof element.className != 'undefined')
+      element.className += " " + name;
+    else
+    {
+      var clsname = (ns_pos||ie8) ? "class" : "className";
+      var clsval = element.getAttribute(clsname);
+      clsval = clsval ? clsval + " " + name : name;
+      element.setAttribute(clsname, clsval);
+    }
   }
 }
 
@@ -1314,7 +1432,7 @@ function wrapImplicitSlides()
       node = heading.nextSibling;
 
       div = document.createElement("div");
-      div.setAttribute((ns_pos ? "class" : "className"), "slide");
+      addClass(div, "slide");
       document.body.replaceChild(div, heading);
       div.appendChild(heading);
 
@@ -1731,6 +1849,9 @@ function pageAddress(uri)
 {
    var i = uri.indexOf("#");
 
+   if (i < 0)
+     i = uri.indexOf("%23");
+
    // check if anchor is entire page
 
    if (i < 0)
@@ -1745,20 +1866,71 @@ function showSlideNumber()
            (slidenum + 1) + "/" + slides.length;
 }
 
+// every 200mS check if the location has been changed as a
+// result of the user activating the Back button/menu item
+// doesn't work for Opera < 9.5
+function checkLocation()
+{
+  var hash = location.hash;
+
+  if (slidenum > 0 && (hash == "" || hash == "#"))
+    gotoSlide(0);
+  else if (hash.length > 2 && hash != "#("+(slidenum+1)+")")
+  {
+    var num = parseInt(location.hash.substr(2));
+
+    if (!isNaN(num))
+      gotoSlide(num-1);
+  }
+}
+
+// this doesn't push location onto history stack for IE
+// for which a hidden iframe hack is needed: load page into
+// the iframe with script that set's parent's location.hash
+// but that won't work for standalone use unless we can
+// create the page dynamically via a javascript: URL
 function setLocation()
 {
    var uri = pageAddress(location.href);
+   var hash = "#(" + (slidenum+1) + ")";
 
-   //if (slidenum > 0)
-      uri = uri + "#(" + (slidenum+1) + ")";
+   if (slidenum >= 0)
+      uri = uri + hash;
 
-   if (uri != location.href && !khtml)
+   if (ie && !ie8)
+      pushHash(hash);
+
+   if (uri != location.href /*&& !khtml */)
       location.href = uri;
 
-   document.title = title + " (" + (slidenum+1) + ")";
-   //document.title = (slidenum+1) + ") " + slideName(slidenum);
+   if (khtml)
+      hash = "(" + (slidenum+1) + ")";
 
+   if (!ie && location.hash != hash && location.hash != "")
+     location.hash = hash;
+
+   document.title = title + " (" + (slidenum+1) + ")";
    showSlideNumber();
+}
+
+// only used for IE6 and IE7
+function onFrameLoaded(hash)
+{
+  location.hash = hash;
+  var uri = pageAddress(location.href);
+  location.href = uri + hash;
+}
+
+// history hack with thanks to Bertrand Le Roy
+function pushHash(hash)
+{
+  if (hash == "") hash = "#(1)";
+  window.location.hash = hash;
+  var doc = document.getElementById("historyFrame").contentWindow.document;
+  doc.open("javascript:'<html></html>'");
+  doc.write("<html><head><script type=\"text/javascript\">parent.onFrameLoaded('"+
+    (hash) + "');</script></head><body>hello mum</body></html>");
+  doc.close();
 }
 
 // find current slide based upon location
@@ -1876,8 +2048,7 @@ function slideName(index)
 
 // find first h1 element in DOM tree
 function findHeading(node)
-{
-  if (!node || node.nodeType != 1)
+{  if (!node || node.nodeType != 1)
     return null;
 
   if (node.nodeName == "H1" || node.nodeName == "h1" || node.nodeName == "H2" || node.nodeName == "h2")
@@ -1959,7 +2130,7 @@ function findSizeAdjust()
          return 1 * content;
    }
 
-   return 0;
+   return 1;
 }
 
 function addToolbar()
@@ -2006,17 +2177,8 @@ function addToolbar()
       var gap2 = document.createTextNode(" ");
       left.appendChild(gap2);
 
-      var i = location.href.indexOf("#");
-
-      // check if anchor is entire page
-
-      if (i > 0)
-         page = location.href.substr(0, i);
-      else
-         page = location.href;
-
       var start = document.createElement("a");
-      start.setAttribute("href", page);
+      start.setAttribute("href", "javascript:firstSlide()");
       start.setAttribute("title", "restart presentation".localize());
       start.innerHTML = "restart?".localize();
 //    start.setAttribute("href", "javascript:printSlides()");
@@ -2082,17 +2244,8 @@ function addToolbar()
       var gap2 = document.createTextNode(" ");
       toolbar.appendChild(gap2);
 
-      var i = location.href.indexOf("#");
-
-      // check if anchor is entire page
-
-      if (i > 0)
-         page = location.href.substr(0, i);
-      else
-         page = location.href;
-
       var start = document.createElement("a");
-      start.setAttribute("href", page);
+      start.setAttribute("href", "javascript:firstSlide()");
       start.setAttribute("title", "restart presentation".localize());
       start.innerHTML = "restart?".localize();
 //    start.setAttribute("href", "javascript:printSlides()");
@@ -2385,9 +2538,14 @@ function tableOfContents()
       this.first.focus();
   }
 
+  toc.onmouseup = mouseButtonUp;
+
   toc.onclick = function (e) {
     e||(e=window.event);
-    hideTableOfContents();
+
+    if (selectedTextLen <= 0)
+       hideTableOfContents();
+
     stopPropagation(e);
     
     if (e.cancel != undefined)
