@@ -1,3 +1,9 @@
+2010-05-26  Takeshi Nishimatsu  <t-nissie@imr.tohoku.ac.jp>
+
+	* ulmul.gemspec: slidy.js -> ulmul-slidy.js
+	                 Original slidy.js of 2009 is used.
+	                 Version 0.4.0.
+
 2008-12-27  Takeshi Nishimatsu
 
 	* lib/ulmul.rb: documents for release.
