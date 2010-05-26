@@ -144,7 +144,6 @@ output HTML file, set it 3..2.
  * References to figures, tables and code.
  * Citation.
  * Include highlighted code between Code.../Code.
- * slidy.js -> ulmul-slidy.js
 
 == Subversion repository
 You can checkout the latest source tree of ULMUL anonymously from RubyForge with svn(1) command:
@@ -166,7 +165,7 @@ their licenses at http://www.w3.org/Consortium/Legal/copyright-documents
 and http://www.w3.org/Consortium/Legal/copyright-software .
 
 == Author of ULMUL
-Takeshi Nishimatsu (t_nissie{at}yahoo.co.jp)
+Takeshi Nishimatsu (t_nissie{at}yahoo.co.jp) http://t-nissie.users.sourceforge.net/
 
 # Local variables:
 #   mode: rd
