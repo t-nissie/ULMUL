@@ -16,6 +16,7 @@ Download ULMUL from: http://rubyforge.org/projects/ulmul or http://rubygems.org/
    etc. to read MathML.
  * ulmul2xhtml output is good with the Slidy presentation environment
    http://www.w3.org/Talks/Tools/Slidy/ using Firefox+CSS+XHTML+JavaScript.
+   Please use ulmul-slidy.js and ulmul-slidy.css in the package.
  * Lines starting from "#" are comments.
  * You can add your conversion rules to @subs_rules.
  * List of contents will be automatically generated.

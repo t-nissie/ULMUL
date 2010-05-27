@@ -16,6 +16,7 @@ Rubyで書かれています。ulmul.rbをライブラリとして利用する�
    math_ml.rb http://www.hinet.mydns.jp/?mathml.rb を使っています。
  * ウェブ・ブラウザ+CSS+XHTML+JavaScriptを使ったプレゼン環境
    Slidy http://www.w3.org/Talks/Tools/Slidy/ に対応したxhtmlが出力可能。
+   パッケージの中の ulmul-slidy.js と ulmul-slidy.css とを使ってください。
  * =begin, =end はあってもなくてもかまいません。
  * 行を#ではじめるとコメントになります。
  * ulmul.rbをライブラリとしても使えます。
@@ -102,6 +103,8 @@ Fig. 1 ruby.jpg
 
 == 使用方法
 ulmul2xhtmlとulmul2html5の２つのコマンドがあります。
+特に指定がなければ ulmul2xhtml.css と ulmul2html5.css とがそれぞれのCSSファイルのなります。
+これら２つのファイルはパッケージに同梱されています。
 
 2010年4月現在、ulmul2xhtmlの出力を.htmlの拡張子を持ったファイルにリダイレクトして
 httpサーバからtext/htmlのMIMEタイプで送信されるようにすれば
