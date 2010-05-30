@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2010-05-30 23:42:12 takeshi>
+# Time-stamp: <2010-05-30 23:49:09 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -42,4 +42,5 @@ Gem::Specification.new do |s|
      Visit its project homepage http://ulmul.rubyforge.org/ .
 
      Use ulmul-slidy.js and ulmul-slidy.css in the ulmul package for your presentations using Firefox.
+     EOF
 end
