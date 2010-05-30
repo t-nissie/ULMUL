@@ -135,6 +135,8 @@ output HTML file, set it 3..2.
    * Its source is http://loto.sourceforge.net/feram/README
  * http://loto.sourceforge.net/feram/doc/film.xhtml
    * It is a Slidy presentation made from http://loto.sourceforge.net/feram/doc/film.txt
+ * http://ulmul.rubyforge.org/index.en.html
+   * Its source is http://loto.sourceforge.net/README-en (this document)
 
 == TODO
  * rescue syntax errors (raises) in an input file and report the
@@ -151,6 +153,8 @@ You can checkout the latest source tree of ULMUL anonymously from RubyForge with
  $ svn co svn://rubyforge.org/var/svn/ulmul/ulmul/trunk ulmul
 
 == Copying
+Copyright © 2008-2010 by Takeshi Nishimatsu
+
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 You can copy, modify and redistribute ulmul.rb,

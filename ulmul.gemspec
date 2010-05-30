@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2010-05-25 21:34:42 takeshi>
+# Time-stamp: <2010-05-30 23:42:12 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -33,6 +33,13 @@ Gem::Specification.new do |s|
   s.add_dependency('mathml', '>=0.8.1')
 
   s.description       = <<-EOF
-     ULMUL is an Ultra Lightweight Mark-Up Language.
-     EOF
+     "ULMUL" is an original Ultra Lightweight MarkUp Language.
+     ULMUL texts can be converted into HTML5 with "ulmul2html5" command
+     and into XHTML with "ulmul2xhtml" command.
+     TeX style equations are converted into MathML.
+     ULMUL is written in Ruby.
+     You can also use ulmul.rb as a library.
+     Visit its project homepage http://ulmul.rubyforge.org/ .
+
+     Use ulmul-slidy.js and ulmul-slidy.css in the ulmul package for your presentations using Firefox.
 end

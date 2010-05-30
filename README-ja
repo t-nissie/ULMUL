@@ -24,7 +24,6 @@ Rubyで書かれています。ulmul.rbをライブラリとして利用する�
  * 目次 (Contents) を自動的に生成できます。
  * はじめの「= ABCD EFGH」がタイトルになります。Slidyの表紙にもなります。
  * テキストファイルはutf-8で書きます。自然言語は--language=jaなどとオプションで指定できます。
-などが特徴です。
 
 == インストール方法
 ２通りのインストール方法があります。
@@ -142,6 +141,8 @@ JavaScriptのファイル名を指定します。
    * ソースは http://loto.sourceforge.net/feram/README
  * http://loto.sourceforge.net/feram/doc/film.xhtml
    * ソースは http://loto.sourceforge.net/feram/doc/film.txt
+ * http://ulmul.rubyforge.org/index.ja.html
+   * ソースは http://loto.sourceforge.net/README-ja （この文章）
 
 == ulmul.rbの仕組み
 入力の各行をイベントとして状態遷移しています。
@@ -154,6 +155,8 @@ svn(1)コマンドを使って
 とcheckoutできます。
 
 == 著作権表示
+Copyright © 2008-2010 by Takeshi Nishimatsu
+
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
 You can copy, modify and redistribute ulmul.rb,
