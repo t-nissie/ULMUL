@@ -142,7 +142,7 @@ JavaScriptのファイル名を指定します。
  * http://loto.sourceforge.net/feram/doc/film.xhtml
    * ソースは http://loto.sourceforge.net/feram/doc/film.txt
  * http://ulmul.rubyforge.org/index.ja.html
-   * ソースは http://loto.sourceforge.net/README-ja （この文章）
+   * ソースは http://ulmul.rubyforge.org/README-ja （この文章）
 
 == ulmul.rbの仕組み
 入力の各行をイベントとして状態遷移しています。

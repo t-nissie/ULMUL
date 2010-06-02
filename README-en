@@ -136,7 +136,7 @@ output HTML file, set it 3..2.
  * http://loto.sourceforge.net/feram/doc/film.xhtml
    * It is a Slidy presentation made from http://loto.sourceforge.net/feram/doc/film.txt
  * http://ulmul.rubyforge.org/index.en.html
-   * Its source is http://loto.sourceforge.net/README-en (this document)
+   * Its source is http://ulmul.rubyforge.org/README-en (this document)
 
 == TODO
  * rescue syntax errors (raises) in an input file and report the
