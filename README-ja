@@ -32,9 +32,9 @@ Rubyで書かれています。ulmul.rbをライブラリとして利用する�
   $ tar zxf ulmul-X.Y.Z.tgz
   $ cd ulmul-X.Y.Z
   $ sudo ruby setup.rb
-なお、ULMULを使うにはeimxmlライブラリとmathmlライブラリとが必要です。
+なお、ULMULを使うにはeim_xmlライブラリとmath_mlライブラリとが必要です。
 === II. RubyGemsを使えば簡単にインストールができます
-gemでインストールすればeimxmlライブラリとmathmlライブラリとは自動的にインストールされます:
+gemでインストールすればeim_xmlライブラリとmath_mlライブラリとは自動的にインストールされます:
   $ sudo gem install ulmul
 
 == ULMULテキストの書き方

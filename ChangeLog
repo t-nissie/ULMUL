@@ -1,3 +1,8 @@
+2010-06-06   Takeshi Nishimatsu  <t-nissie@imr.tohoku.ac.jp>
+
+	* ulmul.gemspec: mathml -> math_ml
+	                 Version 0.4.1.
+
 2010-05-26  Takeshi Nishimatsu  <t-nissie@imr.tohoku.ac.jp>
 
 	* ulmul.gemspec: slidy.js -> ulmul-slidy.js

@@ -32,12 +32,12 @@ ulmul-X.Y.Z.tgz package can be installed as:
   $ cd ulmul-X.Y.Z
   $ su
   # ruby setup.rb
-Note that the eimxml and mathml libraries are required.
+Note that the eim_xml and math_ml libraries are required.
 === II. RubyGems users can take an easy way
 There is an easy way, if you are a RubyGems user:
   $ su
   # gem install ulmul
-If you do not have the eimxml and mathml libraries, gem will download and install the
+If you do not have the eim_xml and math_ml libraries, gem will download and install the
 library automatically.
 
 == How to write ULMUL texts
