@@ -1,12 +1,12 @@
 # ulmul.rb
-# Time-stamp: <2010-06-16 10:04:28 takeshi>
+# Time-stamp: <2010-06-16 10:43:25 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
 require "date"
 require "math_ml/string"
 
-# For m17n of Ruby 1.9.x. Thanks, Masayoshi Takahashi-san.
+# For m17n of Ruby 1.9.x. Thanks, Masayoshi Takahashi-san [ruby-list:47159].
 if defined?(Encoding) && Encoding.respond_to?("default_external")
   Encoding.default_external = "UTF-8"
 end
