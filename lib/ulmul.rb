@@ -1,11 +1,15 @@
-#!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2010-06-06 20:10:52 takeshi>
+# Time-stamp: <2010-06-16 10:04:28 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
 require "date"
 require "math_ml/string"
+
+# For m17n of Ruby 1.9.x. Thanks, Masayoshi Takahashi-san.
+if defined?(Encoding) && Encoding.respond_to?("default_external")
+  Encoding.default_external = "UTF-8"
+end
 
 class String
   def apply_subs_rules(rules)
@@ -310,7 +314,6 @@ class Ulmul
     itemize_continue_primitive(new_level,str)
     @is_mathml = @is_mathml || is_mathml
   end
-
 
   def parse(fd)
     while line=fd.gets || line="=end\n"

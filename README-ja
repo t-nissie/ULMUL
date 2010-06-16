@@ -121,11 +121,6 @@ IE8はMathMLで書かれた数式を含んだHTML5をうまく表示できない
  $ ulmul2xhtml -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j ulmul-slidy.js presentation.txt > presentation.xhtml
  $ ulmul2html5 with-equations.txt    > with-equations.html      # HTML5
 
-Ruby 1.9.x で "invalid byte sequence in US-ASCII (ArgumentError)" のエラーが出てしまうときは、
- $ LANG=ja_JP.UTF-8 ulmul2html5 README-ja
- % env LANG=ja_JP.UTF-8 ulmul2html5 README-ja     # For csh and tcsh users
-などを試してみて下さい。
-
 === コマンド・ライン・オプション
 ==== --help
 ヘルプ情報が表示されます。
