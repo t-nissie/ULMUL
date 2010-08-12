@@ -1,5 +1,5 @@
 # ulmul.rb
-# Time-stamp: <2010-06-16 10:43:25 takeshi>
+# Time-stamp: <2010-08-12 19:41:42 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -331,7 +331,7 @@ class Ulmul
 
   def body
     if @contents_range.first<=@contents_range.last
-      @body.sub(CONTENTS_HERE,"<br />Contents:"+@contents.body)
+      @body.sub(CONTENTS_HERE,"<br />\n<div class=\"contents\">\nContents:"+@contents.body+"</div>\n")
     else
       @body
     end
