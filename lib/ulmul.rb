@@ -1,5 +1,5 @@
 # ulmul.rb
-# Time-stamp: <2010-08-12 19:41:42 takeshi>
+# Time-stamp: <2010-09-27 14:31:45 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -76,7 +76,7 @@ class Contents
 end
 
 class Ulmul
-  VERSION = '0.4.1'
+  VERSION = '0.4.2'
   CONTENTS_HERE="<!-- Contents -->"
   CONTENTS_RANGE_DEFAULT=2..3
   TABLE={
