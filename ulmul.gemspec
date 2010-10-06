@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2010-06-06 20:09:18 takeshi>
+# Time-stamp: <2010-10-06 20:58:27 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
 # s.extra_rdoc_files  = %w(README)
 
   s.add_dependency('math_ml', '>=0.9')
+  s.add_dependency('aasm',    '>=2.2.0')
 
   s.description       = <<-EOF
      "ULMUL" is an original Ultra Lightweight MarkUp Language.
