@@ -1,13 +1,10 @@
-#! /usr/bin/env ruby
-# isi_test.rb -*-ruby-*-
-# Time-stamp: <2008-01-01 17:43:26 takeshi>
+# ulmul_test.rb -*-ruby-*-
+# Time-stamp: <2010-10-06 18:43:08 takeshi>
 # Author: Takeshi NISHIMATSU
 ##
-require 'rubygems'
-require 'rubyunit'
-require 'ulmul'
+require 'test_helper'
 
-class TestISI < RUNIT::TestCase
+class TestISI < Test::Unit::TestCase
   def test_exist_Ulmul
     assert_instance_of(Class, Ulmul)
   end
