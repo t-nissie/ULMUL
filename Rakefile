@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2010-05-26 17:48:08 takeshi>
+# Time-stamp: <2010-10-06 16:51:12 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -33,7 +33,8 @@ task :default => [ :test ]
 desc "Run the unit and functional tests"
 task :test
 Rake::TestTask.new do |t|
-  t.test_files = FileList['tests/*.rb']
+  t.libs << 'lib' << 'test'
+  t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end
 
