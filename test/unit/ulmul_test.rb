@@ -1,8 +1,10 @@
 # ulmul_test.rb -*-ruby-*-
-# Time-stamp: <2010-10-06 18:43:08 takeshi>
+# Time-stamp: <2010-10-06 20:14:21 t-nissie>
 # Author: Takeshi NISHIMATSU
 ##
-require 'test_helper'
+require 'rubygems'
+require 'test/unit'
+require 'ulmul'
 
 class TestISI < Test::Unit::TestCase
   def test_exist_Ulmul
