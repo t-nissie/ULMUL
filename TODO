@@ -1,0 +1,2 @@
+* Check s.files and s.test_files in ulmul.gemspec.
+  There is no tests/ulmul_test.rb and "{html}/**/*".

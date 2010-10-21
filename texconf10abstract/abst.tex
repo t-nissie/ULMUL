@@ -1,0 +1,75 @@
+\documentclass[a4paper,12pt]{jarticle}
+\usepackage{graphicx}
+\setlength{\oddsidemargin}{-5.4mm}  % 25.4 - 5.4 = 20
+\setlength{\topmargin}{-17mm}
+\setlength{\textwidth}{170mm}       % 210 - 20*2 = 170 mm
+\setlength{\textheight}{264mm}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+  {\Large \bf TeXで数式が書ける軽量マークアップ言語ULMULの開発}
+
+  \bigskip
+
+  {東北大学金属材料研究所\ \ \ \ 西松毅}
+
+  {\tt t-nissie[at]imr.tohoku.ac.jp\ \ \ \ \ http://t-nissie.users.sourceforge.net/}
+
+  \smallskip
+
+  2010年10月23日
+\end{center}
+
+\noindent{\bf 概要}　ULMULは独自の軽量マークアップ言語 (Ultra Lightweight MarkUp Language) です\cite{ulmul.rubyforge.org}。
+ULMULテキストはシンプルなのでそのままでも読みやすく、
+また、コマンド{\tt ulmul2html5}でHTML5に、
+{\tt ulmul2xhtml}でXHTMLに変換できます。
+文章中のTeXスタイルで書かれた数式をMathMLに変換できるのが特徴です。
+FirefoxとCascading Style Sheets (CSS)とJavaScriptと
+を使ったプレゼン環境HTML Slidy\cite{Slidy}に対応したXHTMLも出力可能になっています。
+科学系のドキュメントのテキストファイル、Webページ、
+プレゼンスライドを一括して作ることができます。
+Firefox等のWebブラウザでは、MathML（とHTML5）への対応が進み、
+数式を含む文章の表示が可能になりつつあります。
+
+\bigskip
+
+\noindent{\bf 実装と配布}　ULMULの本体は数百行のRubyコードです。
+MathMLライブラリ\cite{ruby-mathml}を利用しています。
+バージョン0.4.xではわざわざ独自に実装してしまった状態遷移表を用いて構文解析をしています。
+次のバージョンからなんらかの有限状態機械 (Finite State Machine) ライブラリを導入します。
+GNU General Public License バージョン3 (GPLv3) の条件下で再配布が可能なフリーソフトウエアです。
+Rubyの標準ソフトウエアパッケージであるRubyGemsになっていますので
+``{\tt sudo gem install ulmul}''だけでインストールが可能です\cite{ulmul-rubygems}。
+
+\bigskip
+
+\noindent{\bf 将来展望}　数式用のさまざまな書体の文字や数学の記号に
+Unicodeのコードポイントがそれぞれ割り当てられ、
+今年になってSTIX Fontsも正式にリリースされました\cite{STIX}。
+紙、Web、PDF、ワープロ文書などの媒体を問わず、
+数式の表示と表現が新しい局面を迎えています。
+\LaTeX とMS Wordの中間のような
+科学用の美文書作成システムが現れることを期待しています。
+すなわち、\LaTeX より章立てや箇条書きや数式の可読性が高い、
+数式用のさまざまな書体がそのまま使われているテキストファイルがソースになります。
+ソースの編集と表示はEmacsなどのエディタが支援しますが、
+MS Wordほどの機能はなく、たとえばフォントのサイズは指定できません。
+そのソースをULMULのように処理をすることにより「美文書」が出来上がるというシステムです。
+
+%\bigskip
+%
+%\noindent{\bf 蛇足}　ドナウ川の支流のオルト川の支流のAita川の支流にUlmul川があるそうです\cite{UlmulRiver}。
+
+% ULMULの使用例
+%  * http://ulmul.rubyforge.org/index.ja.html
+%    ソースは http://ulmul.rubyforge.org/README-ja
+%  * http://loto.sourceforge.net/feram/
+%    ソースは http://loto.sourceforge.net/feram/README
+%  * http://loto.sourceforge.net/feram/doc/film.xhtml （Slidyの使用例）
+%    ソースは http://loto.sourceforge.net/feram/doc/film.txt
+% （数式とSlidyはFirefoxでないと正常に表示されないかもしれません）
+
+\bibliographystyle{ulmul}
+\bibliography{ulmul}
+\end{document}
