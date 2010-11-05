@@ -1,0 +1,17 @@
+また昨年に引き続き，会期終了後に発刊される "Asian Journal of TeX" 誌（ http://ajt.ktug.kr/ ）に 
+(post-)proceedings 
+の特集を組みます．特集号への掲載を希望される場合は，2010 年 11 月 23 
+日までに，原稿をtexconf10{at}googlegroups.com 
+宛にお送りください．投稿規程などは http://ajt.ktug.kr/authors.html をご覧ください．
+
+
+--- ajt.cls.original	2010-11-05 16:32:40.000000000 +0900
++++ ajt.cls		2010-11-05 22:18:36.000000000 +0900
+@@ -77,6 +77,7 @@
+   \addtolength\oddsidemargin{1.5mm}
+   \addtolength\evensidemargin{-1.5mm}
+ \fi
++\fi
+ \setlength\textheight{210mm}
+ \setlength\headheight{12pt}
+ \setlength\headsep{14pt}
