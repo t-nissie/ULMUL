@@ -1,6 +1,6 @@
 % nishimatsu-ajt.tex
 % Manuscript for ULMUL
-% Time-stamp: <2010-11-08 09:38:24 takeshi>
+% Time-stamp: <2010-11-23 21:32:18 takeshi>
 %%
 \documentclass{ajt}            % run with pdflatex or xelatex
 
@@ -19,34 +19,55 @@
 %\DefineShortVerb{\|}
 
 %%% Mandatory article metadata %%%
-\title{How to prepare a document with AJT class}
+\title[You can write TeX style equations.]{Development of a Ultra Lightweight MarkUp Language (ULMUL)}
 %\title[Subtitle here]{How to prepare a document with AJT class}
 \author{Takeshi Nishimatsu}
-\address{Department of Typesetting, \TeX\ University}
+\address{Institute for Materials Research (IMR), Tohoku University, Sendai 980-8577, JAPAN}
 \email{t-nissie@imr.tohoku.ac.jp}
-\keywords{bbb bbb bbb}
-\abstract{aldjf dfkjadlf dlfajdlf dfajdl
-aaaaaaa aaaaaaaa aaaaaaaaaa}
+\keywords{XHTML, HTML5, MathML, presentation, HTML Slidy, Firefox}
+\abstract{``ULMUL'' is an original Ultra Lightweight MarkUp Language.
+ULMUL texts can be converted into HTML5 with ``ulmul2html5'' command
+and into XHTML with ``ulmul2xhtml'' command.
+TeX style equations are converted into MathML.
+ULMUL is written in Ruby.
+}
+
 
 \begin{document}
-
-%%% Do not forget to start with \maketitle!
 \maketitle
 
-\section{aaa}
-aaaaaaaaa aaaaaaaaaaa aaaaaaaaaaa\cite{ruby-mathml}.
+\section{Introduction}
+There are many markup languages for the pretty typesetting.
+For example,
+HTML is one of the most famous markup languages,
+Ruby Document format (RD)\cite{RDtool} and
+RDoc\cite{RDoc} are widely used in Ruby communities, and
+ReVIEW is designed for the digital publishing\cite{ReVIEW}.
+Here, I introduce an original Ultra Lightweight MarkUp Language, named ULMUL,
+which I am developing for the pretty typesetting and presentations
+with mathematical equations.
 
-\subsection{bbbb bbbb bbbb}
-aaaa aaaaa aaaa aaaaaaa aaaaa aaaaaa\cite{ulmul-rubyforge-org}.
-aaaa aaaaa aaaa aaaaaaa aaaaa aaaaaa.
-aaaa aaaaa aaaa aaaaaaa aaaaa aaaaaa.
-aaaa aaaaa aaaa aaaaaaa aaaaa aaaaaa.
-
-\subsection{ccc ccc ccc}
+\section{Features}
+ULMUL only has simple and low functions.
+ULMUL texts should be written in the UTF-8 encodeing.
 aaaa aaaaa aaaa aaaaaaa aaaaa aaaaaa\cite{Slidy}.
 aaaa aaaaa aaaa aaaaaaa aaaaa aaaaaa\cite{ulmul-rubygems}.
 aaaa aaaaa aaaa aaaaaaa aaaaa aaaaaa.
 aaaa aaaaa aaaa aaaaaaa aaaaa aaaaaa.
+
+
+
+\section{Implementation}
+Currently, the main library file of ULMUL is about 300 lines of Ruby code.
+The MathML library\cite{ruby-mathml} is employed for the TeX to MathML Processing.
+A finite state machine is applied for parsing ULMUL text.
+I distribute ULMUL as free software under the conditions described in
+the GNU General Public License (the "GPL").
+Because I prepare ``gem'' packages of every versions of ULMUL from {\tt RubyGems.org},
+You can install ULMUL merely with ``{\tt sudo gem install ulmul}''.
+
+\section{Future of ULMUL}
+``ulmul2latex'' command.
 
 \bibliographystyle{nishimatsu-ajt} %original bst
 \bibliography{nishimatsu-ajt}

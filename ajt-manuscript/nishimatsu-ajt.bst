@@ -174,7 +174,7 @@ FUNCTION {format.names}
   if$
     { namesleft #0 > }
     { useabbrev
-        { s nameptr "{f. }{vv~}{ll}{, jj}" format.name$ 't := }
+        { s nameptr "{ff }{vv~}{ll}{, jj}" format.name$ 't := }
         { s nameptr "{ff }{vv~}{ll}{, jj}" format.name$ 't := }
       if$
       nameptr #1 >
