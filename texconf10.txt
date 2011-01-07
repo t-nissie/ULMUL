@@ -124,11 +124,13 @@ Fig. 1 ruby.jpg
  * ulmul.rbは数百行のRubyコード
  * math_ml.rbライブラリを利用
  * ulmul.rbをライブラリとして利用することも可能
+ * 
  * 入力の各行をイベントとして状態遷移
  * 定数Ulmul::TABLEが状態遷移表
  * aasm有限状態機械ライブラリに移行予定
 
 == 将来展望
+ * 単体テスト (unit test) の充実
  * エラーメッッセージの充実
  * 表と色づけだれたコード
  * eq:Hamiltonian, fig:foo, tab:bar, cod:baz などで式、図、表、コードの参照
