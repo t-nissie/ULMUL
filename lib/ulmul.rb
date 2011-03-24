@@ -1,10 +1,10 @@
 # ulmul.rb
-# Time-stamp: <2010-10-06 21:01:51 takeshi>
+# Time-stamp: <2011-03-24 22:15:49 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
-require "date"
-require "math_ml/string"
+#require "date"
+#require "math_ml/string"
 require "aasm"
 
 # For m17n of Ruby 1.9.x. Thanks, Masayoshi Takahashi-san [ruby-list:47159].
@@ -31,37 +31,55 @@ class String
 end
 
 module Itemize
-  def itemize_begin(e)
+  def cb_itemize_begin(line=nil)
     @level_of_state = 0
   end
 
-  def itemize_add_primitive(new_level,str)
+  def cb_itemize_add_item(line)
+    new_level = case line
+                when         /^ \* (.*)/ then 1
+                when       /^   \* (.*)/ then 2
+                when     /^     \* (.*)/ then 3
+                when   /^       \* (.*)/ then 4
+                when /^         \* (.*)/ then 5
+                else raise 'Illegal astarisk line for itemize'
+                end
+    str = Regexp.last_match[1]  #.apply_subs_rules(@subs_rules)
     if new_level>@level_of_state+1
       raise 'Illegal jump of itemize level'
     elsif new_level==@level_of_state+1
-      @body << "\n" << "    "*@level_of_state << "<ul>\n"
-      @body <<              "    "*(new_level-1) << "  " << "<li>#{str}"
+      @body << "\n" << "    "*@level_of_state << "<ul>" << "\n"
+      @body <<              "    "*(new_level-1) << "  " << "<li>" << str
       @level_of_state = new_level
     elsif new_level==@level_of_state
-      @body << "</li>\n" << "    "*(new_level-1) << "  " << "<li>#{str}"
+      @body << "</li>" << "\n" << "    "*(new_level-1) << "  " << "<li>" << str
     else
-      @body << "</li>\n"
-      (@level_of_state-1).downto(new_level){|i| @body << "    "*i << "</ul></li>\n"}
-      @body              << "    "*(new_level-1) << "  " << "<li>#{str}"
+      @body << "</li>"<< "\n"
+      (@level_of_state-1).downto(new_level){|i| @body << "    "*i << "</ul>"<< "</li>" << "\n"}
+      @body              << "    "*(new_level-1) << "  " << "<li>" << str
       @level_of_state = new_level
     end
   end
 
-  def itemize_continue_primitive(new_level,str)
-    (@level_of_state-1).downto(new_level){|i| @body << "</li>\n" << "    "*i << "</ul>"}
+  def cb_itemize_continue_item(line)
+    new_level = case line
+                when         /^   (.*)/ then 1
+                when       /^     (.*)/ then 2
+                when     /^       (.*)/ then 3
+                when   /^         (.*)/ then 4
+                when /^           (.*)/ then 5
+                else raise 'Illegal astarisk line for itemize'
+                end
+    str = Regexp.last_match[1]  #.apply_subs_rules(@subs_rules)
+    (@level_of_state-1).downto(new_level){|i| @body << "</li>" << "\n" << "    "*i << "</ul>"}
     @body << "\n  " << "    "*(new_level-1) << "  " << str
     @level_of_state = new_level
   end
 
-  def itemize_end(e)
-    @body << "</li>\n"
-    (@level_of_state-1).downto(1){|i| @body << "    "*i << "</ul></li>\n"}
-    @body << "</ul>\n"
+  def cb_itemize_end(e)
+    @body << "</li>" << "\n"
+    (@level_of_state-1).downto(1){|i| @body << "    "*i << "</ul>" << "</li>" << "\n"}
+    @body << "</ul>" << "\n"
     @level_of_state = 0
   end
 end
@@ -77,6 +95,80 @@ class Contents
 end
 
 class Ulmul
+  include AASM
+  VERSION = '0.5.0'
+  CONTENTS_HERE="<!-- Contents -->"
+ 
+  aasm_initial_state :st_ground
+ 
+  aasm_state :st_ground
+  aasm_state :st_paragraph
+  aasm_state :st_itemize
+ 
+  aasm_event :ev_asterisk do
+    transitions :from => :st_ground,    :to => :st_itemize,  :on_transition =>                    [:cb_itemize_begin, :cb_itemize_add_item]
+    transitions :from => :st_paragraph, :to => :st_itemize,  :on_transition => [:cb_end_paragraph, :cb_itemize_begin, :cb_itemize_add_item]
+    transitions :from => :st_itemize,   :to => :st_itemize,  :on_transition =>                                       [:cb_itemize_add_item]
+  end
+ 
+  aasm_event :ev_offset do
+    transitions :from => :st_itemize,   :to => :st_itemize,  :on_transition => [:cb_itemize_continue_item]
+  end
+ 
+  aasm_event :ev_end do
+    transitions :from => :st_ground,    :to => :st_ground,   :on_transition => []
+    transitions :from => :st_itemize,   :to => :st_ground,   :on_transition => [:cb_itemize_end]
+  end
+ 
+  aasm_event :ev_empty do
+    transitions :from => :st_itemize,   :to => :st_ground,  :on_transition => [:cb_itemize_end]
+  end
+
+  def parse(fd)
+    while line=fd.gets || line="=end\n"
+      case line
+      when /^=begin/,/^#/ then ev_ignore(nil,line)
+      when /^=end/        then ev_end(nil,line); break
+      when /^=+ /         then ev_heading(nil,line)
+      when /^ +\*/        then ev_asterisk(nil,line)
+      when /^\s*$/        then ev_empty(nil,line)
+      when /^\s+/         then ev_offset(nil,line)
+      when /^Eq\./        then ev_eq_begin(nil,line)
+      when /^\/Eq/        then ev_eq_end(nil,line)
+      when /^Fig\./       then ev_fig_begin(nil,line)
+      when /^\/Fig/       then ev_fig_end(nil,line)
+      else ev_normal(line)
+      end
+    end
+  end
+
+  def initialize()
+    @body = ''
+  end
+  attr_reader :body
+end
+
+module HTML_commom
+  def cb_begin_itemize(line=nil)
+    @body << "<ul>\n"
+  end
+  def cb_end_itemize(line=nil)
+    @body << "</ul>"
+  end
+   def cb_begin_item(line)
+    @body << "  <li>#{line}"
+  end
+  def cb_end_item(line=nil)
+    @body << "</li>\n"
+  end
+  def cb_continue_item(line)
+    @body << "\n      #{line}"
+  end
+end
+
+
+
+class Ulmul_Old
   VERSION = '0.4.2'
   CONTENTS_HERE="<!-- Contents -->"
   CONTENTS_RANGE_DEFAULT=2..3
@@ -292,44 +384,6 @@ class Ulmul
     @level_of_heading=new_level
   end
 
-  include Itemize
-  def itemize_add(e)
-    new_level = case e.line
-                when         /^ \* (.*)/ then 1
-                when       /^   \* (.*)/ then 2
-                when     /^     \* (.*)/ then 3
-                when   /^       \* (.*)/ then 4
-                when /^         \* (.*)/ then 5
-                else raise 'Illegal astarisk line for itemize'
-                end
-    str, is_mathml = Regexp.last_match[1].apply_subs_rules(@subs_rules)
-    itemize_add_primitive(new_level,str)
-    @is_mathml = @is_mathml || is_mathml
-  end
-  def itemize_continue(e)
-    /^(\s+)(\S.*)$/.match(e.line)
-    new_level = Regexp.last_match[1].length/2
-    new_level=@level_of_state if new_level>@level_of_state
-    raise "Illegal indent in itemize" if new_level<=0
-    str, is_mathml = Regexp.last_match[2].apply_subs_rules(@subs_rules)
-    itemize_continue_primitive(new_level,str)
-    @is_mathml = @is_mathml || is_mathml
-  end
-
-  def parse(fd)
-    while line=fd.gets || line="=end\n"
-      e = Event.new(line)
-      #STDERR.printf("%s\n", @state)
-      #STDERR.printf("%-10s:%s", e.event, line)
-      procs = TABLE[e.event][@state]
-      procs.each do |i|
-        send(i,e) if i.instance_of?(Symbol)
-        @state=i  if i.instance_of?(String)
-      end
-      break if e.event=='end'
-    end
-  end
-
   def body
     if @contents_range.first<=@contents_range.last
       @body.sub(CONTENTS_HERE,"<br />\n<div class=\"contents\">\nContents:"+@contents.body+"</div>\n")
@@ -375,24 +429,13 @@ class Ulmul
 </html>
 "
   end
+end
 
-  class Event
-    attr_reader :line, :event
-    def initialize(line)
-      @line  = line
-      @event = case line
-               when /^=begin/,/^#/ then 'ignore'
-               when /^=end/        then 'end'
-               when /^=+ /         then 'heading'
-               when /^ +\*/        then 'asterisk'
-               when /^\s*$/        then 'empty'
-               when /^\s+/         then 'offset'
-               when /^Eq\./        then 'eq_begin'
-               when /^\/Eq/        then 'eq_end'
-               when /^Fig\./       then 'fig_begin'
-               when /^\/Fig/       then 'fig_end'
-               else 'normal'
-               end
-    end
+if $0 == __FILE__
+  class Ulmul
+    include Itemize
   end
+  u=Ulmul.new()
+  u.parse(ARGF)
+  puts u.body
 end
