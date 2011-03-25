@@ -1,5 +1,5 @@
 # ulmul.rb
-# Time-stamp: <2011-03-25 13:53:13 takeshi>
+# Time-stamp: <2011-03-25 14:26:25 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -123,10 +123,10 @@ class Ulmul
   end
  
   aasm_event :ev_offset do
-    transitions :from => :st_ground,    :to => :st_verbatim,  :on_transition => [:cb_verbatim_begin, :cb_verbatim_add]
+    transitions :from => :st_ground,    :to => :st_verbatim,  :on_transition =>                    [:cb_verbatim_begin, :cb_verbatim_add]
     transitions :from => :st_itemize,   :to => :st_itemize,   :on_transition => [:cb_itemize_continue_item]
-    transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition =>                     [:cb_verbatim_add]
-    transitions :from => :st_paragraph, :to => :st_verbatim,  :on_transition => [:cb_verbatim_begin, :cb_verbatim_add]
+    transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition =>                                        [:cb_verbatim_add]
+    transitions :from => :st_paragraph, :to => :st_verbatim,  :on_transition => [:cb_paragraph_end, :cb_verbatim_begin, :cb_verbatim_add]
     transitions :from => :st_figure,    :to => :st_figure,    :on_transition => [:cb_figure_continues]
   end
  
@@ -169,11 +169,10 @@ class Ulmul
 
   def cb_paragraph_end(line=nil)
     @body << $ULMUL_PARAGRAPH_TERMINATOR << "\n"
-    p aasm_current_state
   end
 
   def cb_verbatim_begin(line=nil)
-    @body << "<pre>\n"
+    @body << $ULMUL_VERBATIM_INITIATOR << "\n"
   end
 
   def cb_verbatim_add(line)
@@ -181,7 +180,7 @@ class Ulmul
   end
 
   def cb_verbatim_end(line=nil)
-    @body << "</pre>\n"
+    @body << $ULMUL_VERBATIM_TERMINATOR << "\n"
   end
 
   def parse(fd)
@@ -358,12 +357,14 @@ class Ulmul_Old
 end
 
 if $0 == __FILE__ || /ulmul2html5$/ =~ $0
-  $ULMUL_ITEMIZE_INITIATOR   =  '<ul>'
-  $ULMUL_ITEMIZE_TERMINATOR  = '</ul>'
-  $ULMUL_ITEM_INITIATOR      =  '<li>'
-  $ULMUL_ITEM_TERMINATOR     = '</li>'
-  $ULMUL_PARAGRAPH_INITIATOR  =  '<p>'
-  $ULMUL_PARAGRAPH_TERMINATOR = '</p>'
+  $ULMUL_ITEMIZE_INITIATOR    =   '<ul>'
+  $ULMUL_ITEMIZE_TERMINATOR   =  '</ul>'
+  $ULMUL_ITEM_INITIATOR       =   '<li>'
+  $ULMUL_ITEM_TERMINATOR      =  '</li>'
+  $ULMUL_PARAGRAPH_INITIATOR  =    '<p>'
+  $ULMUL_PARAGRAPH_TERMINATOR =   '</p>'
+  $ULMUL_VERBATIM_INITIATOR   =  '<pre>'
+  $ULMUL_VERBATIM_TERMINATOR  = '</pre>'
 
   require "optparse"
   name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
