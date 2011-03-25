@@ -1,5 +1,5 @@
 # ulmul.rb
-# Time-stamp: <2011-03-25 09:54:43 takeshi>
+# Time-stamp: <2011-03-25 10:25:00 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -166,13 +166,6 @@ class Ulmul_Old
   CONTENTS_HERE="<!-- Contents -->"
   CONTENTS_RANGE_DEFAULT=2..3
   TABLE={
-    'ignore'   => {'ground'    => [],
-                   'itemize'   => [],
-                   'verbatim'  => [],
-                   'paragraph' => [],
-                   'equation'  => [],
-                   'figure'    => []},
-
     'end'      => {'ground'    => [                :heading_add],
                    'itemize'   => [  :itemize_end, :heading_add, 'ground'],
                    'verbatim'  => [ :verbatim_end, :heading_add, 'ground'],
@@ -432,6 +425,40 @@ if $0 == __FILE__ || /ulmul2html5$/ =~ $0
     Itemize::ITEM_INITIATOR      =  '<li>'
     Itemize::ITEM_TERMINATOR     = '</li>'
   end
+
+  require "optparse"
+  name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
+  language = "en"
+  stylesheets = []
+  javascripts = []
+  contents_range = 2..3
+  opts = OptionParser.new
+  def opts.usage
+    return to_s.sub(/options/,'options] [filename')
+  end
+  opts.on("-s STYLESHEET_FILENAME","--style STYLESHEET_FILENAME",
+          "Specify stylesheet filename."){|v| stylesheets<<v}
+  opts.on("-n YOUR_NAME","--name YOUR_NAME","Specify your name."){|v| name=v}
+  opts.on("-j JAVASCRIPT_FILENAME","--javascript JAVASCRIPT_FILENAME",
+          "Specify JavaScript filename."){|v| javascripts<<v}
+  opts.on("-l LANGUAGE","--language LANGUAGE",String,
+          "Specify natural language. Its defalt is 'en'."){|v| language=v[0..1].downcase}
+  opts.on("-c CONTENTS_RANGE","--contents-range RANGE_OF_CONTENTS_RANGE","Range of Contents."){|v|
+    begin
+      if eval(v).instance_of?(Range)
+        contents_range=eval(v)
+      else
+        raise NameError
+      end
+    rescue NameError
+      raise("Cannot evaluate given \"#{v}\" as a Range")
+    end
+  }
+  opts.on_tail("-h", "--help", "Show this message."){puts opts.usage; exit}
+
+  opts.parse!(ARGV)
+  stylesheets=['ulmul2html5.css'] if stylesheets==[]
+
   u=Ulmul.new()
   u.parse(ARGF)
   puts u.body
