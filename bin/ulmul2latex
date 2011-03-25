@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+# ulmul2latex
+# Time-stamp: <2011-03-25 14:20:56 takeshi>
+# Author: Takeshi Nishimatsu
+##
+require "ulmul"
+$ULMUL_ITEMIZE_INITIATOR    = '\begin{itemize}'
+$ULMUL_ITEMIZE_TERMINATOR   =   '\end{itemize}'
+$ULMUL_ITEM_INITIATOR       = '\item '
+$ULMUL_ITEM_TERMINATOR      = ''
+$ULMUL_PARAGRAPH_INITIATOR  = ''
+$ULMUL_PARAGRAPH_TERMINATOR = ''
+$ULMUL_VERBATIM_INITIATOR   = '\begin{verbatim}'
+$ULMUL_VERBATIM_TERMINATOR  =   '\end{verbatim}'
+u=Ulmul.new()
+u.parse(ARGF)
+puts u.body
+# Local variables:
+#   compile-command: "ruby -I ../lib ulmul2latex ../lib/test.ulmul"
+# End:
