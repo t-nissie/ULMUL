@@ -1,5 +1,5 @@
 # ulmul.rb
-# Time-stamp: <2011-03-25 09:22:17 takeshi>
+# Time-stamp: <2011-03-25 09:54:43 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -102,13 +102,25 @@ class Ulmul
   aasm_initial_state :st_ground
  
   aasm_state :st_ground
-  aasm_state :st_paragraph
   aasm_state :st_itemize
+  aasm_state :st_verbatim
+  aasm_state :st_paragraph
+  aasm_state :st_equation
+  aasm_state :st_figure
  
+  aasm_event :ev_ignore do
+    transitions :from => :st_ground,    :to => :st_ground    
+    transitions :from => :st_itemize,   :to => :st_itemize   
+    transitions :from => :st_verbatim,  :to => :st_verbatim  
+    transitions :from => :st_paragraph, :to => :st_paragraph 
+    transitions :from => :st_equation,  :to => :st_equation  
+    transitions :from => :st_figure,    :to => :st_figure    
+  end
+
   aasm_event :ev_asterisk do
     transitions :from => :st_ground,    :to => :st_itemize,  :on_transition =>                    [:cb_itemize_begin, :cb_itemize_add_item]
-    transitions :from => :st_paragraph, :to => :st_itemize,  :on_transition => [:cb_end_paragraph, :cb_itemize_begin, :cb_itemize_add_item]
     transitions :from => :st_itemize,   :to => :st_itemize,  :on_transition =>                                       [:cb_itemize_add_item]
+    transitions :from => :st_paragraph, :to => :st_itemize,  :on_transition => [:cb_end_paragraph, :cb_itemize_begin, :cb_itemize_add_item]
   end
  
   aasm_event :ev_offset do
@@ -121,6 +133,7 @@ class Ulmul
   end
  
   aasm_event :ev_empty do
+    transitions :from => :st_ground,    :to => :st_ground,  :on_transition => []
     transitions :from => :st_itemize,   :to => :st_ground,  :on_transition => [:cb_itemize_end]
   end
 
