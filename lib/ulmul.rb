@@ -1,5 +1,5 @@
 # ulmul.rb
-# Time-stamp: <2011-03-24 22:15:49 takeshi>
+# Time-stamp: <2011-03-25 09:22:17 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -48,15 +48,15 @@ module Itemize
     if new_level>@level_of_state+1
       raise 'Illegal jump of itemize level'
     elsif new_level==@level_of_state+1
-      @body << "\n" << "    "*@level_of_state << "<ul>" << "\n"
-      @body <<              "    "*(new_level-1) << "  " << "<li>" << str
+      @body << "\n" << "    "*@level_of_state << ITEMIZE_INITIATOR << "\n"
+      @body <<              "    "*(new_level-1) << "  " << ITEM_INITIATOR << str
       @level_of_state = new_level
     elsif new_level==@level_of_state
-      @body << "</li>" << "\n" << "    "*(new_level-1) << "  " << "<li>" << str
+      @body << ITEM_TERMINATOR << "\n" << "    "*(new_level-1) << "  " << ITEM_INITIATOR << str
     else
-      @body << "</li>"<< "\n"
-      (@level_of_state-1).downto(new_level){|i| @body << "    "*i << "</ul>"<< "</li>" << "\n"}
-      @body              << "    "*(new_level-1) << "  " << "<li>" << str
+      @body << ITEM_TERMINATOR<< "\n"
+      (@level_of_state-1).downto(new_level){|i| @body << "    "*i << ITEMIZE_TERMINATOR << ITEM_TERMINATOR << "\n"}
+      @body              << "    "*(new_level-1) << "  " << ITEM_INITIATOR << str
       @level_of_state = new_level
     end
   end
@@ -71,15 +71,15 @@ module Itemize
                 else raise 'Illegal astarisk line for itemize'
                 end
     str = Regexp.last_match[1]  #.apply_subs_rules(@subs_rules)
-    (@level_of_state-1).downto(new_level){|i| @body << "</li>" << "\n" << "    "*i << "</ul>"}
+    (@level_of_state-1).downto(new_level){|i| @body << ITEM_TERMINATOR << "\n" << "    "*i << ITEMIZE_TERMINATOR}
     @body << "\n  " << "    "*(new_level-1) << "  " << str
     @level_of_state = new_level
   end
 
-  def cb_itemize_end(e)
-    @body << "</li>" << "\n"
-    (@level_of_state-1).downto(1){|i| @body << "    "*i << "</ul>" << "</li>" << "\n"}
-    @body << "</ul>" << "\n"
+  def cb_itemize_end(line=nil)
+    @body << ITEM_TERMINATOR << "\n"
+    (@level_of_state-1).downto(1){|i| @body << "    "*i << ITEMIZE_TERMINATOR << ITEM_TERMINATOR << "\n"}
+    @body << ITEMIZE_TERMINATOR << "\n"
     @level_of_state = 0
   end
 end
@@ -147,26 +147,6 @@ class Ulmul
   end
   attr_reader :body
 end
-
-module HTML_commom
-  def cb_begin_itemize(line=nil)
-    @body << "<ul>\n"
-  end
-  def cb_end_itemize(line=nil)
-    @body << "</ul>"
-  end
-   def cb_begin_item(line)
-    @body << "  <li>#{line}"
-  end
-  def cb_end_item(line=nil)
-    @body << "</li>\n"
-  end
-  def cb_continue_item(line)
-    @body << "\n      #{line}"
-  end
-end
-
-
 
 class Ulmul_Old
   VERSION = '0.4.2'
@@ -431,9 +411,13 @@ class Ulmul_Old
   end
 end
 
-if $0 == __FILE__
+if $0 == __FILE__ || /ulmul2html5$/ =~ $0
   class Ulmul
     include Itemize
+    Itemize::ITEMIZE_INITIATOR   =  '<ul>'
+    Itemize::ITEMIZE_TERMINATOR  = '</ul>'
+    Itemize::ITEM_INITIATOR      =  '<li>'
+    Itemize::ITEM_TERMINATOR     = '</li>'
   end
   u=Ulmul.new()
   u.parse(ARGF)
