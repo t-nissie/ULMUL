@@ -1,5 +1,5 @@
 # ulmul.rb
-# Time-stamp: <2011-03-25 10:25:00 takeshi>
+# Time-stamp: <2011-03-25 13:53:13 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -48,15 +48,15 @@ module Itemize
     if new_level>@level_of_state+1
       raise 'Illegal jump of itemize level'
     elsif new_level==@level_of_state+1
-      @body << "\n" << "    "*@level_of_state << ITEMIZE_INITIATOR << "\n"
-      @body <<              "    "*(new_level-1) << "  " << ITEM_INITIATOR << str
+      @body << "\n" << "    "*@level_of_state << $ULMUL_ITEMIZE_INITIATOR << "\n"
+      @body <<              "    "*(new_level-1) << "  " << $ULMUL_ITEM_INITIATOR << str
       @level_of_state = new_level
     elsif new_level==@level_of_state
-      @body << ITEM_TERMINATOR << "\n" << "    "*(new_level-1) << "  " << ITEM_INITIATOR << str
+      @body << $ULMUL_ITEM_TERMINATOR << "\n" << "    "*(new_level-1) << "  " << $ULMUL_ITEM_INITIATOR << str
     else
-      @body << ITEM_TERMINATOR<< "\n"
-      (@level_of_state-1).downto(new_level){|i| @body << "    "*i << ITEMIZE_TERMINATOR << ITEM_TERMINATOR << "\n"}
-      @body              << "    "*(new_level-1) << "  " << ITEM_INITIATOR << str
+      @body << $ULMUL_ITEM_TERMINATOR<< "\n"
+      (@level_of_state-1).downto(new_level){|i| @body << "    "*i << $ULMUL_ITEMIZE_TERMINATOR << $ULMUL_ITEM_TERMINATOR << "\n"}
+      @body              << "    "*(new_level-1) << "  " << $ULMUL_ITEM_INITIATOR << str
       @level_of_state = new_level
     end
   end
@@ -71,15 +71,15 @@ module Itemize
                 else raise 'Illegal astarisk line for itemize'
                 end
     str = Regexp.last_match[1]  #.apply_subs_rules(@subs_rules)
-    (@level_of_state-1).downto(new_level){|i| @body << ITEM_TERMINATOR << "\n" << "    "*i << ITEMIZE_TERMINATOR}
+    (@level_of_state-1).downto(new_level){|i| @body << $ULMUL_ITEM_TERMINATOR << "\n" << "    "*i << $ULMUL_ITEMIZE_TERMINATOR}
     @body << "\n  " << "    "*(new_level-1) << "  " << str
     @level_of_state = new_level
   end
 
   def cb_itemize_end(line=nil)
-    @body << ITEM_TERMINATOR << "\n"
-    (@level_of_state-1).downto(1){|i| @body << "    "*i << ITEMIZE_TERMINATOR << ITEM_TERMINATOR << "\n"}
-    @body << ITEMIZE_TERMINATOR << "\n"
+    @body << $ULMUL_ITEM_TERMINATOR << "\n"
+    (@level_of_state-1).downto(1){|i| @body << "    "*i << $ULMUL_ITEMIZE_TERMINATOR << $ULMUL_ITEM_TERMINATOR << "\n"}
+    @body << $ULMUL_ITEMIZE_TERMINATOR << "\n"
     @level_of_state = 0
   end
 end
@@ -87,15 +87,14 @@ end
 class Contents
   include Itemize
   def initialize()
-    @state                 = 'itemize'
-    @level_of_state        = 0
-    @body                  = ''
+    @body = ''
   end
   attr_reader :body
 end
 
 class Ulmul
   include AASM
+  include Itemize
   VERSION = '0.5.0'
   CONTENTS_HERE="<!-- Contents -->"
  
@@ -105,36 +104,84 @@ class Ulmul
   aasm_state :st_itemize
   aasm_state :st_verbatim
   aasm_state :st_paragraph
-  aasm_state :st_equation
   aasm_state :st_figure
  
   aasm_event :ev_ignore do
     transitions :from => :st_ground,    :to => :st_ground    
     transitions :from => :st_itemize,   :to => :st_itemize   
-    transitions :from => :st_verbatim,  :to => :st_verbatim  
+    transitions :from => :st_verbatim,  :to => :st_verbatim
     transitions :from => :st_paragraph, :to => :st_paragraph 
-    transitions :from => :st_equation,  :to => :st_equation  
     transitions :from => :st_figure,    :to => :st_figure    
   end
 
   aasm_event :ev_asterisk do
-    transitions :from => :st_ground,    :to => :st_itemize,  :on_transition =>                    [:cb_itemize_begin, :cb_itemize_add_item]
-    transitions :from => :st_itemize,   :to => :st_itemize,  :on_transition =>                                       [:cb_itemize_add_item]
-    transitions :from => :st_paragraph, :to => :st_itemize,  :on_transition => [:cb_end_paragraph, :cb_itemize_begin, :cb_itemize_add_item]
+    transitions :from => :st_ground,    :to => :st_itemize,   :on_transition =>                    [:cb_itemize_begin, :cb_itemize_add_item]
+    transitions :from => :st_itemize,   :to => :st_itemize,   :on_transition =>                                       [:cb_itemize_add_item]
+    transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition => [:cb_verbatim_add]
+    transitions :from => :st_paragraph, :to => :st_itemize,   :on_transition => [:cb_paragraph_end, :cb_itemize_begin, :cb_itemize_add_item]
+    transitions :from => :st_figure,    :to => :st_figure,    :on_transition => [:cb_figure_continues]
   end
  
   aasm_event :ev_offset do
-    transitions :from => :st_itemize,   :to => :st_itemize,  :on_transition => [:cb_itemize_continue_item]
+    transitions :from => :st_ground,    :to => :st_verbatim,  :on_transition => [:cb_verbatim_begin, :cb_verbatim_add]
+    transitions :from => :st_itemize,   :to => :st_itemize,   :on_transition => [:cb_itemize_continue_item]
+    transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition =>                     [:cb_verbatim_add]
+    transitions :from => :st_paragraph, :to => :st_verbatim,  :on_transition => [:cb_verbatim_begin, :cb_verbatim_add]
+    transitions :from => :st_figure,    :to => :st_figure,    :on_transition => [:cb_figure_continues]
   end
  
   aasm_event :ev_end do
-    transitions :from => :st_ground,    :to => :st_ground,   :on_transition => []
-    transitions :from => :st_itemize,   :to => :st_ground,   :on_transition => [:cb_itemize_end]
+    transitions :from => :st_ground,    :to => :st_ground,    :on_transition =>                    [:cb_heading]
+    transitions :from => :st_itemize,   :to => :st_ground,    :on_transition =>   [:cb_itemize_end, :cb_heading]
+    transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end, :cb_heading]
+    transitions :from => :st_paragraph, :to => :st_ground,    :on_transition => [:cb_paragraph_end, :cb_heading]
+    transitions :from => :st_figure,    :to => :st_ground,    :on_transition => [:cb_figure_error]
   end
  
   aasm_event :ev_empty do
-    transitions :from => :st_ground,    :to => :st_ground,  :on_transition => []
-    transitions :from => :st_itemize,   :to => :st_ground,  :on_transition => [:cb_itemize_end]
+    transitions :from => :st_ground,    :to => :st_ground
+    transitions :from => :st_itemize,   :to => :st_ground,    :on_transition =>   [:cb_itemize_end]
+    transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end]
+    transitions :from => :st_paragraph, :to => :st_ground,    :on_transition => [:cb_paragraph_end]
+    transitions :from => :st_figure,    :to => :st_figure,    :on_transition => [:cb_figure_error]
+  end
+
+  aasm_event :ev_normal do
+    transitions :from => :st_ground,    :to => :st_paragraph, :on_transition =>                   [:cb_paragraph_begin, :cb_paragraph_add]
+    transitions :from => :st_itemize,   :to => :st_paragraph, :on_transition =>  [:cb_itemize_end, :cb_paragraph_begin, :cb_paragraph_add]
+    transitions :from => :st_verbatim,  :to => :st_paragraph, :on_transition => [:cb_verbatim_end, :cb_paragraph_begin, :cb_paragraph_add]
+    transitions :from => :st_paragraph, :to => :st_paragraph, :on_transition =>                                        [:cb_paragraph_add]
+    transitions :from => :st_figure,    :to => :st_figure,    :on_transition => [:cb_figure_continues]
+  end
+
+  def cb_heading(line=nil)
+  end
+
+  def cb_paragraph_begin(line=nil)
+    @body << $ULMUL_PARAGRAPH_INITIATOR << "\n"
+  end
+
+  def cb_paragraph_add(line)
+    # result, is_mathml = e.line.apply_subs_rules(@subs_rules)
+    @body << line
+    # @is_mathml = @is_mathml || is_mathml
+  end
+
+  def cb_paragraph_end(line=nil)
+    @body << $ULMUL_PARAGRAPH_TERMINATOR << "\n"
+    p aasm_current_state
+  end
+
+  def cb_verbatim_begin(line=nil)
+    @body << "<pre>\n"
+  end
+
+  def cb_verbatim_add(line)
+      @body << line[1..-1] #.gsub(/</,'&lt;').gsub(/>/,'&gt;')
+  end
+
+  def cb_verbatim_end(line=nil)
+    @body << "</pre>\n"
   end
 
   def parse(fd)
@@ -144,19 +191,22 @@ class Ulmul
       when /^=end/        then ev_end(nil,line); break
       when /^=+ /         then ev_heading(nil,line)
       when /^ +\*/        then ev_asterisk(nil,line)
-      when /^\s*$/        then ev_empty(nil,line)
+      when /^$/           then ev_empty(nil,line)
       when /^\s+/         then ev_offset(nil,line)
       when /^Eq\./        then ev_eq_begin(nil,line)
       when /^\/Eq/        then ev_eq_end(nil,line)
       when /^Fig\./       then ev_fig_begin(nil,line)
       when /^\/Fig/       then ev_fig_end(nil,line)
-      else ev_normal(line)
+      else ev_normal(nil,line)
       end
     end
   end
 
-  def initialize()
+  def initialize(contents_range=2..3)
+    @contents_range = contents_range
+    @contents = Contents.new()
     @body = ''
+    @title = ''
   end
   attr_reader :body
 end
@@ -165,83 +215,6 @@ class Ulmul_Old
   VERSION = '0.4.2'
   CONTENTS_HERE="<!-- Contents -->"
   CONTENTS_RANGE_DEFAULT=2..3
-  TABLE={
-    'end'      => {'ground'    => [                :heading_add],
-                   'itemize'   => [  :itemize_end, :heading_add, 'ground'],
-                   'verbatim'  => [ :verbatim_end, :heading_add, 'ground'],
-                   'paragraph' => [:paragraph_end, :heading_add, 'ground'],
-                   'equation'  => [:equation_error],
-                   'figure'    => [:figure_error]},
-
-    'heading'  => {'ground'    => [                :heading_add],
-                   'itemize'   => [  :itemize_end, :heading_add, 'ground'],
-                   'verbatim'  => [ :verbatim_end, :heading_add, 'ground'],
-                   'paragraph' => [:paragraph_end, :heading_add, 'ground'],
-                   'equation'  => [:equation_continue],
-                   'figure'    => [:figure_continue]},
-
-    'asterisk' => {'ground'    => [:itemize_begin, 'itemize', :itemize_add],
-                   'itemize'   => [                           :itemize_add],
-                   'verbatim'  => [                          :verbatim_add],
-                   'paragraph' => [:paragraph_end,
-                                   :itemize_begin, 'itemize', :itemize_add],
-                   'equation'  => [:equation_continue],
-                   'figure'    => [:figure_continue]},
-
-    'offset'   => {'ground'    => [:verbatim_begin, 'verbatim', :verbatim_add],
-                   'itemize'   => [:itemize_continue],
-                   'verbatim'  => [                             :verbatim_add],
-                   'paragraph' => [:paragraph_end,
-                                   :verbatim_begin, 'verbatim', :verbatim_add],
-                   'equation'  => [:equation_continue],
-                   'figure'    => [:figure_continue]},
-
-    'empty'    => {'ground'    => [],
-                   'itemize'   => [:itemize_end, 'ground'],
-                   'verbatim'  => [:verbatim_add],
-                   'paragraph' => [:paragraph_end, 'ground'],
-                   'equation'  => [:equation_error],
-                   'figure'    => [:figure_error]},
-
-    'normal'   => {'ground'    => [:paragraph_begin, 'paragraph', :paragraph_add],
-                   'itemize'   => [:itemize_end,
-                                   :paragraph_begin, 'paragraph', :paragraph_add],
-                   'verbatim'  => [:verbatim_end,
-                                   :paragraph_begin, 'paragraph', :paragraph_add],
-                   'paragraph' => [:paragraph_add],
-                   'equation'  => [:equation_continue],
-                   'figure'    => [:figure_continue]},
-
-    'eq_begin' => {'ground'    => [:paragraph_begin, :equation_begin, 'equation'],
-                   'itemize'   => [:itemize_end,
-                                   :paragraph_begin, :equation_begin, 'equation'],
-                   'verbatim'  => [:verbatim_end,
-                                   :paragraph_begin, :equation_begin, 'equation'],
-                   'paragraph' => [                  :equation_begin, 'equation'],
-                   'equation'  => [:equation_error],
-                   'figure'    => [:figure_error]},
-
-    'eq_end'   => {'ground'    => [:equation_error],
-                   'itemize'   => [:equation_error],
-                   'verbatim'  => [:equation_error],
-                   'paragraph' => [:equation_error],
-                   'equation'  => [:equation_end, 'paragraph'],
-                   'figure'    => [:figure_error]},
-
-    'fig_begin'=> {'ground'    => [                :figure_begin, 'figure'],
-                   'itemize'   => [:itemize_end,   :figure_begin, 'figure'],
-                   'verbatim'  => [:verbatim_end,  :figure_begin, 'figure'],
-                   'paragraph' => [:paragraph_end, :figure_begin, 'figure'],
-                   'equation'  => [:equation_error],
-                   'figure'    => [:figure_error]},
-
-    'fig_end'  => {'ground'    => [:figure_error],
-                   'itemize'   => [:figure_error],
-                   'verbatim'  => [:figure_error],
-                   'paragraph' => [:figure_error],
-                   'equation'  => [:figure_error],
-                   'figure'    => [:figure_end, 'ground']}
-  }
 
   def initialize(contents_range=CONTENTS_RANGE_DEFAULT,mode='ulmul2html5')
     @contents_range        = contents_range
@@ -307,39 +280,6 @@ class Ulmul_Old
   def figure_error(e)
     p e
     exit 1
-  end
-
-  def verbatim_begin(e)
-    @level_of_state = 0
-    @body << "<pre>"
-  end
-
-  def verbatim_add(e)
-    if e.event=='empty'
-      @level_of_state += 1
-    else
-      @body << "\n"*@level_of_state << e.line[1..-1].gsub(/</,'&lt;').gsub(/>/,'&gt;')
-      @level_of_state=0
-    end
-  end
-
-  def verbatim_end(e)
-    @body << "</pre>\n"
-  end
-
-  def paragraph_begin(e)
-    @level_of_state = 0
-    @body << "<p>\n"
-  end
-
-  def paragraph_add(e)
-    result, is_mathml = e.line.apply_subs_rules(@subs_rules)
-    @body << result
-    @is_mathml = @is_mathml || is_mathml
-  end
-
-  def paragraph_end(e)
-    @body << "</p>\n"
   end
 
   def heading_add(e)
@@ -418,13 +358,12 @@ class Ulmul_Old
 end
 
 if $0 == __FILE__ || /ulmul2html5$/ =~ $0
-  class Ulmul
-    include Itemize
-    Itemize::ITEMIZE_INITIATOR   =  '<ul>'
-    Itemize::ITEMIZE_TERMINATOR  = '</ul>'
-    Itemize::ITEM_INITIATOR      =  '<li>'
-    Itemize::ITEM_TERMINATOR     = '</li>'
-  end
+  $ULMUL_ITEMIZE_INITIATOR   =  '<ul>'
+  $ULMUL_ITEMIZE_TERMINATOR  = '</ul>'
+  $ULMUL_ITEM_INITIATOR      =  '<li>'
+  $ULMUL_ITEM_TERMINATOR     = '</li>'
+  $ULMUL_PARAGRAPH_INITIATOR  =  '<p>'
+  $ULMUL_PARAGRAPH_TERMINATOR = '</p>'
 
   require "optparse"
   name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
@@ -459,7 +398,7 @@ if $0 == __FILE__ || /ulmul2html5$/ =~ $0
   opts.parse!(ARGV)
   stylesheets=['ulmul2html5.css'] if stylesheets==[]
 
-  u=Ulmul.new()
+  u=Ulmul.new(contents_range)
   u.parse(ARGF)
   puts u.body
 end

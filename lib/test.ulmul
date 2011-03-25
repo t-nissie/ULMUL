@@ -1,3 +1,5 @@
+This is the paragraph line 1.
+This is the paragraph line 2.
  * aaa aaa
  * bbb bbb
    * ghi
@@ -5,7 +7,12 @@
    ccc ccc
  * ddd ddd
 
-# Ignore this line.
+Five lines of verbatim follows.
+ v1
+ * v2
+ 
+# ignore it.
+ # Do not ignore me!
+ v4
 
- * eee eee
- * fff fff
+Paragraph hoge hoge.
