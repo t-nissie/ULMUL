@@ -1,5 +1,5 @@
 # ulmul.rb
-# Time-stamp: <2011-03-25 14:26:25 takeshi>
+# Time-stamp: <2011-03-26 13:40:11 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -84,10 +84,11 @@ module Itemize
   end
 end
 
-class Contents
+class Table_of_Contents
   include Itemize
   def initialize()
     @body = ''
+    cb_itemize_begin()
   end
   attr_reader :body
 end
@@ -96,7 +97,6 @@ class Ulmul
   include AASM
   include Itemize
   VERSION = '0.5.0'
-  CONTENTS_HERE="<!-- Contents -->"
  
   aasm_initial_state :st_ground
  
@@ -130,7 +130,7 @@ class Ulmul
     transitions :from => :st_figure,    :to => :st_figure,    :on_transition => [:cb_figure_continues]
   end
  
-  aasm_event :ev_end do
+  aasm_event :ev_heading do
     transitions :from => :st_ground,    :to => :st_ground,    :on_transition =>                    [:cb_heading]
     transitions :from => :st_itemize,   :to => :st_ground,    :on_transition =>   [:cb_itemize_end, :cb_heading]
     transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end, :cb_heading]
@@ -152,9 +152,6 @@ class Ulmul
     transitions :from => :st_verbatim,  :to => :st_paragraph, :on_transition => [:cb_verbatim_end, :cb_paragraph_begin, :cb_paragraph_add]
     transitions :from => :st_paragraph, :to => :st_paragraph, :on_transition =>                                        [:cb_paragraph_add]
     transitions :from => :st_figure,    :to => :st_figure,    :on_transition => [:cb_figure_continues]
-  end
-
-  def cb_heading(line=nil)
   end
 
   def cb_paragraph_begin(line=nil)
@@ -187,7 +184,7 @@ class Ulmul
     while line=fd.gets || line="=end\n"
       case line
       when /^=begin/,/^#/ then ev_ignore(nil,line)
-      when /^=end/        then ev_end(nil,line); break
+      when /^=end/        then ev_heading(nil,line); break
       when /^=+ /         then ev_heading(nil,line)
       when /^ +\*/        then ev_asterisk(nil,line)
       when /^$/           then ev_empty(nil,line)
@@ -201,13 +198,12 @@ class Ulmul
     end
   end
 
-  def initialize(contents_range=2..3)
-    @contents_range = contents_range
-    @contents = Contents.new()
+  def initialize()
+    @toc = Table_of_Contents.new()
     @body = ''
-    @title = ''
+    @level_of_heading = 0
+    @i_th_heading     = 0
   end
-  attr_reader :body
 end
 
 class Ulmul_Old
@@ -215,35 +211,15 @@ class Ulmul_Old
   CONTENTS_HERE="<!-- Contents -->"
   CONTENTS_RANGE_DEFAULT=2..3
 
-  def initialize(contents_range=CONTENTS_RANGE_DEFAULT,mode='ulmul2html5')
-    @contents_range        = contents_range
-    @contents              = Contents.new()
-    @state                 = 'ground'
-    @level_of_state        = 0
-    @level_of_heading      = 0
-    @i_th_heading          = 0
-    @equation              = ''
-    @figure_caption        = ''
-    @body                  = ''
-    @subs_rules            = [[/(http:\S*)(\s|$)/,  '<a href="\1">\1</a>\2'],
-                              [/(https:\S*)(\s|$)/, '<a href="\1">\1</a>\2']]
-    @contents.itemize_begin(nil)
-    @is_mathml = false
+#       @figure_open  =  '<figure>'
+#       @figure_close = '</figure>'
+#       @caption_open  =  '<figcaption>'
+#       @caption_close = '</figcaption>'
 
-    @mode=mode
-    if @mode=='ulmul2html5'
-      @figure_open  =  '<figure>'
-      @figure_close = '</figure>'
-      @caption_open  =  '<figcaption>'
-      @caption_close = '</figcaption>'
-    else
-      @figure_open  =  '<div class="figure">'
-      @figure_close = '</div>'
-      @caption_open  =  '<div class="figcaption">'
-      @caption_close = '</div>'
-    end
-  end
-  attr_accessor :subs_rules
+#       @figure_open  =  '<div class="figure">'
+#       @figure_close = '</div>'
+#       @caption_open  =  '<div class="figcaption">'
+#       @caption_close = '</div>'
 
   def equation_begin(e)
     @is_mathml = true
@@ -281,41 +257,6 @@ class Ulmul_Old
     exit 1
   end
 
-  def heading_add(e)
-    if /^(=+) (.*)$/ =~ e.line
-      new_level=Regexp.last_match[1].length
-      str=Regexp.last_match[2]
-    elsif /^=end/ =~ e.line
-      @level_of_heading=0
-      @body << '</div>'
-      @contents.itemize_end(nil)
-      return
-    end
-    raise 'Illegal jump of heading level' if new_level>@level_of_heading+1
-    @i_th_heading += 1
-    @body << CONTENTS_HERE << "\n" if @i_th_heading==2
-    @body << "</div>\n\n\n"        if @i_th_heading!=1 and new_level<=2
-    @title=str                     if @i_th_heading==1
-    cls = case new_level
-          when 1 then "slide cover"
-          else        "slide"
-          end
-    @body << "<div class=\"#{cls}\">\n" if new_level<=2
-    @body << "<h#{new_level} id=\"LABEL-#{@i_th_heading}\">" << str << "</h#{new_level}>\n"
-    if @contents_range === new_level
-      @contents.itemize_add_primitive(1+new_level-@contents_range.first,
-                                      "<a href=\"#LABEL-#{@i_th_heading}\">" + str + "</a>")
-    end
-    @level_of_heading=new_level
-  end
-
-  def body
-    if @contents_range.first<=@contents_range.last
-      @body.sub(CONTENTS_HERE,"<br />\n<div class=\"contents\">\nContents:"+@contents.body+"</div>\n")
-    else
-      @body
-    end
-  end
 
   def html(stylesheets=["style.css"],javascripts=[],name="",language="en")
     style_lines=""
@@ -356,6 +297,70 @@ class Ulmul_Old
   end
 end
 
+module HTML
+  CONTENTS_HERE="<!-- Contents -->"
+  def cb_heading(line=nil)
+    if /^(=+) (.*)$/ =~ line
+      new_level=Regexp.last_match[1].length
+      str=Regexp.last_match[2]
+    elsif /^=end/ =~ line
+      @level_of_heading=0
+      @body << '</div>'
+      @toc.cb_itemize_end()
+      return
+    end
+    raise 'Illegal jump of heading level' if new_level>@level_of_heading+1
+    @i_th_heading += 1
+    @body << CONTENTS_HERE << "\n" if @i_th_heading==2
+    @body << "</div>\n\n\n"        if @i_th_heading!=1 and new_level<=2
+    @title=str                     if @i_th_heading==1
+    cls = case new_level
+          when 1 then "slide cover"
+          else        "slide"
+          end
+    @body << "<div class=\"#{cls}\">\n" if new_level<=2
+    @body << "<h#{new_level} id=\"LABEL-#{@i_th_heading}\">" << str << "</h#{new_level}>\n"
+    if 2 <= new_level && new_level <= $MAX_CONTENTS
+      @toc.cb_itemize_add_item("  "*(new_level-2) + " * <a href=\"#LABEL-#{@i_th_heading}\">" + str + "</a>")
+    end
+    @level_of_heading=new_level
+  end
+
+  def body
+    if $MAX_CONTENTS>=2
+      @body.sub(CONTENTS_HERE, "<br />\n<div class=\"table of contents\">\nTable of Contents:" +
+                @toc.body + "</div>\n")
+    else
+      @body
+    end
+  end
+end
+
+module LaTeX
+  def cb_heading(line=nil)
+    if /^(=+) (.*)$/ =~ line
+      new_level=Regexp.last_match[1].length
+      str=Regexp.last_match[2]
+    elsif /^=end/ =~ line
+      @level_of_heading=0
+      @toc.cb_itemize_end()
+      return
+    end
+    raise 'Illegal jump of heading level' if new_level>@level_of_heading+1
+    @title=str                                 if new_level==1
+    @body <<       '\section{' << str << "}\n" if new_level==2
+    @body <<    '\subsection{' << str << "}\n" if new_level==3
+    @body << '\subsubsection{' << str << "}\n" if new_level==4
+    @body <<            '\bf{' << str << "}\n" if new_level==5
+    if 2 <= new_level && new_level <= $MAX_CONTENTS
+      @toc.cb_itemize_add_item("  "*(new_level-2) + " * <a href=\"#LABEL-#{@i_th_heading}\">" + str + "</a>")
+    end
+    @level_of_heading=new_level
+  end
+
+  attr_reader :body
+end
+
 if $0 == __FILE__ || /ulmul2html5$/ =~ $0
   $ULMUL_ITEMIZE_INITIATOR    =   '<ul>'
   $ULMUL_ITEMIZE_TERMINATOR   =  '</ul>'
@@ -365,13 +370,13 @@ if $0 == __FILE__ || /ulmul2html5$/ =~ $0
   $ULMUL_PARAGRAPH_TERMINATOR =   '</p>'
   $ULMUL_VERBATIM_INITIATOR   =  '<pre>'
   $ULMUL_VERBATIM_TERMINATOR  = '</pre>'
+  $MAX_CONTENTS = 3
 
   require "optparse"
   name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
   language = "en"
   stylesheets = []
   javascripts = []
-  contents_range = 2..3
   opts = OptionParser.new
   def opts.usage
     return to_s.sub(/options/,'options] [filename')
@@ -383,23 +388,15 @@ if $0 == __FILE__ || /ulmul2html5$/ =~ $0
           "Specify JavaScript filename."){|v| javascripts<<v}
   opts.on("-l LANGUAGE","--language LANGUAGE",String,
           "Specify natural language. Its defalt is 'en'."){|v| language=v[0..1].downcase}
-  opts.on("-c CONTENTS_RANGE","--contents-range RANGE_OF_CONTENTS_RANGE","Range of Contents."){|v|
-    begin
-      if eval(v).instance_of?(Range)
-        contents_range=eval(v)
-      else
-        raise NameError
-      end
-    rescue NameError
-      raise("Cannot evaluate given \"#{v}\" as a Range")
-    end
-  }
   opts.on_tail("-h", "--help", "Show this message."){puts opts.usage; exit}
 
   opts.parse!(ARGV)
   stylesheets=['ulmul2html5.css'] if stylesheets==[]
 
-  u=Ulmul.new(contents_range)
+  class Ulmul2html5 < Ulmul
+    include HTML
+  end
+  u=Ulmul2html5.new()
   u.parse(ARGF)
   puts u.body
 end
