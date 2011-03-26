@@ -1,5 +1,6 @@
+#!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-26 13:40:11 takeshi>
+# Time-stamp: <2011-03-26 18:20:31 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -211,16 +212,6 @@ class Ulmul_Old
   CONTENTS_HERE="<!-- Contents -->"
   CONTENTS_RANGE_DEFAULT=2..3
 
-#       @figure_open  =  '<figure>'
-#       @figure_close = '</figure>'
-#       @caption_open  =  '<figcaption>'
-#       @caption_close = '</figcaption>'
-
-#       @figure_open  =  '<div class="figure">'
-#       @figure_close = '</div>'
-#       @caption_open  =  '<div class="figcaption">'
-#       @caption_close = '</div>'
-
   def equation_begin(e)
     @is_mathml = true
   end
@@ -258,12 +249,65 @@ class Ulmul_Old
   end
 
 
-  def html(stylesheets=["style.css"],javascripts=[],name="",language="en")
+end
+
+module HTML5
+  $ULMUL_FIGURE_INITIATOR      =  '<figure>'
+  $ULMUL_FIGURE_TERMINATOR     = '</figure>'
+  $ULMUL_FIGCAPTION_INITIATOR  =  '<figcaption>'
+  $ULMUL_FIGCAPTION_TERMINATOR = '</figcaption>'
+end
+
+module HTML5
+  $ULMUL_FIGURE_INITIATOR      =  '<div class="figure">'     
+  $ULMUL_FIGURE_TERMINATOR     = '</div>'                   
+  $ULMUL_FIGCAPTION_INITIATOR  =  '<div class="figcaption">' 
+  $ULMUL_FIGCAPTION_TERMINATOR = '</div>'                   
+end
+
+module HTML
+  $ULMUL_ITEMIZE_INITIATOR    =   '<ul>'
+  $ULMUL_ITEMIZE_TERMINATOR   =  '</ul>'
+  $ULMUL_ITEM_INITIATOR       =   '<li>'
+  $ULMUL_ITEM_TERMINATOR      =  '</li>'
+  $ULMUL_PARAGRAPH_INITIATOR  =    '<p>'
+  $ULMUL_PARAGRAPH_TERMINATOR =   '</p>'
+  $ULMUL_VERBATIM_INITIATOR   =  '<pre>'
+  $ULMUL_VERBATIM_TERMINATOR  = '</pre>'
+  CONTENTS_HERE="<!-- Contents -->"
+  def cb_heading(line=nil)
+    if /^(=+) (.*)$/ =~ line
+      new_level=Regexp.last_match[1].length
+      str=Regexp.last_match[2]
+    elsif /^=end/ =~ line
+      @level_of_heading=0
+      @body << '</div>'
+      @toc.cb_itemize_end()
+      return
+    end
+    raise 'Illegal jump of heading level' if new_level>@level_of_heading+1
+    @i_th_heading += 1
+    @body << CONTENTS_HERE << "\n" if @i_th_heading==2
+    @body << "</div>\n\n\n"        if @i_th_heading!=1 and new_level<=2
+    @title=str                     if @i_th_heading==1
+    cls = case new_level
+          when 1 then "slide cover"
+          else        "slide"
+          end
+    @body << "<div class=\"#{cls}\">\n" if new_level<=2
+    @body << "<h#{new_level} id=\"LABEL-#{@i_th_heading}\">" << str << "</h#{new_level}>\n"
+    if 2 <= new_level && new_level <= $MAX_TABLE_OF_CONTENTS
+      @toc.cb_itemize_add_item("  "*(new_level-2) + " * <a href=\"#LABEL-#{@i_th_heading}\">" + str + "</a>")
+    end
+    @level_of_heading=new_level
+  end
+
+  def file(stylesheets=["style.css"],javascripts=[],name="",language="en")
     style_lines=""
     stylesheets.each{|s| style_lines << "<link rel=\"stylesheet\" href=\"#{s}\" type=\"text/css\" />\n"}
     javascript_lines=""
     javascripts.each{|j| javascript_lines << "<script src=\"#{j}\" type=\"text/javascript\"></script>\n"}
-    if @mode=='ulmul2html5'
+    if true   # @mode=='ulmul2html5'
       xml_line=''
       meta_charset_line="<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n  "
       doctype_lines="<!DOCTYPE html>"
@@ -295,39 +339,9 @@ class Ulmul_Old
 </html>
 "
   end
-end
-
-module HTML
-  CONTENTS_HERE="<!-- Contents -->"
-  def cb_heading(line=nil)
-    if /^(=+) (.*)$/ =~ line
-      new_level=Regexp.last_match[1].length
-      str=Regexp.last_match[2]
-    elsif /^=end/ =~ line
-      @level_of_heading=0
-      @body << '</div>'
-      @toc.cb_itemize_end()
-      return
-    end
-    raise 'Illegal jump of heading level' if new_level>@level_of_heading+1
-    @i_th_heading += 1
-    @body << CONTENTS_HERE << "\n" if @i_th_heading==2
-    @body << "</div>\n\n\n"        if @i_th_heading!=1 and new_level<=2
-    @title=str                     if @i_th_heading==1
-    cls = case new_level
-          when 1 then "slide cover"
-          else        "slide"
-          end
-    @body << "<div class=\"#{cls}\">\n" if new_level<=2
-    @body << "<h#{new_level} id=\"LABEL-#{@i_th_heading}\">" << str << "</h#{new_level}>\n"
-    if 2 <= new_level && new_level <= $MAX_CONTENTS
-      @toc.cb_itemize_add_item("  "*(new_level-2) + " * <a href=\"#LABEL-#{@i_th_heading}\">" + str + "</a>")
-    end
-    @level_of_heading=new_level
-  end
 
   def body
-    if $MAX_CONTENTS>=2
+    if $MAX_TABLE_OF_CONTENTS>=2
       @body.sub(CONTENTS_HERE, "<br />\n<div class=\"table of contents\">\nTable of Contents:" +
                 @toc.body + "</div>\n")
     else
@@ -352,7 +366,7 @@ module LaTeX
     @body <<    '\subsection{' << str << "}\n" if new_level==3
     @body << '\subsubsection{' << str << "}\n" if new_level==4
     @body <<            '\bf{' << str << "}\n" if new_level==5
-    if 2 <= new_level && new_level <= $MAX_CONTENTS
+    if 2 <= new_level && new_level <= $MAX_TABLE_OF_CONTENTS
       @toc.cb_itemize_add_item("  "*(new_level-2) + " * <a href=\"#LABEL-#{@i_th_heading}\">" + str + "</a>")
     end
     @level_of_heading=new_level
@@ -362,25 +376,14 @@ module LaTeX
 end
 
 if $0 == __FILE__ || /ulmul2html5$/ =~ $0
-  $ULMUL_ITEMIZE_INITIATOR    =   '<ul>'
-  $ULMUL_ITEMIZE_TERMINATOR   =  '</ul>'
-  $ULMUL_ITEM_INITIATOR       =   '<li>'
-  $ULMUL_ITEM_TERMINATOR      =  '</li>'
-  $ULMUL_PARAGRAPH_INITIATOR  =    '<p>'
-  $ULMUL_PARAGRAPH_TERMINATOR =   '</p>'
-  $ULMUL_VERBATIM_INITIATOR   =  '<pre>'
-  $ULMUL_VERBATIM_TERMINATOR  = '</pre>'
-  $MAX_CONTENTS = 3
-
   require "optparse"
   name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
   language = "en"
   stylesheets = []
   javascripts = []
+  $MAX_TABLE_OF_CONTENTS = 3
   opts = OptionParser.new
-  def opts.usage
-    return to_s.sub(/options/,'options] [filename')
-  end
+  opts.program_name = $0
   opts.on("-s STYLESHEET_FILENAME","--style STYLESHEET_FILENAME",
           "Specify stylesheet filename."){|v| stylesheets<<v}
   opts.on("-n YOUR_NAME","--name YOUR_NAME","Specify your name."){|v| name=v}
@@ -388,7 +391,9 @@ if $0 == __FILE__ || /ulmul2html5$/ =~ $0
           "Specify JavaScript filename."){|v| javascripts<<v}
   opts.on("-l LANGUAGE","--language LANGUAGE",String,
           "Specify natural language. Its defalt is 'en'."){|v| language=v[0..1].downcase}
-  opts.on_tail("-h", "--help", "Show this message."){puts opts.usage; exit}
+  opts.on("-m MAX_TABLE_OF_CONTENTS","--max-table-of-contents  MAX_TABLE_OF_CONTENTS",Integer,
+          "Specify the maximum level for table of contents."){|v| $MAX_TABLE_OF_CONTENTS=v}
+  opts.on_tail("-h", "--help", "Show this message."){puts opts.to_s.sub(/options/,'options] [filename'); exit}
 
   opts.parse!(ARGV)
   stylesheets=['ulmul2html5.css'] if stylesheets==[]
@@ -398,5 +403,5 @@ if $0 == __FILE__ || /ulmul2html5$/ =~ $0
   end
   u=Ulmul2html5.new()
   u.parse(ARGF)
-  puts u.body
+  puts u.file(stylesheets,javascripts,name,language)
 end
