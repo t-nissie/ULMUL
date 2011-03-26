@@ -22,3 +22,7 @@ Paragraph hoge hoge.
 
 == Second page
 Second page's paragraph.
+\Fig:ruby ../ruby.jpg
+  Here is the figure caption (figcaption).
+  Cute red logo of Ruby, isn't it?
+/Fig:ruby

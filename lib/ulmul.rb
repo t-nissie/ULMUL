@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-26 18:20:31 takeshi>
+# Time-stamp: <2011-03-26 19:54:41 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -105,14 +105,14 @@ class Ulmul
   aasm_state :st_itemize
   aasm_state :st_verbatim
   aasm_state :st_paragraph
-  aasm_state :st_figure
+  aasm_state :st_env
  
   aasm_event :ev_ignore do
     transitions :from => :st_ground,    :to => :st_ground    
     transitions :from => :st_itemize,   :to => :st_itemize   
     transitions :from => :st_verbatim,  :to => :st_verbatim
     transitions :from => :st_paragraph, :to => :st_paragraph 
-    transitions :from => :st_figure,    :to => :st_figure    
+    transitions :from => :st_env,       :to => :st_env    
   end
 
   aasm_event :ev_asterisk do
@@ -120,7 +120,7 @@ class Ulmul
     transitions :from => :st_itemize,   :to => :st_itemize,   :on_transition =>                                       [:cb_itemize_add_item]
     transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition => [:cb_verbatim_add]
     transitions :from => :st_paragraph, :to => :st_itemize,   :on_transition => [:cb_paragraph_end, :cb_itemize_begin, :cb_itemize_add_item]
-    transitions :from => :st_figure,    :to => :st_figure,    :on_transition => [:cb_figure_continues]
+    transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
   end
  
   aasm_event :ev_offset do
@@ -128,7 +128,7 @@ class Ulmul
     transitions :from => :st_itemize,   :to => :st_itemize,   :on_transition => [:cb_itemize_continue_item]
     transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition =>                                        [:cb_verbatim_add]
     transitions :from => :st_paragraph, :to => :st_verbatim,  :on_transition => [:cb_paragraph_end, :cb_verbatim_begin, :cb_verbatim_add]
-    transitions :from => :st_figure,    :to => :st_figure,    :on_transition => [:cb_figure_continues]
+    transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
   end
  
   aasm_event :ev_heading do
@@ -136,7 +136,7 @@ class Ulmul
     transitions :from => :st_itemize,   :to => :st_ground,    :on_transition =>   [:cb_itemize_end, :cb_heading]
     transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end, :cb_heading]
     transitions :from => :st_paragraph, :to => :st_ground,    :on_transition => [:cb_paragraph_end, :cb_heading]
-    transitions :from => :st_figure,    :to => :st_ground,    :on_transition => [:cb_figure_error]
+    transitions :from => :st_env,       :to => :st_ground,    :on_transition => [:cb_env_error]
   end
  
   aasm_event :ev_empty do
@@ -144,15 +144,29 @@ class Ulmul
     transitions :from => :st_itemize,   :to => :st_ground,    :on_transition =>   [:cb_itemize_end]
     transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end]
     transitions :from => :st_paragraph, :to => :st_ground,    :on_transition => [:cb_paragraph_end]
-    transitions :from => :st_figure,    :to => :st_figure,    :on_transition => [:cb_figure_error]
+    transitions :from => :st_env,       :to => :st_env
   end
 
+  aasm_event :ev_env_begin do
+    transitions :from => :st_ground,    :to => :st_env,       :on_transition =>                    [:cb_env_begin]
+    transitions :from => :st_itemize,   :to => :st_env,       :on_transition =>   [:cb_itemize_end, :cb_env_begin]
+    transitions :from => :st_verbatim,  :to => :st_env,       :on_transition =>  [:cb_verbatim_end, :cb_env_begin]
+    transitions :from => :st_paragraph, :to => :st_env,       :on_transition => [:cb_paragraph_end, :cb_env_begin]
+    transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_begin_error]
+  end
+ 
+  aasm_event :ev_env_end do
+    transitions :from => [:st_ground, :st_itemize, :st_verbatim, :st_paragraph],
+                                        :to => :st_ground,    :on_transition => [:cb_env_end_error]
+    transitions :from => :st_env,       :to => :st_ground,    :on_transition => [:cb_env_end]
+  end
+ 
   aasm_event :ev_normal do
     transitions :from => :st_ground,    :to => :st_paragraph, :on_transition =>                   [:cb_paragraph_begin, :cb_paragraph_add]
     transitions :from => :st_itemize,   :to => :st_paragraph, :on_transition =>  [:cb_itemize_end, :cb_paragraph_begin, :cb_paragraph_add]
     transitions :from => :st_verbatim,  :to => :st_paragraph, :on_transition => [:cb_verbatim_end, :cb_paragraph_begin, :cb_paragraph_add]
     transitions :from => :st_paragraph, :to => :st_paragraph, :on_transition =>                                        [:cb_paragraph_add]
-    transitions :from => :st_figure,    :to => :st_figure,    :on_transition => [:cb_figure_continues]
+    transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
   end
 
   def cb_paragraph_begin(line=nil)
@@ -181,6 +195,11 @@ class Ulmul
     @body << $ULMUL_VERBATIM_TERMINATOR << "\n"
   end
 
+  def cb_env_error(line=nil)
+    p line
+    exit 1
+  end
+
   def parse(fd)
     while line=fd.gets || line="=end\n"
       case line
@@ -190,10 +209,10 @@ class Ulmul
       when /^ +\*/        then ev_asterisk(nil,line)
       when /^$/           then ev_empty(nil,line)
       when /^\s+/         then ev_offset(nil,line)
-      when /^Eq\./        then ev_eq_begin(nil,line)
-      when /^\/Eq/        then ev_eq_end(nil,line)
-      when /^Fig\./       then ev_fig_begin(nil,line)
-      when /^\/Fig/       then ev_fig_end(nil,line)
+      when /^\\(Eq|Fig|Table|Code):/
+                          then ev_env_begin(nil,line)
+      when /^\/(Eq|Fig|Table|Code):/
+                          then ev_env_end(nil,line)
       else ev_normal(nil,line)
       end
     end
@@ -225,23 +244,6 @@ class Ulmul_Old
     @equation =''
   end
 
-  def figure_begin(e)
-    dummy, @figure_label, @figure_file = e.line.split
-    @body << "#{@figure_open}
-  <img src=\"#{@figure_file}\" alt=\"#{@figure_file}\" />
-  #{@caption_open}\n"
-  end
-
-  def figure_continue(e)
-    result, is_mathml = e.line.apply_subs_rules(@subs_rules)
-    @figure_caption << result
-    @is_mathml = @is_mathml || is_mathml
-  end
-
-  def figure_end(e)
-    @body << @figure_caption << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
-    @figure_caption =''
-  end
 
   def figure_error(e)
     p e
@@ -251,29 +253,14 @@ class Ulmul_Old
 
 end
 
-module HTML5
-  $ULMUL_FIGURE_INITIATOR      =  '<figure>'
-  $ULMUL_FIGURE_TERMINATOR     = '</figure>'
-  $ULMUL_FIGCAPTION_INITIATOR  =  '<figcaption>'
-  $ULMUL_FIGCAPTION_TERMINATOR = '</figcaption>'
-end
-
-module HTML5
-  $ULMUL_FIGURE_INITIATOR      =  '<div class="figure">'     
-  $ULMUL_FIGURE_TERMINATOR     = '</div>'                   
-  $ULMUL_FIGCAPTION_INITIATOR  =  '<div class="figcaption">' 
-  $ULMUL_FIGCAPTION_TERMINATOR = '</div>'                   
-end
+# module XHTML
+#   $ULMUL_FIGURE_INITIATOR      =  '<div class="figure">'     
+#   $ULMUL_FIGURE_TERMINATOR     = '</div>'                   
+#   $ULMUL_FIGCAPTION_INITIATOR  =  '<div class="figcaption">' 
+#   $ULMUL_FIGCAPTION_TERMINATOR = '</div>'                   
+# end
 
 module HTML
-  $ULMUL_ITEMIZE_INITIATOR    =   '<ul>'
-  $ULMUL_ITEMIZE_TERMINATOR   =  '</ul>'
-  $ULMUL_ITEM_INITIATOR       =   '<li>'
-  $ULMUL_ITEM_TERMINATOR      =  '</li>'
-  $ULMUL_PARAGRAPH_INITIATOR  =    '<p>'
-  $ULMUL_PARAGRAPH_TERMINATOR =   '</p>'
-  $ULMUL_VERBATIM_INITIATOR   =  '<pre>'
-  $ULMUL_VERBATIM_TERMINATOR  = '</pre>'
   CONTENTS_HERE="<!-- Contents -->"
   def cb_heading(line=nil)
     if /^(=+) (.*)$/ =~ line
@@ -290,16 +277,34 @@ module HTML
     @body << CONTENTS_HERE << "\n" if @i_th_heading==2
     @body << "</div>\n\n\n"        if @i_th_heading!=1 and new_level<=2
     @title=str                     if @i_th_heading==1
-    cls = case new_level
-          when 1 then "slide cover"
-          else        "slide"
-          end
+    cls = if new_level==1 then "slide cover" else "slide" end
     @body << "<div class=\"#{cls}\">\n" if new_level<=2
     @body << "<h#{new_level} id=\"LABEL-#{@i_th_heading}\">" << str << "</h#{new_level}>\n"
     if 2 <= new_level && new_level <= $MAX_TABLE_OF_CONTENTS
       @toc.cb_itemize_add_item("  "*(new_level-2) + " * <a href=\"#LABEL-#{@i_th_heading}\">" + str + "</a>")
     end
     @level_of_heading=new_level
+  end
+
+  #  $ULMUL_FIGCAPTION_INITIATOR  =  '<figcaption>'
+  #  $ULMUL_FIGCAPTION_TERMINATOR = '</figcaption>'
+
+  def cb_env_begin(line=nil)
+    @env_label, @env_file = line.split
+    @env_label.sub!(/^\\/,'')
+    @body << "<figure id=\"#{@env_label}\">"  << "\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
+  end
+
+  def cb_env_continues(line=nil)
+    # result, is_mathml = e.line.apply_subs_rules(@subs_rules)
+    # @figure_caption << result
+    # @is_mathml = @is_mathml || is_mathml
+  end
+
+  def cb_env_end(line=nil)
+    # @body << @figure_caption << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
+    @body << '</figure>' << "\n"
+    @env_caption =''
   end
 
   def file(stylesheets=["style.css"],javascripts=[],name="",language="en")
@@ -376,6 +381,15 @@ module LaTeX
 end
 
 if $0 == __FILE__ || /ulmul2html5$/ =~ $0
+  $ULMUL_ITEMIZE_INITIATOR    =   '<ul>'
+  $ULMUL_ITEMIZE_TERMINATOR   =  '</ul>'
+  $ULMUL_ITEM_INITIATOR       =   '<li>'
+  $ULMUL_ITEM_TERMINATOR      =  '</li>'
+  $ULMUL_PARAGRAPH_INITIATOR  =    '<p>'
+  $ULMUL_PARAGRAPH_TERMINATOR =   '</p>'
+  $ULMUL_VERBATIM_INITIATOR   =  '<pre>'
+  $ULMUL_VERBATIM_TERMINATOR  = '</pre>'
+
   require "optparse"
   name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
   language = "en"
@@ -394,7 +408,6 @@ if $0 == __FILE__ || /ulmul2html5$/ =~ $0
   opts.on("-m MAX_TABLE_OF_CONTENTS","--max-table-of-contents  MAX_TABLE_OF_CONTENTS",Integer,
           "Specify the maximum level for table of contents."){|v| $MAX_TABLE_OF_CONTENTS=v}
   opts.on_tail("-h", "--help", "Show this message."){puts opts.to_s.sub(/options/,'options] [filename'); exit}
-
   opts.parse!(ARGV)
   stylesheets=['ulmul2html5.css'] if stylesheets==[]
 
