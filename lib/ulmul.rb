@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-28 17:42:24 takeshi>
+# Time-stamp: <2011-03-28 19:56:29 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -358,7 +358,7 @@ module LaTeX
   def cb_env_begin(line=nil)
     @env_label, @env_file = line.split
     @env_label.sub!(/^\\/,'')
-    @body << "\\begin{figure}\n" << "  \includegraphics[width=5cm,bb=0 0 100 100]{#{@env_file}}"
+    @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 200 200]{#{@env_file}}\n"
   end
 
   def cb_env_continues(line=nil)
@@ -369,8 +369,22 @@ module LaTeX
 
   def cb_env_end(line=nil)
     # @body << @figure_caption << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
+    @body << "  \\label{#{@env_label}}\n"
     @body << "\\end{figure}\n"
     @env_caption =''
+  end
+
+  def file(packages,name)
+    return "\\documentclass[a4]{article}
+\\usepackage{graphicx}
+\\usepackage{bm}
+\\title{#{@title}}
+\\author{#{name}}
+\\begin{document}
+\\maketitle
+#{body}
+\\end{document}
+"
   end
 
   attr_reader :body
