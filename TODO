@@ -1,36 +1,40 @@
 = ULMUL TODO LIST
 
 == Error messages
+ * foo.ulmul:55:Illegal environment.
 
 == Unit Test
-  * Check s.files and s.test_files in ulmul.gemspec.
-    There is no tests/ulmul_test.rb and "{html}/**/*".
+ * Check s.files and s.test_files in ulmul.gemspec.
+   There is no tests/ulmul_test.rb and "{html}/**/*".
 
 == Lists
-  * unordered list (itemize)
-  * ordered list
-  * definition list
+ * unordered list (itemize)
+ * ordered list
+ * definition list
 
 == Formats
-  * EPUB
-  * LaTeX
-  * CASIO Electric Dictionary
-  * Evernote export format (enex)
-  * ReView
+ * EPUB
+ * LaTeX
+ * CASIO Electric Dictionary
+ * Evernote export format (enex)
+ * ReView
 
 == Code
-  * colored
+ * colored
 
 == Reference and citation
-  * eq:Hamiltonian
-  * fig:foo
-  * tab:bar
-  * cod:baz
-  * cite:Bohr
+ * Eq:Hamiltonian
+ * Fig:foo
+ * Table:bar
+ * Code:baz
+ * Cite:Bohr
 
 == Font
-  * STIX
+ * STIX
 
 == CSS
-  * pretty
-  * figure width
+ * pretty
+ * figure width
+
+== ulmul2latex
+ * jpeg file -> bb for \includegraphics
