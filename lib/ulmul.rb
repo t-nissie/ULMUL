@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-26 19:54:41 takeshi>
+# Time-stamp: <2011-03-26 20:47:45 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -226,32 +226,10 @@ class Ulmul
   end
 end
 
-class Ulmul_Old
-  VERSION = '0.4.2'
-  CONTENTS_HERE="<!-- Contents -->"
-  CONTENTS_RANGE_DEFAULT=2..3
-
-  def equation_begin(e)
-    @is_mathml = true
-  end
-
-  def equation_continue(e)
-    @equation << e.line
-  end
-
-  def equation_end(e)
-    @body << @equation.to_mathml('block').to_s << "\n"
-    @equation =''
-  end
-
-
-  def figure_error(e)
-    p e
-    exit 1
-  end
-
-
-end
+#  def equation_end(e)
+#    @body << @equation.to_mathml('block').to_s << "\n"
+#    @equation =''
+#  end
 
 # module XHTML
 #   $ULMUL_FIGURE_INITIATOR      =  '<div class="figure">'     
@@ -375,6 +353,24 @@ module LaTeX
       @toc.cb_itemize_add_item("  "*(new_level-2) + " * <a href=\"#LABEL-#{@i_th_heading}\">" + str + "</a>")
     end
     @level_of_heading=new_level
+  end
+
+  def cb_env_begin(line=nil)
+    @env_label, @env_file = line.split
+    @env_label.sub!(/^\\/,'')
+    @body << "\\begin{figure}\n" << "  \includegraphics[width=5cm,bb=0 0 100 100]{#{@env_file}}"
+  end
+
+  def cb_env_continues(line=nil)
+    # result, is_mathml = e.line.apply_subs_rules(@subs_rules)
+    # @figure_caption << result
+    # @is_mathml = @is_mathml || is_mathml
+  end
+
+  def cb_env_end(line=nil)
+    # @body << @figure_caption << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
+    @body << "\\end{figure}\n"
+    @env_caption =''
   end
 
   attr_reader :body
