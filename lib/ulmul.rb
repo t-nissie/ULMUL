@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-28 19:56:29 takeshi>
+# Time-stamp: <2011-03-29 06:25:44 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -19,15 +19,13 @@ class String
     rules.each do |ary|
       result.gsub!(ary[0],ary[1])
     end
-    is_mathml = false
-    while result =~ /\$(.*?)\$/
-      pre=$`
-      tex=Regexp.last_match[1]
-      post=$'
-      result = "#{pre}#{tex.to_mathml}#{post}"
-      is_mathml = true
-    end
-    return result, is_mathml
+#    while result =~ /\$(.*?)\$/
+#      pre=$`
+#      tex=Regexp.last_match[1]
+#      post=$'
+#      result = "#{pre}#{tex.to_mathml}#{post}"
+#    end
+    return result
   end
 end
 
@@ -45,7 +43,7 @@ module Itemize
                 when /^         \* (.*)/ then 5
                 else raise 'Illegal astarisk line for itemize'
                 end
-    str = Regexp.last_match[1]  #.apply_subs_rules(@subs_rules)
+    str = Regexp.last_match[1].apply_subs_rules(@subs_rules)
     if new_level>@level_of_state+1
       raise 'Illegal jump of itemize level'
     elsif new_level==@level_of_state+1
@@ -71,7 +69,7 @@ module Itemize
                 when /^           (.*)/ then 5
                 else raise 'Illegal astarisk line for itemize'
                 end
-    str = Regexp.last_match[1]  #.apply_subs_rules(@subs_rules)
+    str = Regexp.last_match[1].apply_subs_rules(@subs_rules)
     (@level_of_state-1).downto(new_level){|i| @body << ITEM_TERMINATOR << "\n" << "    "*i << ITEMIZE_TERMINATOR}
     @body << "\n  " << "    "*(new_level-1) << "  " << str
     @level_of_state = new_level
@@ -89,6 +87,7 @@ class Table_of_Contents
   include Itemize
   def initialize()
     @body = ''
+    @subs_rules = []
     cb_itemize_begin()
   end
   attr_reader :body
@@ -174,9 +173,7 @@ class Ulmul
   end
 
   def cb_paragraph_add(line)
-    # result, is_mathml = e.line.apply_subs_rules(@subs_rules)
-    @body << line
-    # @is_mathml = @is_mathml || is_mathml
+    @body << line.apply_subs_rules(@subs_rules)
   end
 
   def cb_paragraph_end(line=nil)
@@ -223,7 +220,9 @@ class Ulmul
     @body = ''
     @level_of_heading = 0
     @i_th_heading     = 0
+    @subs_rules = []
   end
+  attr_accessor :subs_rules
 end
 
 #  def equation_end(e)
@@ -271,16 +270,15 @@ module HTML
     @env_label, @env_file = line.split
     @env_label.sub!(/^\\/,'')
     @body << "<figure id=\"#{@env_label}\">"  << "\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
+    @env_caption =''
   end
 
   def cb_env_continues(line=nil)
-    # result, is_mathml = e.line.apply_subs_rules(@subs_rules)
-    # @figure_caption << result
-    # @is_mathml = @is_mathml || is_mathml
+    @env_caption << line
   end
 
   def cb_env_end(line=nil)
-    # @body << @figure_caption << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
+    # @body << @env_caption.apply_subs_rules(@subs_rules) << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
     @body << '</figure>' << "\n"
     @env_caption =''
   end
@@ -290,28 +288,11 @@ module HTML
     stylesheets.each{|s| style_lines << "<link rel=\"stylesheet\" href=\"#{s}\" type=\"text/css\" />\n"}
     javascript_lines=""
     javascripts.each{|j| javascript_lines << "<script src=\"#{j}\" type=\"text/javascript\"></script>\n"}
-    if true   # @mode=='ulmul2html5'
-      xml_line=''
-      meta_charset_line="<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n  "
-      doctype_lines="<!DOCTYPE html>"
-      html_line="<html lang=\"#{language}\">"
-    else
-      xml_line="<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
-      meta_charset_line="<meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=utf-8\" />\n  "
-      if @is_mathml
-        doctype_lines='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
-                     "http://www.w3.org/Math/DTD/mathml2/xhtml-math11-f.dtd">'
-        html_line="<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"#{language}\" dir=\"ltr\">"
-      else
-        doctype_lines='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-                     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
-        html_line="<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"#{language}\" lang=\"#{language}\" dir=\"ltr\">"
-      end
-    end
-    return "#{xml_line}#{doctype_lines}
-#{html_line}
+    return "<!DOCTYPE html>
+<html lang=\"#{language}\">
 <head>
-  #{meta_charset_line}<title>#{@title}</title>
+  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
+  <title>#{@title}</title>
   <meta name=\"author\" content=\"#{name}\" />
   <meta name=\"copyright\" content=\"Copyright &#169; #{Date.today.year} #{name}\" />
   #{style_lines}#{javascript_lines}  <link rel=\"shortcut icon\" href=\"favicon.ico\" />
@@ -350,7 +331,7 @@ module LaTeX
     @body << '\subsubsection{' << str << "}\n" if new_level==4
     @body <<            '\bf{' << str << "}\n" if new_level==5
     if 2 <= new_level && new_level <= $MAX_TABLE_OF_CONTENTS
-      @toc.cb_itemize_add_item("  "*(new_level-2) + " * <a href=\"#LABEL-#{@i_th_heading}\">" + str + "</a>")
+      @toc.cb_itemize_add_item("  "*(new_level-2) + " * " + str)
     end
     @level_of_heading=new_level
   end
@@ -359,16 +340,15 @@ module LaTeX
     @env_label, @env_file = line.split
     @env_label.sub!(/^\\/,'')
     @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 200 200]{#{@env_file}}\n"
+    @env_caption =''
   end
 
   def cb_env_continues(line=nil)
-    # result, is_mathml = e.line.apply_subs_rules(@subs_rules)
-    # @figure_caption << result
-    # @is_mathml = @is_mathml || is_mathml
+    @env_caption << line
   end
 
   def cb_env_end(line=nil)
-    # @body << @figure_caption << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
+    # @body << @env_caption.apply_subs_rules(@subs_rules) << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
     @body << "  \\label{#{@env_label}}\n"
     @body << "\\end{figure}\n"
     @env_caption =''
@@ -424,6 +404,8 @@ if $0 == __FILE__ || /ulmul2html5$/ =~ $0
     include HTML
   end
   u=Ulmul.new()
+  u.subs_rules = [[/(http:\S*)(\s|$)/, '<a href="\1">\1</a>\2'],
+                 [/(https:\S*)(\s|$)/, '<a href="\1">\1</a>\2']]
   u.parse(ARGF)
   puts u.file(stylesheets,javascripts,name,language)
 end

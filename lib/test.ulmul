@@ -3,7 +3,7 @@ This will be the slide cover.
 == First page
 This is the paragraph line 1.
 This is the paragraph line 2.
- * aaa aaa
+ * aaa aaa http://www.fsf.org/
  * bbb bbb
    * ghi
    * klm
@@ -18,7 +18,7 @@ Five lines of verbatim follows.
  # Do not ignore me!
  v4
 
-Paragraph hoge hoge.
+Paragraph hoge hoge. http://www.fsf.org/ .
 
 == Second page
 Second page's paragraph.
