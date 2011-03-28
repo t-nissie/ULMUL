@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-26 20:47:45 takeshi>
+# Time-stamp: <2011-03-28 17:42:24 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -49,15 +49,15 @@ module Itemize
     if new_level>@level_of_state+1
       raise 'Illegal jump of itemize level'
     elsif new_level==@level_of_state+1
-      @body << "\n" << "    "*@level_of_state << $ULMUL_ITEMIZE_INITIATOR << "\n"
-      @body <<              "    "*(new_level-1) << "  " << $ULMUL_ITEM_INITIATOR << str
+      @body << "\n" << "    "*@level_of_state << ITEMIZE_INITIATOR << "\n"
+      @body <<              "    "*(new_level-1) << "  " << ITEM_INITIATOR << str
       @level_of_state = new_level
     elsif new_level==@level_of_state
-      @body << $ULMUL_ITEM_TERMINATOR << "\n" << "    "*(new_level-1) << "  " << $ULMUL_ITEM_INITIATOR << str
+      @body << ITEM_TERMINATOR << "\n" << "    "*(new_level-1) << "  " << ITEM_INITIATOR << str
     else
-      @body << $ULMUL_ITEM_TERMINATOR<< "\n"
-      (@level_of_state-1).downto(new_level){|i| @body << "    "*i << $ULMUL_ITEMIZE_TERMINATOR << $ULMUL_ITEM_TERMINATOR << "\n"}
-      @body              << "    "*(new_level-1) << "  " << $ULMUL_ITEM_INITIATOR << str
+      @body << ITEM_TERMINATOR<< "\n"
+      (@level_of_state-1).downto(new_level){|i| @body << "    "*i << ITEMIZE_TERMINATOR << ITEM_TERMINATOR << "\n"}
+      @body              << "    "*(new_level-1) << "  " << ITEM_INITIATOR << str
       @level_of_state = new_level
     end
   end
@@ -72,15 +72,15 @@ module Itemize
                 else raise 'Illegal astarisk line for itemize'
                 end
     str = Regexp.last_match[1]  #.apply_subs_rules(@subs_rules)
-    (@level_of_state-1).downto(new_level){|i| @body << $ULMUL_ITEM_TERMINATOR << "\n" << "    "*i << $ULMUL_ITEMIZE_TERMINATOR}
+    (@level_of_state-1).downto(new_level){|i| @body << ITEM_TERMINATOR << "\n" << "    "*i << ITEMIZE_TERMINATOR}
     @body << "\n  " << "    "*(new_level-1) << "  " << str
     @level_of_state = new_level
   end
 
   def cb_itemize_end(line=nil)
-    @body << $ULMUL_ITEM_TERMINATOR << "\n"
-    (@level_of_state-1).downto(1){|i| @body << "    "*i << $ULMUL_ITEMIZE_TERMINATOR << $ULMUL_ITEM_TERMINATOR << "\n"}
-    @body << $ULMUL_ITEMIZE_TERMINATOR << "\n"
+    @body << ITEM_TERMINATOR << "\n"
+    (@level_of_state-1).downto(1){|i| @body << "    "*i << ITEMIZE_TERMINATOR << ITEM_TERMINATOR << "\n"}
+    @body << ITEMIZE_TERMINATOR << "\n"
     @level_of_state = 0
   end
 end
@@ -170,7 +170,7 @@ class Ulmul
   end
 
   def cb_paragraph_begin(line=nil)
-    @body << $ULMUL_PARAGRAPH_INITIATOR << "\n"
+    @body << PARAGRAPH_INITIATOR << "\n"
   end
 
   def cb_paragraph_add(line)
@@ -180,11 +180,11 @@ class Ulmul
   end
 
   def cb_paragraph_end(line=nil)
-    @body << $ULMUL_PARAGRAPH_TERMINATOR << "\n"
+    @body << PARAGRAPH_TERMINATOR << "\n"
   end
 
   def cb_verbatim_begin(line=nil)
-    @body << $ULMUL_VERBATIM_INITIATOR << "\n"
+    @body << VERBATIM_INITIATOR << "\n"
   end
 
   def cb_verbatim_add(line)
@@ -192,7 +192,7 @@ class Ulmul
   end
 
   def cb_verbatim_end(line=nil)
-    @body << $ULMUL_VERBATIM_TERMINATOR << "\n"
+    @body << VERBATIM_TERMINATOR << "\n"
   end
 
   def cb_env_error(line=nil)
@@ -232,10 +232,10 @@ end
 #  end
 
 # module XHTML
-#   $ULMUL_FIGURE_INITIATOR      =  '<div class="figure">'     
-#   $ULMUL_FIGURE_TERMINATOR     = '</div>'                   
-#   $ULMUL_FIGCAPTION_INITIATOR  =  '<div class="figcaption">' 
-#   $ULMUL_FIGCAPTION_TERMINATOR = '</div>'                   
+#   $FIGURE_INITIATOR      =  '<div class="figure">'     
+#   $FIGURE_TERMINATOR     = '</div>'                   
+#   $FIGCAPTION_INITIATOR  =  '<div class="figcaption">' 
+#   $FIGCAPTION_TERMINATOR = '</div>'                   
 # end
 
 module HTML
@@ -264,8 +264,8 @@ module HTML
     @level_of_heading=new_level
   end
 
-  #  $ULMUL_FIGCAPTION_INITIATOR  =  '<figcaption>'
-  #  $ULMUL_FIGCAPTION_TERMINATOR = '</figcaption>'
+  #  $FIGCAPTION_INITIATOR  =  '<figcaption>'
+  #  $FIGCAPTION_TERMINATOR = '</figcaption>'
 
   def cb_env_begin(line=nil)
     @env_label, @env_file = line.split
@@ -377,15 +377,6 @@ module LaTeX
 end
 
 if $0 == __FILE__ || /ulmul2html5$/ =~ $0
-  $ULMUL_ITEMIZE_INITIATOR    =   '<ul>'
-  $ULMUL_ITEMIZE_TERMINATOR   =  '</ul>'
-  $ULMUL_ITEM_INITIATOR       =   '<li>'
-  $ULMUL_ITEM_TERMINATOR      =  '</li>'
-  $ULMUL_PARAGRAPH_INITIATOR  =    '<p>'
-  $ULMUL_PARAGRAPH_TERMINATOR =   '</p>'
-  $ULMUL_VERBATIM_INITIATOR   =  '<pre>'
-  $ULMUL_VERBATIM_TERMINATOR  = '</pre>'
-
   require "optparse"
   name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
   language = "en"
@@ -407,10 +398,18 @@ if $0 == __FILE__ || /ulmul2html5$/ =~ $0
   opts.parse!(ARGV)
   stylesheets=['ulmul2html5.css'] if stylesheets==[]
 
-  class Ulmul2html5 < Ulmul
+  Itemize::ITEMIZE_INITIATOR  =   '<ul>'
+  Itemize::ITEMIZE_TERMINATOR =  '</ul>'
+  Itemize::ITEM_INITIATOR     =   '<li>'
+  Itemize::ITEM_TERMINATOR    =  '</li>'
+  Ulmul::PARAGRAPH_INITIATOR  =    '<p>'
+  Ulmul::PARAGRAPH_TERMINATOR =   '</p>'
+  Ulmul::VERBATIM_INITIATOR   =  '<pre>'
+  Ulmul::VERBATIM_TERMINATOR  = '</pre>'
+  class Ulmul
     include HTML
   end
-  u=Ulmul2html5.new()
+  u=Ulmul.new()
   u.parse(ARGF)
   puts u.file(stylesheets,javascripts,name,language)
 end
