@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-29 06:25:44 takeshi>
+# Time-stamp: <2011-03-29 12:59:20 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -30,11 +30,11 @@ class String
 end
 
 module Itemize
-  def cb_itemize_begin(line=nil)
+  def cb_itemize_begin(filename=nil, lnumber=nil, line=nil)
     @level_of_state = 0
   end
 
-  def cb_itemize_add_item(line)
+  def cb_itemize_add_item(filename=nil, lnumber=nil, line=nil)
     new_level = case line
                 when         /^ \* (.*)/ then 1
                 when       /^   \* (.*)/ then 2
@@ -60,7 +60,7 @@ module Itemize
     end
   end
 
-  def cb_itemize_continue_item(line)
+  def cb_itemize_continue_item(filename=nil, lnumber=nil, line=nil)
     new_level = case line
                 when         /^   (.*)/ then 1
                 when       /^     (.*)/ then 2
@@ -75,7 +75,7 @@ module Itemize
     @level_of_state = new_level
   end
 
-  def cb_itemize_end(line=nil)
+  def cb_itemize_end(filename=nil, lnumber=nil, line=nil)
     @body << ITEM_TERMINATOR << "\n"
     (@level_of_state-1).downto(1){|i| @body << "    "*i << ITEMIZE_TERMINATOR << ITEM_TERMINATOR << "\n"}
     @body << ITEMIZE_TERMINATOR << "\n"
@@ -168,49 +168,54 @@ class Ulmul
     transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
   end
 
-  def cb_paragraph_begin(line=nil)
+  def cb_paragraph_begin(filename=nil, lnumber=nil, line=nil)
     @body << PARAGRAPH_INITIATOR << "\n"
   end
 
-  def cb_paragraph_add(line)
+  def cb_paragraph_add(filename=nil, lnumber=nil, line=nil)
     @body << line.apply_subs_rules(@subs_rules)
   end
 
-  def cb_paragraph_end(line=nil)
+  def cb_paragraph_end(filename=nil, lnumber=nil, line=nil)
     @body << PARAGRAPH_TERMINATOR << "\n"
   end
 
-  def cb_verbatim_begin(line=nil)
+  def cb_verbatim_begin(filename=nil, lnumber=nil, line=nil)
     @body << VERBATIM_INITIATOR << "\n"
   end
 
-  def cb_verbatim_add(line)
+  def cb_verbatim_add(filename=nil, lnumber=nil, line=nil)
       @body << line[1..-1] #.gsub(/</,'&lt;').gsub(/>/,'&gt;')
   end
 
-  def cb_verbatim_end(line=nil)
+  def cb_verbatim_end(filename=nil, lnumber=nil, line=nil)
     @body << VERBATIM_TERMINATOR << "\n"
   end
 
-  def cb_env_error(line=nil)
-    p line
+  def cb_env_error(filename=nil, lnumber=nil, line=nil)
+    STDERR << filename << ":#{lnumber}: Still in an environment: #{line}"
     exit 1
   end
 
   def parse(fd)
-    while line=fd.gets || line="=end\n"
+    while true
+      if line = fd.gets
+        lnumber = ARGF.file.lineno
+      else
+        line = "=end\n"
+      end
       case line
-      when /^=begin/,/^#/ then ev_ignore(nil,line)
-      when /^=end/        then ev_heading(nil,line); break
-      when /^=+ /         then ev_heading(nil,line)
-      when /^ +\*/        then ev_asterisk(nil,line)
-      when /^$/           then ev_empty(nil,line)
-      when /^\s+/         then ev_offset(nil,line)
+      when /^=begin/,/^#/ then    ev_ignore(nil, $FILENAME, lnumber, line)
+      when /^=end/        then   ev_heading(nil, $FILENAME, lnumber, line); break
+      when /^=+ /         then   ev_heading(nil, $FILENAME, lnumber, line)
+      when /^ +\*/        then  ev_asterisk(nil, $FILENAME, lnumber, line)
+      when /^$/           then     ev_empty(nil, $FILENAME, lnumber, line)
+      when /^\s+/         then    ev_offset(nil, $FILENAME, lnumber, line)
       when /^\\(Eq|Fig|Table|Code):/
-                          then ev_env_begin(nil,line)
+                          then ev_env_begin(nil, $FILENAME, lnumber, line)
       when /^\/(Eq|Fig|Table|Code):/
-                          then ev_env_end(nil,line)
-      else ev_normal(nil,line)
+                          then   ev_env_end(nil, $FILENAME, lnumber, line)
+      else                        ev_normal(nil, $FILENAME, lnumber, line)
       end
     end
   end
@@ -230,16 +235,9 @@ end
 #    @equation =''
 #  end
 
-# module XHTML
-#   $FIGURE_INITIATOR      =  '<div class="figure">'     
-#   $FIGURE_TERMINATOR     = '</div>'                   
-#   $FIGCAPTION_INITIATOR  =  '<div class="figcaption">' 
-#   $FIGCAPTION_TERMINATOR = '</div>'                   
-# end
-
 module HTML
   CONTENTS_HERE="<!-- Contents -->"
-  def cb_heading(line=nil)
+  def cb_heading(filename=nil, lnumber=nil, line=nil)
     if /^(=+) (.*)$/ =~ line
       new_level=Regexp.last_match[1].length
       str=Regexp.last_match[2]
@@ -258,7 +256,7 @@ module HTML
     @body << "<div class=\"#{cls}\">\n" if new_level<=2
     @body << "<h#{new_level} id=\"LABEL-#{@i_th_heading}\">" << str << "</h#{new_level}>\n"
     if 2 <= new_level && new_level <= $MAX_TABLE_OF_CONTENTS
-      @toc.cb_itemize_add_item("  "*(new_level-2) + " * <a href=\"#LABEL-#{@i_th_heading}\">" + str + "</a>")
+      @toc.cb_itemize_add_item('HTML Table of Contents', @i_th_heading, "  "*(new_level-2) + " * <a href=\"#LABEL-#{@i_th_heading}\">" + str + "</a>")
     end
     @level_of_heading=new_level
   end
@@ -266,18 +264,18 @@ module HTML
   #  $FIGCAPTION_INITIATOR  =  '<figcaption>'
   #  $FIGCAPTION_TERMINATOR = '</figcaption>'
 
-  def cb_env_begin(line=nil)
+  def cb_env_begin(filename=nil, lnumber=nil, line=nil)
     @env_label, @env_file = line.split
     @env_label.sub!(/^\\/,'')
     @body << "<figure id=\"#{@env_label}\">"  << "\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
     @env_caption =''
   end
 
-  def cb_env_continues(line=nil)
+  def cb_env_continues(filename=nil, lnumber=nil, line=nil)
     @env_caption << line
   end
 
-  def cb_env_end(line=nil)
+  def cb_env_end(filename=nil, lnumber=nil, line=nil)
     # @body << @env_caption.apply_subs_rules(@subs_rules) << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
     @body << '</figure>' << "\n"
     @env_caption =''
@@ -315,7 +313,7 @@ module HTML
 end
 
 module LaTeX
-  def cb_heading(line=nil)
+  def cb_heading(filename=nil, lnumber=nil, line=nil)
     if /^(=+) (.*)$/ =~ line
       new_level=Regexp.last_match[1].length
       str=Regexp.last_match[2]
@@ -331,23 +329,23 @@ module LaTeX
     @body << '\subsubsection{' << str << "}\n" if new_level==4
     @body <<            '\bf{' << str << "}\n" if new_level==5
     if 2 <= new_level && new_level <= $MAX_TABLE_OF_CONTENTS
-      @toc.cb_itemize_add_item("  "*(new_level-2) + " * " + str)
+      @toc.cb_itemize_add_item('LaTeX Table of Contents', @i_th_heading, "  "*(new_level-2) + " * " + str)
     end
     @level_of_heading=new_level
   end
 
-  def cb_env_begin(line=nil)
+  def cb_env_begin(filename=nil, lnumber=nil, line=nil)
     @env_label, @env_file = line.split
     @env_label.sub!(/^\\/,'')
     @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 200 200]{#{@env_file}}\n"
     @env_caption =''
   end
 
-  def cb_env_continues(line=nil)
+  def cb_env_continues(filename=nil, lnumber=nil, line=nil)
     @env_caption << line
   end
 
-  def cb_env_end(line=nil)
+  def cb_env_end(filename=nil, lnumber=nil, line=nil)
     # @body << @env_caption.apply_subs_rules(@subs_rules) << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
     @body << "  \\label{#{@env_label}}\n"
     @body << "\\end{figure}\n"
