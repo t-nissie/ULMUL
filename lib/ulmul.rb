@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-29 21:13:46 takeshi>
+# Time-stamp: <2011-03-29 21:32:44 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -192,6 +192,27 @@ class Ulmul
     @body << VERBATIM_TERMINATOR << "\n"
   end
 
+  def cb_env_begin(filename=nil, lnumber=nil, line=nil)
+    @env_label, @env_file = line.split
+    @env_label.sub!(/^\\/,'')
+    @env_caption =''
+    cb_env_begin2()
+  end
+
+  def cb_env_continues(filename=nil, lnumber=nil, line=nil)
+    @env_caption << line
+  end
+
+  def cb_env_end(filename=nil, lnumber=nil, line=nil)
+    if line.chomp.sub(/^\//,'') != @env_label
+      STDERR << filename << ":#{lnumber}: Current environment is #{@env_label}, but it is terminated with: #{line}"
+      exit 1
+    end
+    cb_env_end2()
+    @env_caption =''
+    @env_label =''
+  end
+
   def cb_env_in_env_error(filename=nil, lnumber=nil, line=nil)
     STDERR << filename << ":#{lnumber}: It is already/still in the environment of #{@env_label}, but you tried: #{line}"
     exit 1
@@ -266,28 +287,15 @@ module HTML
     @level_of_heading=new_level
   end
 
-  #  $FIGCAPTION_INITIATOR  =  '<figcaption>'
-  #  $FIGCAPTION_TERMINATOR = '</figcaption>'
-
-  def cb_env_begin(filename=nil, lnumber=nil, line=nil)
-    @env_label, @env_file = line.split
-    @env_label.sub!(/^\\/,'')
+  def cb_env_begin2()
     @body << "<figure id=\"#{@env_label}\">"  << "\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
-    @env_caption =''
   end
 
-  def cb_env_continues(filename=nil, lnumber=nil, line=nil)
-    @env_caption << line
-  end
-
-  def cb_env_end(filename=nil, lnumber=nil, line=nil)
-    if line.chomp.sub(/^\//,'') != @env_label
-      STDERR << filename << ":#{lnumber}: Current environment is #{@env_label}, but it is terminated with: #{line}"
-      exit 1
-    end
-    # @body << @env_caption.apply_subs_rules(@subs_rules) << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
+  def cb_env_end2()
+    @body << "<figcaption>\n"
+    @body << @env_caption.apply_subs_rules(@subs_rules)
+    @body << "</figcaption>\n"
     @body << '</figure>' << "\n"
-    @env_caption =''
   end
 
   def file(stylesheets=["style.css"],javascripts=[],name="",language="en")
@@ -343,22 +351,13 @@ module LaTeX
     @level_of_heading=new_level
   end
 
-  def cb_env_begin(filename=nil, lnumber=nil, line=nil)
-    @env_label, @env_file = line.split
-    @env_label.sub!(/^\\/,'')
+  def cb_env_begin2()
     @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 200 200]{#{@env_file}}\n"
-    @env_caption =''
   end
 
-  def cb_env_continues(filename=nil, lnumber=nil, line=nil)
-    @env_caption << line
-  end
-
-  def cb_env_end(filename=nil, lnumber=nil, line=nil)
-    # @body << @env_caption.apply_subs_rules(@subs_rules) << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
-    @body << "  \\label{#{@env_label}}\n"
-    @body << "\\end{figure}\n"
-    @env_caption =''
+  def cb_env_end2()
+    @body << '  \caption{' << @env_caption.apply_subs_rules(@subs_rules).strip << "}\n"
+    @body << "  \\label{#{@env_label}}\n" << "\\end{figure}\n"
   end
 
   def file(packages,name)
