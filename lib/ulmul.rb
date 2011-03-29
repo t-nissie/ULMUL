@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-29 12:59:20 takeshi>
+# Time-stamp: <2011-03-29 21:13:46 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -135,7 +135,7 @@ class Ulmul
     transitions :from => :st_itemize,   :to => :st_ground,    :on_transition =>   [:cb_itemize_end, :cb_heading]
     transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end, :cb_heading]
     transitions :from => :st_paragraph, :to => :st_ground,    :on_transition => [:cb_paragraph_end, :cb_heading]
-    transitions :from => :st_env,       :to => :st_ground,    :on_transition => [:cb_env_error]
+    transitions :from => :st_env,       :to => :st_ground,    :on_transition => [:cb_env_in_env_error]
   end
  
   aasm_event :ev_empty do
@@ -151,12 +151,12 @@ class Ulmul
     transitions :from => :st_itemize,   :to => :st_env,       :on_transition =>   [:cb_itemize_end, :cb_env_begin]
     transitions :from => :st_verbatim,  :to => :st_env,       :on_transition =>  [:cb_verbatim_end, :cb_env_begin]
     transitions :from => :st_paragraph, :to => :st_env,       :on_transition => [:cb_paragraph_end, :cb_env_begin]
-    transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_begin_error]
+    transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_in_env_error]
   end
  
   aasm_event :ev_env_end do
     transitions :from => [:st_ground, :st_itemize, :st_verbatim, :st_paragraph],
-                                        :to => :st_ground,    :on_transition => [:cb_env_end_error]
+                                        :to => :st_ground,    :on_transition => [:cb_env_not_in_env_error]
     transitions :from => :st_env,       :to => :st_ground,    :on_transition => [:cb_env_end]
   end
  
@@ -192,8 +192,13 @@ class Ulmul
     @body << VERBATIM_TERMINATOR << "\n"
   end
 
-  def cb_env_error(filename=nil, lnumber=nil, line=nil)
-    STDERR << filename << ":#{lnumber}: Still in an environment: #{line}"
+  def cb_env_in_env_error(filename=nil, lnumber=nil, line=nil)
+    STDERR << filename << ":#{lnumber}: It is already/still in the environment of #{@env_label}, but you tried: #{line}"
+    exit 1
+  end
+
+  def cb_env_not_in_env_error(filename=nil, lnumber=nil, line=nil)
+    STDERR << filename << ":#{lnumber}: It is not in any environment, but you tried: #{line}"
     exit 1
   end
 
@@ -276,6 +281,10 @@ module HTML
   end
 
   def cb_env_end(filename=nil, lnumber=nil, line=nil)
+    if line.chomp.sub(/^\//,'') != @env_label
+      STDERR << filename << ":#{lnumber}: Current environment is #{@env_label}, but it is terminated with: #{line}"
+      exit 1
+    end
     # @body << @env_caption.apply_subs_rules(@subs_rules) << "  #{@caption_close}\n" <<  "#{@figure_close}\n"
     @body << '</figure>' << "\n"
     @env_caption =''
