@@ -1,8 +1,5 @@
 = ULMUL TODO LIST
 
-== Error messages
- * foo.ulmul:55:Illegal environment.
-
 == Unit Test
  * Check s.files and s.test_files in ulmul.gemspec.
    There is no tests/ulmul_test.rb and "{html}/**/*".
@@ -38,3 +35,6 @@
 
 == ulmul2latex
  * jpeg file -> bb for \includegraphics
+
+== Done
+ * foo.ulmul:55:Illegal environment. (Error message)
