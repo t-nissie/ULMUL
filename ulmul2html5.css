@@ -1,6 +1,6 @@
 /* -*-CSS-*-
  * style.css for index.??.html of ulmul
- * Time-stamp: <2011-03-26 13:44:07 takeshi>
+ * Time-stamp: <2011-03-30 11:34:05 takeshi>
  * Author: Takeshi NISHIMATSU
  */
 body
@@ -66,16 +66,20 @@ pre
 
 figure img{
     width: 30%;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
     display: block;
 }
 
 figure figcaption{
     width: 40%;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
     display: block;
+}
+
+table {
+    border: blue 2px solid;
+    text-align: center;
+    margin: auto;
 }
 
 div.navi { text-align: right;
