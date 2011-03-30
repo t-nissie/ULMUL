@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-29 21:32:44 takeshi>
+# Time-stamp: <2011-03-30 08:55:16 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
-#require "date"
-#require "math_ml/string"
+require "date"
+require "math_ml/string"
 require "aasm"
 
 # For m17n of Ruby 1.9.x. Thanks, Masayoshi Takahashi-san [ruby-list:47159].
@@ -19,12 +19,12 @@ class String
     rules.each do |ary|
       result.gsub!(ary[0],ary[1])
     end
-#    while result =~ /\$(.*?)\$/
-#      pre=$`
-#      tex=Regexp.last_match[1]
-#      post=$'
-#      result = "#{pre}#{tex.to_mathml}#{post}"
-#    end
+    while result =~ /\$(.*?)\$/
+      pre=$`
+      tex=Regexp.last_match[1]
+      post=$'
+      result = "#{pre}#{tex.to_mathml}#{post}"
+    end
     return result
   end
 end
@@ -287,6 +287,17 @@ module HTML
     @level_of_heading=new_level
   end
 
+  def body
+    if $MAX_TABLE_OF_CONTENTS>=2
+      @body.sub(CONTENTS_HERE, "<br />\n<div class=\"table of contents\">\nTable of Contents:" +
+                @toc.body + "</div>\n")
+    else
+      @body
+    end
+  end
+end
+
+module HTML5
   def cb_env_begin2()
     @body << "<figure id=\"#{@env_label}\">"  << "\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
   end
@@ -298,7 +309,7 @@ module HTML
     @body << '</figure>' << "\n"
   end
 
-  def file(stylesheets=["style.css"],javascripts=[],name="",language="en")
+  def file(stylesheets=["ulmul2html5.css"],javascripts=[],name="",language="en")
     style_lines=""
     stylesheets.each{|s| style_lines << "<link rel=\"stylesheet\" href=\"#{s}\" type=\"text/css\" />\n"}
     javascript_lines=""
@@ -318,14 +329,43 @@ module HTML
 </html>
 "
   end
+end
 
-  def body
-    if $MAX_TABLE_OF_CONTENTS>=2
-      @body.sub(CONTENTS_HERE, "<br />\n<div class=\"table of contents\">\nTable of Contents:" +
-                @toc.body + "</div>\n")
-    else
-      @body
-    end
+module XHTML
+  def cb_env_begin2()
+    @body << "<div class=\"figure\" id=\"#{@env_label}\">"  << "\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
+  end
+
+  def cb_env_end2()
+    @body << "  <div class=\"figcaption\">\n"
+    @body << @env_caption.apply_subs_rules(@subs_rules)
+    @body << "  </div>\n"
+    @body << '</div>' << "\n"
+  end
+
+  def file(stylesheets=["ulmul2xhtml.css"],javascripts=[],name="",language="en")
+    style_lines=""
+    stylesheets.each{|s| style_lines << "<link rel=\"stylesheet\" href=\"#{s}\" type=\"text/css\" />\n"}
+    javascript_lines=""
+    javascripts.each{|j| javascript_lines << "<script src=\"#{j}\" type=\"text/javascript\"></script>\n"}
+    return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE html
+  PUBLIC \"-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN\"
+         \"http://www.w3.org/Math/DTD/mathml2/xhtml-math11-f.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+
+<head>
+  <meta name=\"language\" content=\"#{language}\" />
+  <title>#{@title}</title>
+  <meta name=\"author\" content=\"#{name}\" />
+  <meta name=\"copyright\" content=\"Copyright &#169; #{Date.today.year} #{name}\" />
+  #{style_lines}#{javascript_lines}  <link rel=\"shortcut icon\" href=\"favicon.ico\" />
+</head>
+<body>
+#{body()}
+</body>
+</html>
+"
   end
 end
 
@@ -376,7 +416,7 @@ module LaTeX
   attr_reader :body
 end
 
-if $0 == __FILE__ || /ulmul2html5$/ =~ $0
+if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
   require "optparse"
   name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
   language = "en"
@@ -396,7 +436,6 @@ if $0 == __FILE__ || /ulmul2html5$/ =~ $0
           "Specify the maximum level for table of contents."){|v| $MAX_TABLE_OF_CONTENTS=v}
   opts.on_tail("-h", "--help", "Show this message."){puts opts.to_s.sub(/options/,'options] [filename'); exit}
   opts.parse!(ARGV)
-  stylesheets=['ulmul2html5.css'] if stylesheets==[]
 
   Itemize::ITEMIZE_INITIATOR  =   '<ul>'
   Itemize::ITEMIZE_TERMINATOR =  '</ul>'
@@ -408,6 +447,11 @@ if $0 == __FILE__ || /ulmul2html5$/ =~ $0
   Ulmul::VERBATIM_TERMINATOR  = '</pre>'
   class Ulmul
     include HTML
+    if /ulmul2xhtml$/ =~ $0
+      include XHTML
+    else
+      include HTML5
+    end
   end
   u=Ulmul.new()
   u.subs_rules = [[/(http:\S*)(\s|$)/, '<a href="\1">\1</a>\2'],
