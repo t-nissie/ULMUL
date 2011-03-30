@@ -1,34 +1,19 @@
 #!/usr/bin/env ruby
 # ulmul2html5
-# Time-stamp: <2011-03-25 10:23:28 takeshi>
+# Time-stamp: <2011-03-30 11:43:20 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 =begin
 = ulmul2html5
 == Usage
 === Examples
- % ulmul2html foo.txt
- % ulmul2html --style=style.css --name="John Smith" foo.ulmul > foo.html
- % ulmul2html --style=ulmul-slidy.css --javascript=slidy.js \
+ $ ulmul2html5 --help
+ $ ulmul2html5 foo.txt
+ $ ulmul2html5 --style=style.css --name="John Smith" foo.ulmul > foo.html
+ $ ulmul2html5 --style=ulmul-slidy.css --javascript=ulmul-slidy.js \
    --name="Takeshi Nishimatsu" presentation.txt > presentation.xhtml
-=== Command options
-==== -s, --style
-Specify stylesheet filename.
-==== -n, --name
-Specify your name for copyright notices.
-==== -j, --javascript
-Specify JavaScript filename.
-==== -l, --language
-Specify natural language. Its default is "en".
-==== -c, --contents-range
-Range of "Contents". Its default is "2..3".
-If you do not need "Contents" at the beginning of the
-output HTML file, set it 3..2.
-==== --help
-Show a help message.
 =end
 require "ulmul"
-
 # Local variables:
-#   compile-command: "ruby -I ../lib ./ulmul2html ulmul2html"
+#   compile-command: "ruby -I ../lib ./ulmul2html5 ulmul2html5"
 # End:
