@@ -3,7 +3,13 @@ This will be the slide cover.
 == First page
 This is the paragraph line 1.
 This is the paragraph line 2.
-Mass $m$ can be converted into energy $E$ as $E=mc^2$.
+
+Mass $m$ can be converted into energy $E$ as
+\Eq:Emc2
+  E=mc^2
+/Eq:Emc2
+
+Example of itemize.
  * aaa aaa http://www.fsf.org/
  * bbb bbb
    * ghi
