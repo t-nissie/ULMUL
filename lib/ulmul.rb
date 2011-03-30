@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-30 08:55:16 takeshi>
+# Time-stamp: <2011-03-30 12:08:54 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -196,6 +196,12 @@ class Ulmul
     @env_label, @env_file = line.split
     @env_label.sub!(/^\\/,'')
     @env_caption =''
+    case @env_label
+    when /^Fig:/
+      @figures << @env_label
+    when /^Table:/
+      @tables << @env_label
+    end
     cb_env_begin2()
   end
 
@@ -251,6 +257,8 @@ class Ulmul
     @body = ''
     @level_of_heading = 0
     @i_th_heading     = 0
+    @figures         = []
+    @tables          = []
     @subs_rules = []
   end
   attr_accessor :subs_rules
@@ -295,18 +303,36 @@ module HTML
       @body
     end
   end
+
+  def cb_env_end2table()
+      @body << "  <caption>\n"
+      @body << "  TABLE #{@figures.length}. " << @env_caption.apply_subs_rules(@subs_rules)
+      @body << "  </caption>\n"
+      @body << "  <thead><tr><th>       TABLE           </th></tr></thead>\n"
+      @body << "  <tbody><tr><td>Not not yet implemented</td></tr></tbody>\n"
+      @body << '</table>' << "\n"
+  end
 end
 
 module HTML5
   def cb_env_begin2()
-    @body << "<figure id=\"#{@env_label}\">"  << "\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
+    case @env_label
+    when /^Fig:/
+      @body << "<figure id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
+    when /^Table:/
+      @body << "<table  id=\"#{@env_label}\">\n"
+    end
   end
 
   def cb_env_end2()
-    @body << "<figcaption>\n"
-    @body << @env_caption.apply_subs_rules(@subs_rules)
-    @body << "</figcaption>\n"
-    @body << '</figure>' << "\n"
+    case @env_label
+    when /^Fig:/
+      @body << "  <figcaption>\n"
+      @body << "  FIG #{@figures.length}. " << @env_caption.apply_subs_rules(@subs_rules)
+      @body << "  </figcaption>\n" << '</figure>' << "\n"
+    when /^Table:/
+      cb_env_end2table()
+    end
   end
 
   def file(stylesheets=["ulmul2html5.css"],javascripts=[],name="",language="en")
@@ -333,14 +359,24 @@ end
 
 module XHTML
   def cb_env_begin2()
-    @body << "<div class=\"figure\" id=\"#{@env_label}\">"  << "\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
+    case @env_label
+    when /^Fig:/
+      @body << "<div class=\"figure\" id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
+    when /^Table:/
+      @body << "<table id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
+    end
   end
 
   def cb_env_end2()
-    @body << "  <div class=\"figcaption\">\n"
-    @body << @env_caption.apply_subs_rules(@subs_rules)
-    @body << "  </div>\n"
-    @body << '</div>' << "\n"
+    case @env_label
+    when /^Fig:/
+      @body << "  <div class=\"figcaption\">\n"
+      @body << "  FIG #{@figures.length}. " << @env_caption.apply_subs_rules(@subs_rules)
+      @body << "  </div>\n"
+      @body << '</div>' << "\n"
+    when /^Table:/
+      cb_env_end2table()
+    end
   end
 
   def file(stylesheets=["ulmul2xhtml.css"],javascripts=[],name="",language="en")

@@ -22,8 +22,15 @@ Five lines of verbatim follows.
 Paragraph hoge hoge. http://www.fsf.org/ .
 
 == Second page
-Second page's paragraph.
+Test FIGURE and TABLE.
+=== Figure
+A figure.
 \Fig:ruby ../ruby.jpg
   Here is the figure caption (figcaption).
   Cute red logo of Ruby, isn't it?
 /Fig:ruby
+=== Table
+A table.
+\Table:example
+  Example caption for a table.
+/Table:example
