@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-30 12:08:54 takeshi>
+# Time-stamp: <2011-03-30 18:23:33 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -19,11 +19,13 @@ class String
     rules.each do |ary|
       result.gsub!(ary[0],ary[1])
     end
-    while result =~ /\$(.*?)\$/
-      pre=$`
-      tex=Regexp.last_match[1]
-      post=$'
-      result = "#{pre}#{tex.to_mathml}#{post}"
+    if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
+      while result =~ /\$(.*?)\$/
+        pre=$`
+        tex=Regexp.last_match[1]
+        post=$'
+        result = "#{pre}#{tex.to_mathml}#{post}"
+      end
     end
     return result
   end
@@ -306,10 +308,10 @@ module HTML
 
   def cb_env_end2table()
       @body << "  <caption>\n"
-      @body << "  TABLE #{@figures.length}. " << @env_caption.apply_subs_rules(@subs_rules)
+      @body << "  Table #{@figures.length}: " << @env_caption.apply_subs_rules(@subs_rules)
       @body << "  </caption>\n"
       @body << "  <thead><tr><th>       TABLE           </th></tr></thead>\n"
-      @body << "  <tbody><tr><td>Not not yet implemented</td></tr></tbody>\n"
+      @body << "  <tbody><tr><td>Not yet implemented</td></tr></tbody>\n"
       @body << '</table>' << "\n"
   end
 end
@@ -328,7 +330,7 @@ module HTML5
     case @env_label
     when /^Fig:/
       @body << "  <figcaption>\n"
-      @body << "  FIG #{@figures.length}. " << @env_caption.apply_subs_rules(@subs_rules)
+      @body << "  Figure #{@figures.length}: " << @env_caption.apply_subs_rules(@subs_rules)
       @body << "  </figcaption>\n" << '</figure>' << "\n"
     when /^Table:/
       cb_env_end2table()
@@ -428,12 +430,26 @@ module LaTeX
   end
 
   def cb_env_begin2()
-    @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 200 200]{#{@env_file}}\n"
+    case @env_label
+    when /^Fig:/
+      @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 200 200]{#{@env_file}}\n"
+    when /^Table:/
+      @body << "\\begin{table}\n"
+    end
   end
 
   def cb_env_end2()
-    @body << '  \caption{' << @env_caption.apply_subs_rules(@subs_rules).strip << "}\n"
-    @body << "  \\label{#{@env_label}}\n" << "\\end{figure}\n"
+    case @env_label
+    when /^Fig:/
+      @body << '  \caption{' << @env_caption.apply_subs_rules(@subs_rules).strip << "}\n"
+      @body << "  \\label{#{@env_label}}\n" << "\\end{figure}\n"
+    when /^Table:/
+      @body << '  \caption{' << @env_caption.apply_subs_rules(@subs_rules).strip << "}\n"
+      @body << "  \\label{#{@env_label}}\n"
+      @body << "  \\center\n"
+      @body << "  {TABLE is not yet implemented.}\n"
+      @body << "\\end{table}\n"
+    end
   end
 
   def file(packages,name)
@@ -495,3 +511,6 @@ if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
   u.parse(ARGF)
   puts u.file(stylesheets,javascripts,name,language)
 end
+# Local variables:
+#   compile-command: "./ulmul.rb -s ../ulmul2html5.css test.ulmul | tee test.html"
+# End:
