@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-30 18:23:33 takeshi>
+# Time-stamp: <2011-03-30 18:48:49 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -199,6 +199,8 @@ class Ulmul
     @env_label.sub!(/^\\/,'')
     @env_caption =''
     case @env_label
+    when /^Eq:/
+      @equations << @env_label
     when /^Fig:/
       @figures << @env_label
     when /^Table:/
@@ -259,17 +261,13 @@ class Ulmul
     @body = ''
     @level_of_heading = 0
     @i_th_heading     = 0
+    @equations       = []
     @figures         = []
     @tables          = []
     @subs_rules = []
   end
   attr_accessor :subs_rules
 end
-
-#  def equation_end(e)
-#    @body << @equation.to_mathml('block').to_s << "\n"
-#    @equation =''
-#  end
 
 module HTML
   CONTENTS_HERE="<!-- Contents -->"
@@ -319,6 +317,8 @@ end
 module HTML5
   def cb_env_begin2()
     case @env_label
+    when /^Eq:/
+      # Nothing to do.
     when /^Fig:/
       @body << "<figure id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
     when /^Table:/
@@ -328,6 +328,8 @@ module HTML5
 
   def cb_env_end2()
     case @env_label
+    when /^Eq:/
+      @body << @env_caption.to_mathml('block').to_s.sub(/<math /,"<math id=\"#{@env_label}\" ") << "\n"
     when /^Fig:/
       @body << "  <figcaption>\n"
       @body << "  Figure #{@figures.length}: " << @env_caption.apply_subs_rules(@subs_rules)
