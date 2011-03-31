@@ -6,8 +6,9 @@ This is the paragraph line 2.
 
 Mass $m$ can be converted into energy $E$ as
 \Eq:Emc2
-  E=mc^2
+  E=mc^2 .
 /Eq:Emc2
+Paragraph continues.
 
 Example of itemize.
  * aaa aaa http://www.fsf.org/
