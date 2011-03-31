@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul2xhtml
-# Time-stamp: <2011-03-30 11:46:00 takeshi>
+# Time-stamp: <2011-03-31 19:29:32 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 =begin
@@ -14,5 +14,5 @@
 =end
 require "ulmul"
 # Local variables:
-#   compile-command: "ruby -I ../lib ulmul2xhtml -s ../ulmul2xhtml.css ../lib/test.ulmul | tee test.xhtml"
+#   compile-command: "ruby -I ../lib ulmul2xhtml -s ../ulmul2xhtml.css -s ../google-code-prettify/src/prettify.css -j ../google-code-prettify/src/prettify.js ../lib/test.ulmul | tee test.html"
 # End:
