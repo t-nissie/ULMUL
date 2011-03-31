@@ -9,6 +9,7 @@ Mass $m$ can be converted into energy $E$ as
   E=mc^2 .
 /Eq:Emc2
 Paragraph continues.
+Can you believe in Eq:Emc2?
 
 Example of itemize.
  * aaa aaa http://www.fsf.org/
@@ -31,13 +32,13 @@ Paragraph hoge hoge. http://www.fsf.org/ .
 == Second page
 Test FIGURE and TABLE.
 === Figure
-A figure.
+A figure. See Fig:ruby.
 \Fig:ruby ../ruby.jpg
   Here is the figure caption (figcaption).
   Cute red logo of Ruby, isn't it?
 /Fig:ruby
 === Table
-A table.
+A table. See Table:example!
 \Table:example
   Example caption for a table.
 /Table:example

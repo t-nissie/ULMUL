@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-31 13:52:04 takeshi>
+# Time-stamp: <2011-03-31 15:00:47 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -334,11 +334,15 @@ module HTML
   end
 
   def body
+    b = @body.dup
+    @equations.each_with_index{|r,i| b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),  "\\1<a href=\"##{r}\">Eq. (#{i+1})</a>\\2")}
+    @figures.each_with_index{|r,i|   b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),   "\\1<a href=\"##{r}\">Fig. #{i+1}</a>\\2")}
+    @tables.each_with_index{|r,i|    b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),  "\\1<a href=\"##{r}\">Table #{i+1}</a>\\2")}
     if $MAX_TABLE_OF_CONTENTS>=2
-      @body.sub(CONTENTS_HERE, "<br />\n<div class=\"table of contents\">\nTable of Contents:" +
+      b.sub(CONTENTS_HERE, "<br />\n<div class=\"table of contents\">\nTable of Contents:" +
                 @toc.body + "</div>\n")
     else
-      @body
+      b
     end
   end
 
@@ -514,7 +518,13 @@ module LaTeX
 "
   end
 
-  attr_reader :body
+  def body
+    b = @body.dup
+    @equations.each{|r| b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),  "\\1Eq.~(\\ref{#{r}})\\2")}
+    @figures.each{|r|   b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),   "\\1Fig.~\\ref{#{r}}\\2")}
+    @tables.each{|r|    b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'), "\\1Table.~\\ref{#{r}}\\2")}
+    return b
+  end
 end
 
 if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
