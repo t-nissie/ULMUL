@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-30 18:48:49 takeshi>
+# Time-stamp: <2011-03-31 12:23:14 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -107,6 +107,7 @@ class Ulmul
   aasm_state :st_verbatim
   aasm_state :st_paragraph
   aasm_state :st_env
+  aasm_state :st_equation
  
   aasm_event :ev_ignore do
     transitions :from => :st_ground,    :to => :st_ground    
@@ -114,6 +115,7 @@ class Ulmul
     transitions :from => :st_verbatim,  :to => :st_verbatim
     transitions :from => :st_paragraph, :to => :st_paragraph 
     transitions :from => :st_env,       :to => :st_env    
+    transitions :from => :st_equation,  :to => :st_equation
   end
 
   aasm_event :ev_asterisk do
@@ -122,6 +124,7 @@ class Ulmul
     transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition => [:cb_verbatim_add]
     transitions :from => :st_paragraph, :to => :st_itemize,   :on_transition => [:cb_paragraph_end, :cb_itemize_begin, :cb_itemize_add_item]
     transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
+    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_continues]
   end
  
   aasm_event :ev_offset do
@@ -130,6 +133,7 @@ class Ulmul
     transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition =>                                        [:cb_verbatim_add]
     transitions :from => :st_paragraph, :to => :st_verbatim,  :on_transition => [:cb_paragraph_end, :cb_verbatim_begin, :cb_verbatim_add]
     transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
+    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_continues]
   end
  
   aasm_event :ev_heading do
@@ -138,6 +142,7 @@ class Ulmul
     transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end, :cb_heading]
     transitions :from => :st_paragraph, :to => :st_ground,    :on_transition => [:cb_paragraph_end, :cb_heading]
     transitions :from => :st_env,       :to => :st_ground,    :on_transition => [:cb_env_in_env_error]
+    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_in_equation_error]
   end
  
   aasm_event :ev_empty do
@@ -146,6 +151,7 @@ class Ulmul
     transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end]
     transitions :from => :st_paragraph, :to => :st_ground,    :on_transition => [:cb_paragraph_end]
     transitions :from => :st_env,       :to => :st_env
+    transitions :from => :st_equation,  :to => :st_equation
   end
 
   aasm_event :ev_env_begin do
@@ -154,12 +160,27 @@ class Ulmul
     transitions :from => :st_verbatim,  :to => :st_env,       :on_transition =>  [:cb_verbatim_end, :cb_env_begin]
     transitions :from => :st_paragraph, :to => :st_env,       :on_transition => [:cb_paragraph_end, :cb_env_begin]
     transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_in_env_error]
+    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_in_equation_error]
   end
  
   aasm_event :ev_env_end do
-    transitions :from => [:st_ground, :st_itemize, :st_verbatim, :st_paragraph],
+    transitions :from => [:st_ground, :st_itemize, :st_verbatim, :st_paragraph, :st_equation],
                                         :to => :st_ground,    :on_transition => [:cb_env_not_in_env_error]
     transitions :from => :st_env,       :to => :st_ground,    :on_transition => [:cb_env_end]
+  end
+ 
+  aasm_event :ev_equation_begin do
+    transitions :from => :st_ground,    :to => :st_equation,  :on_transition =>                    [:cb_paragraph_begin, :cb_equation_begin]
+    transitions :from => :st_itemize,   :to => :st_equation,  :on_transition =>   [:cb_itemize_end, :cb_paragraph_begin, :cb_equation_begin]
+    transitions :from => :st_verbatim,  :to => :st_equation,  :on_transition =>  [:cb_verbatim_end, :cb_paragraph_begin, :cb_equation_begin]
+    transitions :from => :st_paragraph, :to => :st_equation,  :on_transition =>                                         [:cb_equation_begin]
+    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_in_equation_error]
+  end
+ 
+  aasm_event :ev_equation_end do
+    transitions :from => [:st_ground, :st_itemize, :st_verbatim, :st_paragraph, :st_env],
+                                        :to => :st_ground,    :on_transition => [:cb_equation_not_in_equation_error]
+    transitions :from => :st_equation,  :to => :st_paragraph, :on_transition => [:cb_equation_end]
   end
  
   aasm_event :ev_normal do
@@ -168,6 +189,7 @@ class Ulmul
     transitions :from => :st_verbatim,  :to => :st_paragraph, :on_transition => [:cb_verbatim_end, :cb_paragraph_begin, :cb_paragraph_add]
     transitions :from => :st_paragraph, :to => :st_paragraph, :on_transition =>                                        [:cb_paragraph_add]
     transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
+    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_continues]
   end
 
   def cb_paragraph_begin(filename=nil, lnumber=nil, line=nil)
@@ -199,8 +221,6 @@ class Ulmul
     @env_label.sub!(/^\\/,'')
     @env_caption =''
     case @env_label
-    when /^Eq:/
-      @equations << @env_label
     when /^Fig:/
       @figures << @env_label
     when /^Table:/
@@ -233,6 +253,22 @@ class Ulmul
     exit 1
   end
 
+  def cb_equation_begin(filename=nil, lnumber=nil, line=nil)
+    @equation_label = line.strip.sub!(/^\\/,'')
+    @equations << @equation_label
+    @equation_contents = ''
+  end
+
+  def cb_equation_continues(filename=nil, lnumber=nil, line=nil)
+    @equation_contents << line
+  end
+
+  def cb_equation_end(filename=nil, lnumber=nil, line=nil)
+    cb_equation_end2()
+    @equation_contents =''
+    @equation_label =''
+  end
+
   def parse(fd)
     while true
       if line = fd.gets
@@ -247,10 +283,12 @@ class Ulmul
       when /^ +\*/        then  ev_asterisk(nil, $FILENAME, lnumber, line)
       when /^$/           then     ev_empty(nil, $FILENAME, lnumber, line)
       when /^\s+/         then    ev_offset(nil, $FILENAME, lnumber, line)
-      when /^\\(Eq|Fig|Table|Code):/
+      when /^\\(Fig|Table|Code):/
                           then ev_env_begin(nil, $FILENAME, lnumber, line)
-      when /^\/(Eq|Fig|Table|Code):/
+      when /^\/(Fig|Table|Code):/
                           then   ev_env_end(nil, $FILENAME, lnumber, line)
+      when /^\\Eq:/  then ev_equation_begin(nil, $FILENAME, lnumber, line)
+      when /^\/Eq:/  then   ev_equation_end(nil, $FILENAME, lnumber, line)
       else                        ev_normal(nil, $FILENAME, lnumber, line)
       end
     end
@@ -317,8 +355,6 @@ end
 module HTML5
   def cb_env_begin2()
     case @env_label
-    when /^Eq:/
-      # Nothing to do.
     when /^Fig:/
       @body << "<figure id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
     when /^Table:/
@@ -328,8 +364,6 @@ module HTML5
 
   def cb_env_end2()
     case @env_label
-    when /^Eq:/
-      @body << @env_caption.to_mathml('block').to_s.sub(/<math /,"<math id=\"#{@env_label}\" ") << "\n"
     when /^Fig:/
       @body << "  <figcaption>\n"
       @body << "  Figure #{@figures.length}: " << @env_caption.apply_subs_rules(@subs_rules)
@@ -337,6 +371,10 @@ module HTML5
     when /^Table:/
       cb_env_end2table()
     end
+  end
+
+  def cb_equation_end2()
+    @body << @equation_contents.to_mathml('block').to_s.sub(/<math /,"<math id=\"#{@equation_label}\" ") << "\n"
   end
 
   def file(stylesheets=["ulmul2html5.css"],javascripts=[],name="",language="en")
@@ -452,6 +490,12 @@ module LaTeX
       @body << "  {TABLE is not yet implemented.}\n"
       @body << "\\end{table}\n"
     end
+  end
+
+  def cb_equation_end2()
+    @body << "\\begin{equation}\n" << "  \\label{#{@equation_label}}\n"
+    @body << @equation_contents
+    @body << "\\end{equation}\n"
   end
 
   def file(packages,name)
