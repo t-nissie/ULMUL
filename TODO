@@ -5,7 +5,6 @@
    There is no tests/ulmul_test.rb and "{html}/**/*".
 
 == Lists
- * unordered list (itemize)
  * ordered list
  * definition list
 
@@ -17,13 +16,15 @@
  * ReView
 
 == Code
- * colored
+ * syntax highlighting with google-code-prettify http://code.google.com/p/google-code-prettify/
 
-== Reference and citation
+== References
  * Eq:Hamiltonian
  * Fig:foo
  * Table:bar
  * Code:baz
+
+== Citation
  * Cite:Bohr
 
 == Font
@@ -31,10 +32,9 @@
 
 == CSS
  * pretty
- * figure width
-
-== ulmul2latex
- * jpeg file -> bb for \includegraphics
+ * EPS
 
 == Done
- * foo.ulmul:55:Illegal environment. (Error message)
+ * unordered list (itemize) [Lists]
+ * foo.ulmul:55:Illegal environment. [Error message]
+ * jpeg file -> bb for \includegraphics
