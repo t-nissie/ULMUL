@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2010-10-06 20:58:27 takeshi>
+# Time-stamp: <2011-03-31 13:42:41 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.name              = 'ulmul'
 
   s.bindir            = 'bin'
-  s.executables       = ['ulmul2html5', 'ulmul2xhtml']
+  s.executables       = ['ulmul2html5', 'ulmul2xhtml', 'ulmul2latex']
   s.default_executable=  'ulmul2html5'
 
   s.summary           = 'ULMUL is an Ultra Lightweight Mark-Up Language'
@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('math_ml', '>=0.9')
   s.add_dependency('aasm',    '>=2.2.0')
+  s.add_dependency('exifr',   '>=1.0.5')
 
   s.description       = <<-EOF
      "ULMUL" is an original Ultra Lightweight MarkUp Language.
