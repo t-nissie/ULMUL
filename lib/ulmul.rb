@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-31 15:00:47 takeshi>
+# Time-stamp: <2011-03-31 19:14:47 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -225,6 +225,8 @@ class Ulmul
       @figures << @env_label
     when /^Table:/
       @tables << @env_label
+    when /^Code:/
+      @codes << @env_label
     end
     cb_env_begin2()
   end
@@ -302,6 +304,7 @@ class Ulmul
     @equations       = []
     @figures         = []
     @tables          = []
+    @codes           = []
     @subs_rules = []
   end
   attr_accessor :subs_rules
@@ -338,6 +341,7 @@ module HTML
     @equations.each_with_index{|r,i| b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),  "\\1<a href=\"##{r}\">Eq. (#{i+1})</a>\\2")}
     @figures.each_with_index{|r,i|   b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),   "\\1<a href=\"##{r}\">Fig. #{i+1}</a>\\2")}
     @tables.each_with_index{|r,i|    b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),  "\\1<a href=\"##{r}\">Table #{i+1}</a>\\2")}
+    @codes.each_with_index{|r,i|     b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),   "\\1<a href=\"##{r}\">Code #{i+1}</a>\\2")}
     if $MAX_TABLE_OF_CONTENTS>=2
       b.sub(CONTENTS_HERE, "<br />\n<div class=\"table of contents\">\nTable of Contents:" +
                 @toc.body + "</div>\n")
@@ -354,6 +358,19 @@ module HTML
       @body << "  <tbody><tr><td>Not yet implemented</td></tr></tbody>\n"
       @body << '</table>' << "\n"
   end
+
+  def cb_env_end2code()
+    @body << "  Code #{@figures.length}: " << @env_caption.apply_subs_rules(@subs_rules) << "</p>\n"
+    @body << "<pre class=\"prettyprint\">\n"
+    f = open(@env_file)
+    @body << f.read.gsub(/&/,'&amp;').gsub(/</,'&lt;').gsub(/>/,'&gt;')
+    f.close
+    @body << "</pre>\n"
+  end
+
+  def cb_equation_end2()
+    @body << @equation_contents.to_mathml('block').to_s.sub(/<math /,"<math id=\"#{@equation_label}\" ") << "\n"
+  end
 end
 
 module HTML5
@@ -363,6 +380,8 @@ module HTML5
       @body << "<figure id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
     when /^Table:/
       @body << "<table  id=\"#{@env_label}\">\n"
+    when /^Code:/
+      @body << "<p id=\"#{@env_label}\" class=\"code caption\">\n"
     end
   end
 
@@ -374,18 +393,16 @@ module HTML5
       @body << "  </figcaption>\n" << '</figure>' << "\n"
     when /^Table:/
       cb_env_end2table()
+    when /^Code:/
+      cb_env_end2code()
     end
-  end
-
-  def cb_equation_end2()
-    @body << @equation_contents.to_mathml('block').to_s.sub(/<math /,"<math id=\"#{@equation_label}\" ") << "\n"
   end
 
   def file(stylesheets=["ulmul2html5.css"],javascripts=[],name="",language="en")
     style_lines=""
-    stylesheets.each{|s| style_lines << "<link rel=\"stylesheet\" href=\"#{s}\" type=\"text/css\" />\n"}
+    stylesheets.each{|s| style_lines << "  <link rel=\"stylesheet\" href=\"#{s}\" type=\"text/css\" />\n"}
     javascript_lines=""
-    javascripts.each{|j| javascript_lines << "<script src=\"#{j}\" type=\"text/javascript\"></script>\n"}
+    javascripts.each{|j| javascript_lines << "  <script src=\"#{j}\" type=\"text/javascript\"></script>\n"}
     return "<!DOCTYPE html>
 <html lang=\"#{language}\">
 <head>
@@ -393,9 +410,9 @@ module HTML5
   <title>#{@title}</title>
   <meta name=\"author\" content=\"#{name}\" />
   <meta name=\"copyright\" content=\"Copyright &#169; #{Date.today.year} #{name}\" />
-  #{style_lines}#{javascript_lines}  <link rel=\"shortcut icon\" href=\"favicon.ico\" />
+#{style_lines}#{javascript_lines}  <link rel=\"shortcut icon\" href=\"favicon.ico\" />
 </head>
-<body>
+<body onload=\"prettyPrint()\">
 #{body()}
 </body>
 </html>
@@ -410,6 +427,8 @@ module XHTML
       @body << "<div class=\"figure\" id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
     when /^Table:/
       @body << "<table id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
+    when /^Code:/
+      @body << "<p id=\"#{@env_label}\" class=\"code caption\">\n"
     end
   end
 
@@ -422,12 +441,14 @@ module XHTML
       @body << '</div>' << "\n"
     when /^Table:/
       cb_env_end2table()
+    when /^Code:/
+      cb_env_end2code()
     end
   end
 
   def file(stylesheets=["ulmul2xhtml.css"],javascripts=[],name="",language="en")
     style_lines=""
-    stylesheets.each{|s| style_lines << "<link rel=\"stylesheet\" href=\"#{s}\" type=\"text/css\" />\n"}
+    stylesheets.each{|s| style_lines << "  <link rel=\"stylesheet\" href=\"#{s}\" type=\"text/css\" />\n"}
     javascript_lines=""
     javascripts.each{|j| javascript_lines << "<script src=\"#{j}\" type=\"text/javascript\"></script>\n"}
     return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -443,7 +464,7 @@ module XHTML
   <meta name=\"copyright\" content=\"Copyright &#169; #{Date.today.year} #{name}\" />
   #{style_lines}#{javascript_lines}  <link rel=\"shortcut icon\" href=\"favicon.ico\" />
 </head>
-<body>
+<body onload=\"prettyPrint()\">
 #{body()}
 </body>
 </html>
@@ -522,7 +543,8 @@ module LaTeX
     b = @body.dup
     @equations.each{|r| b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),  "\\1Eq.~(\\ref{#{r}})\\2")}
     @figures.each{|r|   b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),   "\\1Fig.~\\ref{#{r}}\\2")}
-    @tables.each{|r|    b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'), "\\1Table.~\\ref{#{r}}\\2")}
+    @tables.each{|r|    b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),  "\\1Table~\\ref{#{r}}\\2")}
+    @codes.each{|r|     b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),   "\\1Code~\\ref{#{r}}\\2")}
     return b
   end
 end
@@ -571,5 +593,5 @@ if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
   puts u.file(stylesheets,javascripts,name,language)
 end
 # Local variables:
-#   compile-command: "./ulmul.rb -s ../ulmul2html5.css test.ulmul | tee test.html"
+#   compile-command: "./ulmul.rb -s ../ulmul2html5.css -s ../google-code-prettify/src/prettify.css -j ../google-code-prettify/src/prettify.js test.ulmul | tee test.html"
 # End:
