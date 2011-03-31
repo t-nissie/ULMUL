@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-31 13:45:19 takeshi>
+# Time-stamp: <2011-03-31 13:52:04 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -502,7 +502,7 @@ module LaTeX
   end
 
   def file(packages,name)
-    return "\\documentclass[a4]{article}
+    return "\\documentclass{article}
 \\usepackage{graphicx}
 \\usepackage{bm}
 \\title{#{@title}}
