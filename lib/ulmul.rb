@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # ulmul.rb
-# Time-stamp: <2011-03-31 12:23:14 takeshi>
+# Time-stamp: <2011-03-31 13:45:19 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -448,6 +448,7 @@ module XHTML
 end
 
 module LaTeX
+  require 'exifr'
   def cb_heading(filename=nil, lnumber=nil, line=nil)
     if /^(=+) (.*)$/ =~ line
       new_level=Regexp.last_match[1].length
@@ -472,7 +473,9 @@ module LaTeX
   def cb_env_begin2()
     case @env_label
     when /^Fig:/
-      @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 200 200]{#{@env_file}}\n"
+      width  = EXIFR::JPEG.new(@env_file).width
+      height = EXIFR::JPEG.new(@env_file).height
+      @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 #{width} #{height}]{#{@env_file}}\n"
     when /^Table:/
       @body << "\\begin{table}\n"
     end
