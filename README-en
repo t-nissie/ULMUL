@@ -1,7 +1,7 @@
 = ULMUL (Ultra Lightweight MarkUp Language)
 "ULMUL" is an original Ultra Lightweight MarkUp Language.
 ULMUL texts can be converted into HTML5 with "ulmul2html5" command
-and into XHTML with "ulmul2xhtml" command.
+and into LaTeX with "ulmul2latex" command.
 TeX style equations are converted into MathML.
 ULMUL is written in Ruby.
 You can also use ulmul.rb as a library.
@@ -14,7 +14,7 @@ Download ULMUL from: http://rubyforge.org/projects/ulmul or http://rubygems.org/
  * TeX style equations between two dollar marks ($) and between Eq. and /Eq.
    will be converted into MathML. You can use Firefox version 3.x, IE+MathPlayer,
    etc. to read MathML.
- * ulmul2xhtml output is good with the Slidy presentation environment
+ * ulmul2html5 output is good with the Slidy presentation environment
    http://www.w3.org/Talks/Tools/Slidy/ using Firefox+CSS+XHTML+JavaScript.
    Please use ulmul-slidy.js and ulmul-slidy.css in the package.
  * Lines starting from "#" are comments.
@@ -25,37 +25,43 @@ Download ULMUL from: http://rubyforge.org/projects/ulmul or http://rubygems.org/
    Specify your natural language with a --language option, e.g. --language=en.
 
 == Installation of ULMUL
-There are two different ways to install ULMUL.
-=== I. Conservative way; use setup.rb
-ulmul-X.Y.Z.tgz package can be installed as:
-  $ tar zxf ulmul-X.Y.Z.tgz
-  $ cd ulmul-X.Y.Z
-  $ su
-  # ruby setup.rb
-Note that the eim_xml and math_ml libraries are required.
-=== II. RubyGems users can take an easy way
-There is an easy way, if you are a RubyGems user:
-  $ su
-  # gem install ulmul
-If you do not have the eim_xml and math_ml libraries, gem will download and install the
-library automatically.
+Please use gem ( RubyGems https://rubygems.org/ ) for the installation.
+  $ sudo gem install ulmul
+If you do not have the eim_xml, math_ml, aasm and exifr libraries,
+gem will download and install the libraries automatically.
 
 == How to write ULMUL texts
 The encode of input file must be utf-8.
 === lines
+Inside ulmul.rb, input lines are processed as "events".
 ==== empty
 Empty lines divide paragraphs.
 ==== heading
 Starting with "= ", "== ", "=== ", "==== ", "===== ", and "====== ".
 "= " will be used for the title.
 ==== asterisk
-Lines starting with
- " *"
- "   *"
- "     *"
- "       *"
- "         *"
-become itemize.
+Lines starting with asterisks become itemizing list.
+For example,
+ # Nesting is allowed uo to 5th level.
+  * First
+    * Second
+      * Third
+        * Fourth
+          * Fifth
+          * More for fifth
+      * More for third
+  * More for first
+become
+# Nesting is allowed uo to 5th level.
+ * First
+   * Second
+     * Third
+       * Fourth
+         * Fifth
+         * More for fifth
+     * More for third
+ * More for first
+
 ==== offset
 Lines starting with some spaces but not asterisks become verbatim lines.
 ==== end
@@ -70,48 +76,86 @@ Other lines.
 === Equations
 Input:
  Mass $m$ can be converted into energy $E$ as
- Eq. 1
+ \Eq:Emc2
             E=mc^2.
- /Eq.
+ /Eq:Emc2
 
 Output:
 
 Mass $m$ can be converted into energy $E$ as
-Eq. 1
-            E=mc^2.
-/Eq.
+\Eq:Emc2
+           E=mc^2.
+/Eq:Emc2
 
 To view the equations in MathML correctly, please use
- * Firefox http://mozilla.jp/firefox/
+ * Firefox 4 http://mozilla.jp/firefox/
  * IE8 + MathPlayer http://www.dessci.com/en/products/mathplayer/
  * etc.
 
 === Figures
+Start  with  "\Fig:foo FILENAME.jpg"
+and end with "/Fig:foo", where "foo" is a tag for the figure.
+You can write a figure caption between them.
+You can refer the figure with "Fig:foo" as Fig:ruby.
+
 Input:
- Fig. 1 ruby.jpg
+ \Fig:ruby ruby.jpg
    The is a dummy figure for an example.
    Cute red logo of Ruby, isn't it?
- /Fig.
+ /Fig:ruby
 
 Output:
-Fig. 1 ruby.jpg
+\Fig:ruby ruby.jpg
   The is a dummy figure for an example.
   Cute red logo of Ruby, isn't it?
-/Fig.
+/Fig:ruby
+
+=== Tables
+Start a Table environment with "\Table:bar"
+and terminate it with "/Table:bar", where "bar" is a tag for the figure.
+You can write a figure caption between them.
+You can refer the figure with "Table:bar" as Table:diamond.
+
+Input:
+ \Table:diamond
+   The is a dummy caption for the table.
+ /Table:diamond
+
+Output:
+\Table:diamond
+  The is a dummy caption for the table.
+/Table:diamond
+
+=== Code
+Start a Code environment with "\Code:baz FILENAME"
+and terminate it with "/Code:baz", where "baz" is a tag for the figure.
+You can write a figure caption between them.
+You can refer the figure with "Code:baz" as Code:hello.
+Code will be highlighted with
+google-code-prettify http://code.google.com/p/google-code-prettify/ ,
+when options of -s google-code-prettify/src/prettify.css and
+-j google-code-prettify/src/prettify.js are given.
+
+Input:
+ \Code:hello hello.c
+   The is a dummy figure for an example.
+   Cute red logo of Hello, isn't it?
+ /Code:hello
+
+Output:
+\Code:hello hello.c
+  The is a dummy caption for the code.
+/Code:hello
 
 == Usage
-There are ulmul2xhtml and ulmul2html5 commands.
-
-Use .html extensions even for ulmul2xhtml outputs.
+ulmul2html5 command
 
 To view HTML5 documents,
 change the setting of the "html5.enable" entry to "true" in "about:config".
 See http://kb.mozillazine.org/About:config for details.
 
 === Examples
- $ ulmul2xhtml without-equations.txt > without-equations.html   # XHTML1.0 Transitional
- $ ulmul2xhtml with-equations.txt    > with-equations.html      # XHTML1.1 + MathML2.0
- $ ulmul2xhtml -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j ulmul-slidy.js presentation.txt > presentation.xhtml
+ $ ulmul2html5 -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j ulmul-slidy.js presentation.txt > presentation.html
  $ ulmul2html5 with-equations.txt    > with-equations.html      # HTML5
 
 === Command options
@@ -138,22 +182,23 @@ output HTML file, set it 3..2.
  * http://ulmul.rubyforge.org/index.en.html
    * Its source is http://ulmul.rubyforge.org/README-en (this document)
 
+=== ulmul2xhtml is obsolete
+ulmul2xhtml will be removed from next version.
+
+
 == TODO
- * rescue syntax errors (raises) in an input file and report the
-   errors as #{$FILENAME}:#{file.lineno}:...
+ * More good error messages for syntax errors.
  * Unit test, tests/ulmul_test.rb
- * @body must be XML object, not a String.
- * Tables.
- * References to figures, tables and code.
+ * @body shoud be XML object, not a String.
  * Citation.
- * Include highlighted code between Code.../Code.
+For more, see TODO file.
 
 == Subversion repository
 You can checkout the latest source tree of ULMUL anonymously from RubyForge with svn(1) command:
  $ svn co svn://rubyforge.org/var/svn/ulmul/ulmul/trunk ulmul
 
 == Copying
-Copyright © 2008-2010 by Takeshi Nishimatsu
+Copyright © 2008-2011 by Takeshi Nishimatsu
 
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
@@ -168,6 +213,11 @@ You can download the original package, slidy.zip, from
 http://www.w3.org/Talks/Tools/Slidy/ . You can find
 their licenses at http://www.w3.org/Consortium/Legal/copyright-documents
 and http://www.w3.org/Consortium/Legal/copyright-software .
+
+Google Inc. has copyrights for files under google-code-prettify
+directory. Package prettify-21-Jul-2010.zip is distributed
+from http://code.google.com/p/google-code-prettify/ under the
+Apache License, Version 2.0.
 
 == Author of ULMUL
 Takeshi Nishimatsu (t_nissie{at}yahoo.co.jp) http://t-nissie.users.sourceforge.net/

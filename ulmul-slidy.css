@@ -1,7 +1,7 @@
 /* ulmul-slidy.css -*-CSS-*-
 
    Original slidy.css is modified by Takeshi NISHIMATSU
-   Time-stamp: <2010-10-22 18:12:45 takeshi>
+   Time-stamp: <2011-04-01 11:31:15 takeshi>
 
    References:
     http://daily-expo.com/csslite/
@@ -103,11 +103,23 @@ div.toolbar {
   background-color: #e3e3ff;
 }
 
-div.figure img { width:50%;
-                 margin-left:auto;
-                 margin-right:auto;
-                 display: block;}
+figure img { width:50%;
+             margin-left:auto;
+             margin-right:auto;
+             display: block;}
 
-div.figure div.figcaption { width:60%;
-                         margin-left:auto;
-                         margin-right:auto;}
+figure figcaption { width:60%;
+                    margin-left:auto;
+                    margin-right:auto;}
+
+table {
+    border: blue 2px solid;
+    text-align: center;
+    margin: auto;
+}
+
+p.code.caption {
+    width: 80%;
+    margin: auto;
+    display: block;
+}
