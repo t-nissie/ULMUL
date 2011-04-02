@@ -49,8 +49,8 @@ ulmul.rbは状態遷移 (state machine) ライブラリaasmを使っていて、
     * Second
       * Third
         * Fourth
-          * Fifth
-          * More for fifth
+        * more for Fourth
+      second continue
       * More for third
   * More for first
 は
@@ -59,8 +59,8 @@ ulmul.rbは状態遷移 (state machine) ライブラリaasmを使っていて、
    * Second
      * Third
        * Fourth
-         * Fifth
-         * More for fifth
+       * more for Fourth
+     second continue
      * More for third
  * More for first
 と変換されます。
@@ -140,8 +140,8 @@ Table環境はまだインプリメントされていません。
 
 == ulmul2html5の使用方法
 === 例
+ $ ulmul2html5 foo.txt > foo.html
  $ ulmul2html5 -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j ulmul-slidy.js presentation.txt > presentation.html
- $ ulmul2html5 with-equations.txt > with-equations.html      # HTML5
 
 === コマンド・ライン・オプション
 ==== --help

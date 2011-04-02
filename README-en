@@ -49,8 +49,8 @@ For example,
     * Second
       * Third
         * Fourth
-          * Fifth
-          * More for fifth
+        * more for Fourth
+      second continue
       * More for third
   * More for first
 become
@@ -59,8 +59,8 @@ become
    * Second
      * Third
        * Fourth
-         * Fifth
-         * More for fifth
+       * more for Fourth
+     second continue
      * More for third
  * More for first
 ==== offset
@@ -68,7 +68,7 @@ Lines starting with some spaces but not asterisks become verbatim lines.
 ==== end
 EOF or "=end" end the process.
 ==== ignore
-Lines starting with"#" and "=begin" are ignored.
+Lines starting with "#" and "=begin" are ignored.
 ==== normal
 Other lines.
 === Other rules
@@ -90,7 +90,7 @@ Mass $m$ can be converted into energy $E$ as
 
 To view the equations in MathML correctly, please use
  * Firefox 4 http://mozilla.jp/firefox/
- * IE8 + MathPlayer http://www.dessci.com/en/products/mathplayer/
+ * IE9
  * etc.
 
 === Figures
@@ -152,8 +152,8 @@ Output:
 
 == Usage of ulmul2html5
 === Examples
+ $ ulmul2html5 foo.txt > foo.html
  $ ulmul2html5 -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j ulmul-slidy.js presentation.txt > presentation.html
- $ ulmul2html5 with-equations.txt > with-equations.html      # HTML5
 
 === Command options
 ==== --help
