@@ -1,13 +1,11 @@
 # ulmul_test.rb -*-ruby-*-
-# Time-stamp: <2010-10-07 21:29:34 takeshi>
+# Time-stamp: <2011-04-02 17:10:52 takeshi>
 # Author: Takeshi NISHIMATSU
 ##
 require 'rubygems'
 require 'test/unit'
 require 'ulmul'
-
 class TestULMUL < Test::Unit::TestCase
-
   def test_exist_Ulmul
     assert_instance_of(Class, Ulmul)
   end
@@ -16,13 +14,8 @@ class TestULMUL < Test::Unit::TestCase
     assert(Ulmul.method_defined?(:parse))
   end
 
-  def test_method_html
-    assert(Ulmul.method_defined?(:html))
-  end
-
   def test_singleton_new
-    u = Ulmul.new(2..3,'ulmul2html5')
+    u = Ulmul.new()
     assert_instance_of(Ulmul, u)
   end
-
 end
