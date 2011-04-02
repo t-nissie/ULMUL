@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-04-01 16:14:25 takeshi>
+# Time-stamp: <2011-04-02 10:22:47 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -229,7 +229,6 @@ class Ulmul
     when /^Code:/
       @codes << @env_label
     end
-    cb_env_begin2()
   end
 
   def cb_env_continues(filename=nil, lnumber=nil, line=nil)
@@ -352,8 +351,9 @@ module HTML
   end
 
   def cb_env_end2table()
+      @body << "<table  id=\"#{@env_label}\">\n"
       @body << "  <caption>\n"
-      @body << "  Table #{@figures.length}: " << @env_caption.apply_subs_rules(@subs_rules)
+      @body << "  Table #{@tables.length}: " << @env_caption.apply_subs_rules(@subs_rules)
       @body << "  </caption>\n"
       @body << "  <thead><tr><th>       TABLE           </th></tr></thead>\n"
       @body << "  <tbody><tr><td>Not yet implemented</td></tr></tbody>\n"
@@ -361,7 +361,8 @@ module HTML
   end
 
   def cb_env_end2code()
-    @body << "  Code #{@figures.length}: " << @env_caption.apply_subs_rules(@subs_rules) << "</p>\n"
+    @body << "<p id=\"#{@env_label}\" class=\"code caption\">\n"
+    @body << "  Code #{@codes.length}: " << @env_caption.apply_subs_rules(@subs_rules) << "</p>\n"
     @body << "<pre class=\"prettyprint\">\n"
     f = open(@env_file)
     @body << f.read.gsub(/&/,'&amp;').gsub(/</,'&lt;').gsub(/>/,'&gt;')
@@ -375,20 +376,10 @@ module HTML
 end
 
 module HTML5
-  def cb_env_begin2()
-    case @env_label
-    when /^Fig:/
-      @body << "<figure id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
-    when /^Table:/
-      @body << "<table  id=\"#{@env_label}\">\n"
-    when /^Code:/
-      @body << "<p id=\"#{@env_label}\" class=\"code caption\">\n"
-    end
-  end
-
   def cb_env_end2()
     case @env_label
     when /^Fig:/
+      @body << "<figure id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
       @body << "  <figcaption>\n"
       @body << "  Figure #{@figures.length}: " << @env_caption.apply_subs_rules(@subs_rules)
       @body << "  </figcaption>\n" << '</figure>' << "\n"
@@ -422,22 +413,12 @@ module HTML5
 end
 
 module XHTML
-  def cb_env_begin2()
-    case @env_label
-    when /^Fig:/
-      @body << "<div class=\"figure\" id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
-    when /^Table:/
-      @body << "<table id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
-    when /^Code:/
-      @body << "<p id=\"#{@env_label}\" class=\"code caption\">\n"
-    end
-  end
-
   def cb_env_end2()
     case @env_label
     when /^Fig:/
+      @body << "<div class=\"figure\" id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
       @body << "  <div class=\"figcaption\">\n"
-      @body << "  FIG #{@figures.length}. " << @env_caption.apply_subs_rules(@subs_rules)
+      @body << "  Figure #{@figures.length}. " << @env_caption.apply_subs_rules(@subs_rules)
       @body << "  </div>\n"
       @body << '</div>' << "\n"
     when /^Table:/
@@ -446,7 +427,7 @@ module XHTML
       cb_env_end2code()
     end
   end
-
+  
   def file(stylesheets=["ulmul2xhtml.css"],javascripts=[],name="",language="en")
     style_lines=""
     stylesheets.each{|s| style_lines << "  <link rel=\"stylesheet\" href=\"#{s}\" type=\"text/css\" />\n"}
@@ -496,25 +477,16 @@ module LaTeX
     @level_of_heading=new_level
   end
 
-  def cb_env_begin2()
+  def cb_env_end2()
     case @env_label
     when /^Fig:/
       width  = EXIFR::JPEG.new(@env_file).width
       height = EXIFR::JPEG.new(@env_file).height
       @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 #{width} #{height}]{#{@env_file}}\n"
-    when /^Table:/
-      @body << "\\begin{table}\n"
-    when /^Code:/
-      # do nothing
-    end
-  end
-
-  def cb_env_end2()
-    case @env_label
-    when /^Fig:/
       @body << '  \caption{' << @env_caption.apply_subs_rules(@subs_rules).strip << "}\n"
       @body << "  \\label{#{@env_label}}\n" << "\\end{figure}\n"
     when /^Table:/
+      @body << "\\begin{table}\n"
       @body << '  \caption{' << @env_caption.apply_subs_rules(@subs_rules).strip << "}\n"
       @body << "  \\label{#{@env_label}}\n"
       @body << "  \\center\n"

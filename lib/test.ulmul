@@ -48,3 +48,21 @@ Code. Can you read Code:hello?
   Ordinary hello.c.
   Can you see stdio.h?
 /Code:hello
+
+== Third page
+Code. Can you read Code:hellow?
+\Code:hellow ../hello.c
+  Ordinary hello.c.
+  Can you see stdio.h?
+/Code:hellow
+
+A table. See Table:example2!
+\Table:example2
+  Example caption for a table.
+/Table:example2
+
+A figure. See Fig:ruby2.
+\Fig:ruby2 ../ruby.jpg
+  Here is the figure caption (figcaption).
+  Cute red logo of Ruby, isn't it?
+/Fig:ruby2
