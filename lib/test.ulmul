@@ -43,8 +43,8 @@ A table. See Table:example!
   Example caption for a table.
 /Table:example
 === Code
-Code. See Code:hello?
+Code. Can you read Code:hello?
 \Code:hello ../hello.c
   Ordinary hello.c.
-  Can you stdio.h?
+  Can you see stdio.h?
 /Code:hello

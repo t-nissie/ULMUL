@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-03-31 19:14:47 takeshi>
+# Time-stamp: <2011-04-01 16:14:25 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -503,6 +504,8 @@ module LaTeX
       @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 #{width} #{height}]{#{@env_file}}\n"
     when /^Table:/
       @body << "\\begin{table}\n"
+    when /^Code:/
+      # do nothing
     end
   end
 
@@ -517,6 +520,12 @@ module LaTeX
       @body << "  \\center\n"
       @body << "  {TABLE is not yet implemented.}\n"
       @body << "\\end{table}\n"
+    when /^Code:/
+      @body << "\\begin{lstlisting}[caption={#{@env_caption.apply_subs_rules(@subs_rules).strip}},label=#{@env_label}]\n"
+      f = open(@env_file)
+      @body << f.read
+      f.close
+      @body << "\\end{lstlisting}\n"
     end
   end
 
@@ -530,6 +539,21 @@ module LaTeX
     return "\\documentclass{article}
 \\usepackage{graphicx}
 \\usepackage{bm}
+\\usepackage{listings}
+\\renewcommand{\\lstlistingname}{Code}
+\\lstset{language=c,
+%  basicstyle=\\ttfamily\\scriptsize,
+%  commentstyle=\\textit,
+%  classoffset=1,
+%  keywordstyle=\\bfseries,
+   frame=shadowbox,
+%  framesep=5pt,
+%  showstringspaces=false,
+%  numbers=left,
+%  stepnumber=1,
+%  numberstyle=\\tiny,
+%  tabsize=2
+}
 \\title{#{@title}}
 \\author{#{name}}
 \\begin{document}
@@ -565,7 +589,7 @@ if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
           "Specify JavaScript filename."){|v| javascripts<<v}
   opts.on("-l LANGUAGE","--language LANGUAGE",String,
           "Specify natural language. Its defalt is 'en'."){|v| language=v[0..1].downcase}
-  opts.on("-m MAX_TABLE_OF_CONTENTS","--max-table-of-contents  MAX_TABLE_OF_CONTENTS",Integer,
+  opts.on("-m MAX_TABLE_OF_CONTENTS","--max-table-of-contents MAX_TABLE_OF_CONTENTS",Integer,
           "Specify the maximum level for table of contents."){|v| $MAX_TABLE_OF_CONTENTS=v}
   opts.on_tail("-h", "--help", "Show this message."){puts opts.to_s.sub(/options/,'options] [filename'); exit}
   opts.parse!(ARGV)
