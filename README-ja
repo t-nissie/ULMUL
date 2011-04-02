@@ -1,57 +1,69 @@
 = ULMUL取扱説明書
 ULMULは独自の軽量マークアップ言語 (Ultra Lightweight MarkUp Language) です。
-コマンドulmul2html5でHTML5に、ulmul2xhtmlでXHTMLに変換できます。
+コマンドulmul2html5でHTML5に、ulmul2latexでLaTeXに変換できます。
 文章中のTeXスタイルで書かれた数式をMathMLに変換できるのが特徴です。
 Rubyで書かれています。ulmul.rbをライブラリとして利用することも可能です。
 
 ホームページ: http://ulmul.rubyforge.org/
 
-ダウンロード: http://rubyforge.org/projects/ulmul/ または http://rubygems.org/gems/ulmul
+ダウンロード: http://rubygems.org/gems/ulmul または http://rubyforge.org/projects/ulmul/
 
 == 特徴
- * 文章中の２つのドル記号($)で挟まれた部分とEq.…/Eq.で挟まれた行が数式としてTeX形式からMathML形式に変換されます。
-   MathMLとはXMLで数式を記述するための規格です。込み入った規格なので人間が直接MathMLを記述する
-   ことは想定されていませんが、ULMULでやっているようにTeXなどからの変換により生成することができます。
-   Firefoxのバージョン3.0以上やIE+MathPlayerで読めるようです。
+ * 文章中の２つのドル記号($)で挟まれた部分と\Eq:fooと/Eq:fooとで挟まれた行が
+   数式としてTeX形式からMathML形式に変換されます。MathMLとはXMLで数式を記述
+   するための規格です。込み入った規格なので人間が直接MathMLを記述する
+   ことは想定されていませんが、ULMULでやっているようにTeXなどからの変換により
+   生成することができます。Firefox4やIE9で読めるようです。
    math_ml.rb http://www.hinet.mydns.jp/?mathml.rb を使っています。
  * ウェブ・ブラウザ+CSS+XHTML+JavaScriptを使ったプレゼン環境
    Slidy http://www.w3.org/Talks/Tools/Slidy/ に対応したxhtmlが出力可能。
    パッケージの中の ulmul-slidy.js と ulmul-slidy.css とを使ってください。
+ * 図、表、コードが挿入でき、文中でそれらの参照ができます。
  * =begin, =end はあってもなくてもかまいません。
  * 行を#ではじめるとコメントになります。
  * ulmul.rbをライブラリとしても使えます。
  * subs_rulesに俺ルールを加えることができます。
- * 目次 (Contents) を自動的に生成できます。
+ * 目次 (Table of Contents) を自動的に生成できます。
  * はじめの「= ABCD EFGH」がタイトルになります。Slidyの表紙にもなります。
  * テキストファイルはutf-8で書きます。自然言語は--language=jaなどとオプションで指定できます。
 
 == インストール方法
-２通りのインストール方法があります。
-=== I. setup.rbを使う方法
-パッケージ ulmul-X.Y.Z.tgz を次のようにインストールします:
-  $ tar zxf ulmul-X.Y.Z.tgz
-  $ cd ulmul-X.Y.Z
-  $ sudo ruby setup.rb
-なお、ULMULを使うにはeim_xmlライブラリとmath_mlライブラリとが必要です。
-=== II. RubyGemsを使えば簡単にインストールができます
-gemでインストールすればeim_xmlライブラリとmath_mlライブラリとは自動的にインストールされます:
+gemでインストールすれば必要なライブラリも自動的にインストールされます:
   $ sudo gem install ulmul
 
 == ULMULテキストの書き方
 ULMULテキストのエンコーディングにはutf-8を使ってください。
 === 各行の種類
+ulmul.rbは状態遷移 (state machine) ライブラリaasmを使っていて、
+入力の各行を「イベント」として扱っています。
 ==== 空行 (empty)
 空行は段落を分割します。
 ==== ヘディング (heading)
 "= ", "== ", "=== ", "==== ", "===== ", または "====== " で始めてください。
 「= ABCD EFGH」ならABCD EFGHがタイトルになります。Slidyの表紙にもなります。
 ==== アスタリスクで始まる行は箇条書きになります (asterisk)
-６段までネストした箇条書きが可能です:
- " *"
- "   *"
- "     *"
- "       *"
- "         *"
+５段までネストした箇条書きが可能です:
+たとえば、
+ # Nesting is allowed uo to 5th level.
+  * First
+    * Second
+      * Third
+        * Fourth
+          * Fifth
+          * More for fifth
+      * More for third
+  * More for first
+は
+# Nesting is allowed uo to 5th level.
+ * First
+   * Second
+     * Third
+       * Fourth
+         * Fifth
+         * More for fifth
+     * More for third
+ * More for first
+と変換されます。
 ==== オフセットされて書かれた行はそのまま出力 (verbatim, pre) されます (offset)
 １つスペースを置いて書き始めた行はverbatimになります。
 ==== 終わり (end)
@@ -67,59 +79,69 @@ Lines starting with"#" and "=begin" are ignored.
 
 === 数式の書き方
 文章中の２つのドル記号($)で挟まれた部分がTeX形式からMathML形式に変換されます。
-また、Eq.…/Eq.で挟まれた行も次の例のように処理されます。
+また、\Eq:fooと/Eq:fooとで挟まれた行も次の例のように処理されます。
 
 入力:
  Mass $m$ can be converted into energy $E$ as
- Eq. 1
+ \Eq:Emc2
             E=mc^2.
- /Eq.
+ /Eq:Emc2
 
 出力:
 
 Mass $m$ can be converted into energy $E$ as
-Eq. 1
-            E=mc^2.
-/Eq.
+\Eq:Emc2
+           E=mc^2.
+/Eq:Emc2
 
 数式を正しくご覧いただくには
- * Firefox http://mozilla.jp/firefox/
- * IE8 + MathPlayer http://www.dessci.com/en/products/mathplayer/
+ * Firefox4 http://mozilla.jp/firefox/
+ * IE9
 などのブラウザを試してみて下さい。
 
 === 図の挿入方法
+「図環境」は "\Fig:foo FILENAME.jpg" で始めて "/Fig:foo" で閉じてください。
+間に図のキャプションを書くことができます。
+ここで "foo" は図のタグです。
+"Fig:foo"で図を参照することができます。こんな具合です Fig:ruby 。
+
 入力:
- Fig. 1 ruby.jpg
+ \Fig:ruby ruby.jpg
    The is a dummy figure for an example.
    Cute red logo of Ruby, isn't it?
- /Fig.
+ /Fig:ruby
 
 出力:
-Fig. 1 ruby.jpg
+\Fig:ruby ruby.jpg
   The is a dummy figure for an example.
   Cute red logo of Ruby, isn't it?
-/Fig.
+/Fig:ruby
 
-== 使用方法
-ulmul2xhtmlとulmul2html5の２つのコマンドがあります。
-特に指定がなければ ulmul2xhtml.css と ulmul2html5.css とがそれぞれのCSSファイルのなります。
-これら２つのファイルはパッケージに同梱されています。
+=== 表の挿入方法
+Table環境はまだインプリメントされていません。
 
-2010年4月現在、ulmul2xhtmlの出力を.htmlの拡張子を持ったファイルにリダイレクトして
-httpサーバからtext/htmlのMIMEタイプで送信されるようにすれば
-いくつかのブラウザが数式を表示してくれるようです。
-１行目のxml宣言を取るとさらにうまく表示される場合もあります。
+=== コードの挿入方法
+「コード環境」は "\Code:baz FILENAME" で始めて "/Code:baz" で閉じてください。
+間にキャプションを書くことができます。
+ここで "baz" は図のタグです。
+"Code:baz"で当該コードを参照することができます。こんな具合です Code:hello 。
 
-Firefox3.6でHTML5を表示するには、URLとして about:config を入力して、
-html5.enableをfalseからtrueに変更してください。
+入力:
+ \Code:hello hello.c
+   Ordinary hello.c.
+   Can you see stdio.h?
+ /Code:hello
 
-IE8はMathMLで書かれた数式を含んだHTML5をうまく表示できないようです。
+出力:
+\Code:hello hello.c
+  Ordinary hello.c.
+  Can you see stdio.h?
+/Code:hello
 
+== ulmul2html5の使用方法
 === 例
- $ ulmul2xhtml without-equations.txt > without-equations.html   # XHTML1.0 Transitional
- $ ulmul2xhtml with-equations.txt    > with-equations.html      # XHTML1.1 + MathML2.0
- $ ulmul2xhtml -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j ulmul-slidy.js presentation.txt > presentation.xhtml
- $ ulmul2html5 with-equations.txt    > with-equations.html      # HTML5
+ $ ulmul2html5 -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j ulmul-slidy.js presentation.txt > presentation.html
+ $ ulmul2html5 with-equations.txt > with-equations.html      # HTML5
 
 === コマンド・ライン・オプション
 ==== --help
@@ -132,11 +154,11 @@ IE8はMathMLで書かれた数式を含んだHTML5をうまく表示できない
 JavaScriptのファイル名を指定します。
 ==== -l, --language
 自然言語の種類を指定します。既定値は"en"です。日本語の場合は-l jaとします。
-==== -c, --contents-range
-目次の深さを指定します。既定値は"2..3"です。
-目次が必要なければ-c 3..2とします。
+==== -m, --max-table-of-contents
+目次の深さを指定します。既定値は"3"です。
+目次が必要なければ1を指定してください。
 
-=== 使用例
+=== 実際の使用例
  * http://loto.sourceforge.net/feram/
    * ソースは http://loto.sourceforge.net/feram/README
  * http://loto.sourceforge.net/feram/doc/film.xhtml
@@ -144,18 +166,25 @@ JavaScriptのファイル名を指定します。
  * http://ulmul.rubyforge.org/index.ja.html
    * ソースは http://ulmul.rubyforge.org/README-ja （この文章）
 
-== ulmul.rbの仕組み
-入力の各行をイベントとして状態遷移しています。
-定数Ulmul::TABLEが状態遷移表です。
+=== ulmul2xhtmlは消します
+次のバージョン (0.6.x) からulmul2xhtmlは消します。
+
+== Usage of ulmul2latex
+ $ ulmul2latex --help
+ $ ulmul2latex test.ulmul | tee test.tex
+ $ latex test.tex
+ $ latex test.tex
+ $ dvipdfmx test.dvi
+ulmul2latexはまだ発展途上です。
 
 == 最新のソース・ツリーの入手方法
 ソース・ツリーはRubyForge.orgのSubversionレポジトリで管理されています。
 svn(1)コマンドを使って
  $ svn co svn://rubyforge.org/var/svn/ulmul/ulmul/trunk ulmul
-とcheckoutできます。
+と匿名でcheckoutできます。
 
 == 著作権表示
-Copyright © 2008-2010 by Takeshi Nishimatsu
+Copyright © 2008-2011 by Takeshi Nishimatsu
 
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
@@ -170,6 +199,11 @@ You can download the original package, slidy.zip, from
 http://www.w3.org/Talks/Tools/Slidy/ . You can find
 their licenses at http://www.w3.org/Consortium/Legal/copyright-documents
 and http://www.w3.org/Consortium/Legal/copyright-software .
+
+Google Inc. has copyrights for files under google-code-prettify
+directory. Package prettify-21-Jul-2010.zip is distributed
+from http://code.google.com/p/google-code-prettify/ under the
+Apache License, Version 2.0.
 
 == 作者
 西松タケシ (t_nissie{at}yahoo.co.jp) http://t-nissie.users.sourceforge.net/
