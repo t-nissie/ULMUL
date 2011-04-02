@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2011-04-01 15:43:33 takeshi>
+# Time-stamp: <2011-04-02 19:31:51 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -81,4 +81,12 @@ file "index.ja.html" => ["bin/ulmul2html5", "README-ja", "ulmul2html5.css", "goo
   sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -s #{t.prerequisites[2]} -s #{t.prerequisites[3]} \
       -j #{t.prerequisites[4]} -l ja #{t.prerequisites[1]} | \
       sed -e 's%</h1>%</h1><div class=\"navi\">[<a href=\"index.en.html\">English</a>/<a href=\"index.ja.html\">Japanese</a>]</div>%' > #{t.name}"
+end
+
+desc "Create README-en.tex"
+file "README-en.tex" => ["bin/ulmul2latex", "README-en", "lib/ulmul.rb", "Rakefile"] do |t|
+  sh "ruby -I lib #{t.prerequisites[0]} #{t.prerequisites[1]} | sed -e 's/\(\$\)/(\\\\$)/' -e 's/#/\\\\#/' \
+      -e 's/subs_/subs\\\\_/' -e 's/eim_/eim\\\\_/' -e 's/math_/math\\\\_/' -e 's/ulmul_/ulmul\\\\_/' \
+      -e 's/t_nissie/t\\\\_nissie/' -e 's/\\\\Eq/\\\\\\\\Eq/' \
+      -e 's/\\\\Fig/\\\\\\\\Fig/' -e 's/\\\\Table/\\\\\\\\Table/' -e 's/\\\\Code/\\\\\\\\Code/' > #{t.name}"
 end
