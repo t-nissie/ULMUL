@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-04-02 10:46:40 takeshi>
+# Time-stamp: <2011-04-02 19:23:18 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -48,7 +48,9 @@ module Itemize
                 end
     str = Regexp.last_match[1].apply_subs_rules(@subs_rules)
     if new_level>@level_of_state+1
-      raise 'Illegal jump of itemize level'
+      STDERR << filename << ":#{lnumber}: Illegal jump of itemize level from #{@level_of_state} to #{new_level}: #{line}"
+      exit 1
+      raise 
     elsif new_level==@level_of_state+1
       @body << "\n" << "    "*@level_of_state << ITEMIZE_INITIATOR << "\n"
       @body <<              "    "*(new_level-1) << "  " << ITEM_INITIATOR << str
@@ -65,11 +67,11 @@ module Itemize
 
   def cb_itemize_continue_item(filename=nil, lnumber=nil, line=nil)
     new_level = case line
-                when         /^   (.*)/ then 1
-                when       /^     (.*)/ then 2
-                when     /^       (.*)/ then 3
-                when   /^         (.*)/ then 4
-                when /^           (.*)/ then 5
+                when         /^   (\S.*)/ then 1
+                when       /^     (\S.*)/ then 2
+                when     /^       (\S.*)/ then 3
+                when   /^         (\S.*)/ then 4
+                when /^           (\S.*)/ then 5
                 else raise 'Illegal astarisk line for itemize'
                 end
     str = Regexp.last_match[1].apply_subs_rules(@subs_rules)
