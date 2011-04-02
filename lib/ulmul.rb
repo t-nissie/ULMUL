@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-04-02 10:22:47 takeshi>
+# Time-stamp: <2011-04-02 10:46:40 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -362,7 +362,7 @@ module HTML
 
   def cb_env_end2code()
     @body << "<p id=\"#{@env_label}\" class=\"code caption\">\n"
-    @body << "  Code #{@codes.length}: " << @env_caption.apply_subs_rules(@subs_rules) << "</p>\n"
+    @body << "  Code #{@codes.length}: " << @env_caption.apply_subs_rules(@subs_rules) << "(download: <a href=\"#{@env_file}\">#{File.basename(@env_file)}</a>)" << "</p>\n"
     @body << "<pre class=\"prettyprint\">\n"
     f = open(@env_file)
     @body << f.read.gsub(/&/,'&amp;').gsub(/</,'&lt;').gsub(/>/,'&gt;')
