@@ -1,25 +1,26 @@
 = ULMUL (Ultra Lightweight MarkUp Language)
 "ULMUL" is an original Ultra Lightweight MarkUp Language.
-ULMUL texts can be converted into HTML5 with "ulmul2html5" command
-and into LaTeX with "ulmul2latex" command.
+ULMUL texts can be converted into HTML5 with "ulmul2html5"
+command and into LaTeX with "ulmul2latex" command.
 TeX style equations are converted into MathML.
 ULMUL is written in Ruby.
 You can also use ulmul.rb as a library.
 
 Homepage of ULMUL: http://ulmul.rubyforge.org/
 
-Download ULMUL from: http://rubyforge.org/projects/ulmul or http://rubygems.org/gems/ulmul
+Download ULMUL from: http://rubygems.org/gems/ulmul or http://rubyforge.org/projects/ulmul
 
 == Features
- * TeX style equations between two dollar marks ($) and between Eq. and /Eq.
-   will be converted into MathML. You can use Firefox version 3.x, IE+MathPlayer,
-   etc. to read MathML.
+ * TeX style equations between two dollar marks ($) and between \Eq:foo and /Eq:foo
+   will be converted into MathML. You can use Firefox4, IE9, etc. to read MathML.
  * ulmul2html5 output is good with the Slidy presentation environment
    http://www.w3.org/Talks/Tools/Slidy/ using Firefox+CSS+XHTML+JavaScript.
    Please use ulmul-slidy.js and ulmul-slidy.css in the package.
+ * Figures, tables and code can be inserted to the document.
+   They can be easily refered in the text.
  * Lines starting from "#" are comments.
  * You can add your conversion rules to @subs_rules.
- * List of contents will be automatically generated.
+ * "Table of Contents" will be automatically generated.
  * "= ABC EFGH" will be the document title and the cover page of Slidy.
  * Use utf-8 for ULMUL texts.
    Specify your natural language with a --language option, e.g. --language=en.
@@ -33,7 +34,8 @@ gem will download and install the libraries automatically.
 == How to write ULMUL texts
 The encode of input file must be utf-8.
 === lines
-Inside ulmul.rb, input lines are processed as "events".
+Inside ulmul.rb, input lines are processed as "events"
+with aasm library https://rubygems.org/gems/aasm .
 ==== empty
 Empty lines divide paragraphs.
 ==== heading
@@ -61,7 +63,6 @@ become
          * More for fifth
      * More for third
  * More for first
-
 ==== offset
 Lines starting with some spaces but not asterisks become verbatim lines.
 ==== end
@@ -93,8 +94,8 @@ To view the equations in MathML correctly, please use
  * etc.
 
 === Figures
-Start  with  "\Fig:foo FILENAME.jpg"
-and end with "/Fig:foo", where "foo" is a tag for the figure.
+Start a Figure environment with "\Fig:foo FILENAME.jpg"
+and terminate it with "/Fig:foo", where "foo" is a tag for the figure.
 You can write a figure caption between them.
 You can refer the figure with "Fig:foo" as Fig:ruby.
 
@@ -111,8 +112,9 @@ Output:
 /Fig:ruby
 
 === Tables
+Table environment is NOT IMPLEMENTED yet.
 Start a Table environment with "\Table:bar"
-and terminate it with "/Table:bar", where "bar" is a tag for the figure.
+and terminate it with "/Table:bar", where "bar" is a tag for the table.
 You can write a figure caption between them.
 You can refer the figure with "Table:bar" as Table:diamond.
 
@@ -128,7 +130,7 @@ Output:
 
 === Code
 Start a Code environment with "\Code:baz FILENAME"
-and terminate it with "/Code:baz", where "baz" is a tag for the figure.
+and terminate it with "/Code:baz", where "baz" is a tag for the code.
 You can write a figure caption between them.
 You can refer the figure with "Code:baz" as Code:hello.
 Code will be highlighted with
@@ -138,25 +140,20 @@ when options of -s google-code-prettify/src/prettify.css and
 
 Input:
  \Code:hello hello.c
-   The is a dummy figure for an example.
-   Cute red logo of Hello, isn't it?
+   Ordinary hello.c.
+   Can you see stdio.h?
  /Code:hello
 
 Output:
 \Code:hello hello.c
-  The is a dummy caption for the code.
+  Ordinary hello.c.
+  Can you see stdio.h?
 /Code:hello
 
-== Usage
-ulmul2html5 command
-
-To view HTML5 documents,
-change the setting of the "html5.enable" entry to "true" in "about:config".
-See http://kb.mozillazine.org/About:config for details.
-
+== Usage of ulmul2html5
 === Examples
  $ ulmul2html5 -n 'Takeshi Nishimatsu' -s ulmul-slidy.css -j ulmul-slidy.js presentation.txt > presentation.html
- $ ulmul2html5 with-equations.txt    > with-equations.html      # HTML5
+ $ ulmul2html5 with-equations.txt > with-equations.html      # HTML5
 
 === Command options
 ==== --help
@@ -169,10 +166,10 @@ Specify your name for copyright notices.
 Specify JavaScript filename.
 ==== -l, --language
 Specify natural language. Its default is "en".
-==== -c, --contents-range
-Range of "Contents". Its default is "2..3".
-If you do not need "Contents" at the beginning of the
-output HTML file, set it 3..2.
+==== -m, --max-table-of-contents
+Maximum depth for the Table of Contents.
+Its default is 3.
+If you do not need the Table of Contents, specify 1.
 
 === ULMUL and Slidy examples
  * http://loto.sourceforge.net/feram/
@@ -183,18 +180,26 @@ output HTML file, set it 3..2.
    * Its source is http://ulmul.rubyforge.org/README-en (this document)
 
 === ulmul2xhtml is obsolete
-ulmul2xhtml will be removed from next version.
+ulmul2xhtml will be removed from next version 0.6.x.
 
+== Usage of ulmul2latex
+ $ ulmul2latex --help
+ $ ulmul2latex test.ulmul | tee test.tex
+ $ latex test.tex
+ $ latex test.tex
+ $ dvipdfmx test.dvi
+ulmul2latex is still under development. Sorry.
 
 == TODO
- * More good error messages for syntax errors.
+ * More usefull error messages for syntax errors.
  * Unit test, tests/ulmul_test.rb
  * @body shoud be XML object, not a String.
  * Citation.
 For more, see TODO file.
 
 == Subversion repository
-You can checkout the latest source tree of ULMUL anonymously from RubyForge with svn(1) command:
+You can checkout the latest source tree of ULMUL anonymously from RubyForge
+with svn(1) command:
  $ svn co svn://rubyforge.org/var/svn/ulmul/ulmul/trunk ulmul
 
 == Copying
