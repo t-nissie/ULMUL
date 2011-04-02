@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2011-04-02 17:13:06 takeshi>
+# Time-stamp: <2011-04-02 18:00:52 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -11,7 +11,8 @@ Gem::Specification.new do |s|
   s.default_executable=  'ulmul2html5'
 
   s.summary           = 'ULMUL is an Ultra Lightweight Mark-Up Language'
-  s.files             = Dir.glob("{html}/**/*") << 'lib/ulmul.rb' << 'test/unit/ulmul_test.rb' <<
+  s.files             = Dir.glob("{google-code-prettify}/**/*") <<
+                        'lib/ulmul.rb' << 'test/unit/ulmul_test.rb' <<
                         'ulmul2xhtml.css' << 'favicon.ico' <<
                         'ulmul2html5.css' << 'XHTML-vs-HTML5.ja.txt' <<
                         'ChangeLog' <<
