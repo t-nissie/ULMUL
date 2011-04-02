@@ -18,6 +18,16 @@ Example of itemize.
    * klm
    ccc ccc
  * ddd ddd
+ * First
+   * Second
+     * Third
+     * Third
+       * Fourth
+       * more for Fourth
+       third continue
+     * Why ?
+   * More for third
+ * More for first
 
 Five lines of verbatim follows.
  v1
