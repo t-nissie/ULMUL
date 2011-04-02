@@ -1,28 +1,24 @@
 = ULMUL TODO LIST
-
-== Unit Test
- * Check s.files and s.test_files in ulmul.gemspec.
-   There is no tests/ulmul_test.rb and "{html}/**/*".
+== Formats
+ * HTML5 (done)
+ * LaTeX (done)
+ * EPUB
+ * CASIO Electric Dictionary
+ * Evernote export format (enex)
+ * ReView
 
 == Lists
  * ordered list
  * definition list
 
-== Formats
- * EPUB
- * LaTeX
- * CASIO Electric Dictionary
- * Evernote export format (enex)
- * ReView
+== Tables
+ * Implementation
 
-== Code
- * syntax highlighting with google-code-prettify http://code.google.com/p/google-code-prettify/
+== Figures
+ * Not only JPEG but EPS  
 
-== References
- * Eq:Hamiltonian
- * Fig:foo
- * Table:bar
- * Code:baz
+== Ref in Japanese
+ * In Japanese, spaces are needed before and after "Env:foo".
 
 == Citation
  * Cite:Bohr
@@ -31,10 +27,15 @@
  * STIX
 
 == CSS
- * pretty
- * EPS
+ * more pretty style
+
+== Test
+ * Unit test
+ * Error messages
 
 == Done
+ * References
  * unordered list (itemize) [Lists]
  * foo.ulmul:55:Illegal environment. [Error message]
  * jpeg file -> bb for \includegraphics
+ * syntax highlighting with google-code-prettify http://code.google.com/p/google-code-prettify/
