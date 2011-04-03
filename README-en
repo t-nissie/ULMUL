@@ -17,7 +17,7 @@ Download ULMUL from: http://rubygems.org/gems/ulmul or http://rubyforge.org/proj
    http://www.w3.org/Talks/Tools/Slidy/ using Firefox+CSS+XHTML+JavaScript.
    Please use ulmul-slidy.js and ulmul-slidy.css in the package.
  * Figures, tables and code can be inserted to the document.
-   They can be easily refered in the text.
+   They can be easily referred in the text.
  * Lines starting from "#" are comments.
  * You can add your conversion rules to @subs_rules.
  * "Table of Contents" will be automatically generated.
@@ -44,7 +44,7 @@ Starting with "= ", "== ", "=== ", "==== ", "===== ", and "====== ".
 ==== asterisk
 Lines starting with asterisks become itemizing list.
 For example,
- # Nesting is allowed uo to 5th level.
+ # Nesting is allowed up to 5th level.
   * First
     * Second
       * Third
@@ -54,7 +54,7 @@ For example,
       * More for third
   * More for first
 become
-# Nesting is allowed uo to 5th level.
+# Nesting is allowed up to 5th level.
  * First
    * Second
      * Third
@@ -191,9 +191,9 @@ ulmul2xhtml will be removed from next version 0.6.x.
 ulmul2latex is still under development. Sorry.
 
 == TODO
- * More usefull error messages for syntax errors.
+ * More useful error messages for syntax errors.
  * Unit test, tests/ulmul_test.rb
- * @body shoud be XML object, not a String.
+ * @body should be XML object, not a String.
  * Citation.
 For more, see TODO file.
 
