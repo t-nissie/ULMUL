@@ -69,7 +69,7 @@ ulmul.rbは状態遷移 (state machine) ライブラリaasmを使っていて、
 ==== 終わり (end)
 EOF と "=end" が出てくると処理が終了します。
 ==== 無視される行 (ignore)
-Lines starting with"#" and "=begin" are ignored.
+"#" または "=begin" で始まる行は無視されます。
 ==== その他の入力行 (normal)
 地の文になります。
 
