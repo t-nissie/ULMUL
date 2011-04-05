@@ -13,7 +13,7 @@ Rubyで書かれています。ulmul.rbをライブラリとして利用する�
    数式としてTeX形式からMathML形式に変換されます。MathMLとはXMLで数式を記述
    するための規格です。込み入った規格なので人間が直接MathMLを記述する
    ことは想定されていませんが、ULMULでやっているようにTeXなどからの変換により
-   生成することができます。Firefox4やIE9で読めるようです。
+   生成することができます。Firefox 4やIE9で読めるようです。
    math_ml.rb http://www.hinet.mydns.jp/?mathml.rb を使っています。
  * ウェブ・ブラウザ+CSS+XHTML+JavaScriptを使ったプレゼン環境
    Slidy http://www.w3.org/Talks/Tools/Slidy/ に対応したxhtmlが出力可能。
@@ -42,9 +42,9 @@ ulmul.rbは状態遷移 (state machine) ライブラリaasmを使っていて、
 "= ", "== ", "=== ", "==== ", "===== ", または "====== " で始めてください。
 「= ABCD EFGH」ならABCD EFGHがタイトルになります。Slidyの表紙にもなります。
 ==== アスタリスクで始まる行は箇条書きになります (asterisk)
-５段までネストした箇条書きが可能です:
+４〜５段までネストした箇条書きが可能です:
 たとえば、
- # Nesting is allowed uo to 5th level.
+ # Nesting is allowed uo to 4th--5th level.
   * First
     * Second
       * Third
@@ -54,7 +54,7 @@ ulmul.rbは状態遷移 (state machine) ライブラリaasmを使っていて、
       * More for third
   * More for first
 は
-# Nesting is allowed uo to 5th level.
+# Nesting is allowed uo to 4th--5th level.
  * First
    * Second
      * Third
@@ -94,9 +94,11 @@ Mass $m$ can be converted into energy $E$ as
            E=mc^2.
 /Eq:Emc2
 
+数式は"Eq:Einstein"のように参照します。こんなかんじ Eq:Emc2 。
+
 数式を正しくご覧いただくには
- * Firefox4 http://mozilla.jp/firefox/
- * IE9
+ * Firefox 4  http://mozilla.jp/firefox/
+ * IE9        http://windows.microsoft.com/ja-JP/internet-explorer/downloads/ie
 などのブラウザを試してみて下さい。
 
 === 図の挿入方法

@@ -12,7 +12,7 @@ Download ULMUL from: http://rubygems.org/gems/ulmul or http://rubyforge.org/proj
 
 == Features
  * TeX style equations between two dollar marks ($) and between \Eq:foo and /Eq:foo
-   will be converted into MathML. You can use Firefox4, IE9, etc. to read MathML.
+   will be converted into MathML. You can use Firefox 4, IE9, etc. to read MathML.
  * ulmul2html5 output is good with the Slidy presentation environment
    http://www.w3.org/Talks/Tools/Slidy/ using Firefox+CSS+XHTML+JavaScript.
    Please use ulmul-slidy.js and ulmul-slidy.css in the package.
@@ -44,7 +44,7 @@ Starting with "= ", "== ", "=== ", "==== ", "===== ", and "====== ".
 ==== asterisk
 Lines starting with asterisks become itemizing list.
 For example,
- # Nesting is allowed up to 5th level.
+ # Nesting is allowed up to 4th--5th level.
   * First
     * Second
       * Third
@@ -54,7 +54,7 @@ For example,
       * More for third
   * More for first
 become
-# Nesting is allowed up to 5th level.
+# Nesting is allowed up to 4th--5th level.
  * First
    * Second
      * Third
@@ -88,9 +88,11 @@ Mass $m$ can be converted into energy $E$ as
            E=mc^2.
 /Eq:Emc2
 
+You can refer the equation in a way like "Eq:Einstein", as Eq:Emc2.
+
 To view the equations in MathML correctly, please use
- * Firefox 4 http://mozilla.jp/firefox/
- * IE9
+ * Firefox 4  http://mozilla.jp/firefox/
+ * IE9        http://windows.microsoft.com/en-US/internet-explorer/products/ie/home
  * etc.
 
 === Figures
