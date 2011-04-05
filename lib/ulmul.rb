@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-04-06 06:48:14 takeshi>
+# Time-stamp: <2011-04-06 07:04:19 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -371,7 +371,7 @@ module HTML
     if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
       @body << @equation_contents.to_mathml('block').to_s.sub(/<math /,"<math id=\"#{@equation_label}\" ") << "\n"
     elsif /ulmul2mathjax$/ =~ $0
-      @body << "<div id=\"#{@equation_label}\">\n\\begin{equation}\n" << @equation_contents << "  \\tag{#{@equations.length}}" << "\\end{equation}\n</div>\n"
+      @body << "<div id=\"#{@equation_label}\">\n\\begin{equation}\n" << @equation_contents << "  \\tag{#{@equations.length}}\n" << "\\end{equation}\n</div>\n"
     end
   end
 end
