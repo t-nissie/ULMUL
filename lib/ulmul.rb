@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-04-02 19:23:18 takeshi>
+# Time-stamp: <2011-04-06 05:53:37 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -21,12 +21,7 @@ class String
       result.gsub!(ary[0],ary[1])
     end
     if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
-      while result =~ /\$(.*?)\$/
-        pre=$`
-        tex=Regexp.last_match[1]
-        post=$'
-        result = "#{pre}#{tex.to_mathml}#{post}"
-      end
+      result.gsub!(/\$(.*?)\$/){|s| Regexp.last_match[1].to_mathml}
     end
     return result
   end
