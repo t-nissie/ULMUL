@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-04-06 05:53:37 takeshi>
+# Time-stamp: <2011-04-06 06:48:14 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -368,7 +368,11 @@ module HTML
   end
 
   def cb_equation_end2()
-    @body << @equation_contents.to_mathml('block').to_s.sub(/<math /,"<math id=\"#{@equation_label}\" ") << "\n"
+    if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
+      @body << @equation_contents.to_mathml('block').to_s.sub(/<math /,"<math id=\"#{@equation_label}\" ") << "\n"
+    elsif /ulmul2mathjax$/ =~ $0
+      @body << "<div id=\"#{@equation_label}\">\n\\begin{equation}\n" << @equation_contents << "  \\tag{#{@equations.length}}" << "\\end{equation}\n</div>\n"
+    end
   end
 end
 
@@ -399,6 +403,13 @@ module HTML5
   <title>#{@title}</title>
   <meta name=\"author\" content=\"#{name}\" />
   <meta name=\"copyright\" content=\"Copyright &#169; #{Date.today.year} #{name}\" />
+  <script type=\"text/x-mathjax-config\">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'] ]
+      }
+    });
+  </script>
 #{style_lines}#{javascript_lines}  <link rel=\"shortcut icon\" href=\"favicon.ico\" />
 </head>
 <body onload=\"prettyPrint()\">
@@ -542,7 +553,7 @@ module LaTeX
   end
 end
 
-if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
+if $0 == __FILE__ || /ulmul2(html5|xhtml|mathjax)$/ =~ $0
   require "optparse"
   name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
   language = "en"
