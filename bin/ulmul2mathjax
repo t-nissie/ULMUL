@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+# ulmul2mathjax
+# Time-stamp: <2011-04-06 06:52:05 takeshi>
+# Author: Takeshi Nishimatsu
+##
+=begin
+= ulmul2mathjax
+== Usage
+=== Examples
+ $ ulmul2mathjax --help
+ $ ulmul2mathjax -j 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default' foo.txt
+ $ ulmul2mathjax --style=style.css --name="John Smith" foo.ulmul > foo.html
+=end
+require "ulmul"
+# Local variables:
+#   compile-command: "cd .. && ruby -I lib bin/ulmul2mathjax -s ulmul2html5.css -s google-code-prettify/src/prettify.css -j google-code-prettify/src/prettify.js -j 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default' README-en > README-en-mathjax.html"
+# End:
