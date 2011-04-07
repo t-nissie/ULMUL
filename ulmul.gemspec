@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2011-04-03 19:33:51 takeshi>
+# Time-stamp: <2011-04-07 15:57:07 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.name              = 'ulmul'
 
   s.bindir            = 'bin'
-  s.executables       = ['ulmul2html5', 'ulmul2xhtml', 'ulmul2latex']
+  s.executables       = ['ulmul2html5', 'ulmul2xhtml', 'ulmul2latex', 'ulmul2mathjax']
   s.default_executable=  'ulmul2html5'
 
   s.summary           = 'ULMUL is an Ultra Lightweight Mark-Up Language'
@@ -20,6 +20,8 @@ Gem::Specification.new do |s|
                         'README-ja' << 'index.ja.html' <<
                         'Rakefile' << 'ulmul.gemspec' << 'setup.rb' <<
                         'ruby.jpg' <<
+                        'ruby.eps' <<
+                        'ruby.obj' <<
                         'hello.c' <<
                         'ulmul-slidy.js' <<
                         'ulmul-slidy.css'
@@ -42,9 +44,10 @@ Gem::Specification.new do |s|
      and into LaTeX with "ulmul2latex" command.
      TeX style equations are converted into MathML.
      ULMUL is written in Ruby.
+     "ulmul2mathjax" convert ULMUL texts into MathJax style HTML files.
      You can also use ulmul.rb as a library.
      Visit its project homepage http://ulmul.rubyforge.org/ .
-
-     Use ulmul-slidy.js and ulmul-slidy.css in the ulmul package for your presentations using Firefox.
+     Please use ulmul-slidy.js and ulmul-slidy.css in the
+     ulmul package for your presentations using Firefox.
      EOF
 end
