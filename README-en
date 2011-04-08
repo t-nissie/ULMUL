@@ -105,12 +105,14 @@ Input:
  \Fig:ruby ruby.jpg
    The is a dummy figure for an example.
    Cute red logo of Ruby, isn't it?
+   You can write equations even in a caption as $ax^2+bx+c=0$.
  /Fig:ruby
 
 Output:
 \Fig:ruby ruby.jpg
   The is a dummy figure for an example.
   Cute red logo of Ruby, isn't it?
+  You can write equations even in a caption as $ax^2+bx+c=0$.
 /Fig:ruby
 
 === Tables
