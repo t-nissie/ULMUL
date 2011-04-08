@@ -1,0 +1,9 @@
+= Changes in each version
+== 0.5.1
+ * ulmul2mathjax, a new command, converts ulmul texts into MathJax documents.
+ * Way to give @subs_rules is changed.
+
+== 0.5.0
+ * \Fig:foo--/Fig:foo, \Table:bar--/Table:bar, \Code:baz--/Code:baz, and \Eq:hoge--/Eq:hoge.
+ * Start to use AASM library internally.
+ 
