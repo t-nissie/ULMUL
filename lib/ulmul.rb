@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-04-06 07:04:19 takeshi>
+# Time-stamp: <2011-04-09 02:23:55 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -12,19 +12,6 @@ require "aasm"
 # For m17n of Ruby 1.9.x. Thanks, Masayoshi Takahashi-san [ruby-list:47159].
 if defined?(Encoding) && Encoding.respond_to?("default_external")
   Encoding.default_external = "UTF-8"
-end
-
-class String
-  def apply_subs_rules(rules)
-    result = self.dup
-    rules.each do |ary|
-      result.gsub!(ary[0],ary[1])
-    end
-    if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
-      result.gsub!(/\$(.*?)\$/){|s| Regexp.last_match[1].to_mathml}
-    end
-    return result
-  end
 end
 
 module Itemize
@@ -41,7 +28,7 @@ module Itemize
                 when /^         \* (.*)/ then 5
                 else raise 'Illegal astarisk line for itemize'
                 end
-    str = Regexp.last_match[1].apply_subs_rules(@subs_rules)
+    str = @subs_rules.call(Regexp.last_match[1])
     if new_level>@level_of_state+1
       STDERR << filename << ":#{lnumber}: Illegal jump of itemize level from #{@level_of_state} to #{new_level}: #{line}"
       exit 1
@@ -69,7 +56,7 @@ module Itemize
                 when /^           (\S.*)/ then 5
                 else raise 'Illegal astarisk line for itemize'
                 end
-    str = Regexp.last_match[1].apply_subs_rules(@subs_rules)
+    str = @subs_rules.call(Regexp.last_match[1])
     (@level_of_state-1).downto(new_level){|i| @body << ITEM_TERMINATOR << "\n" << "    "*i << ITEMIZE_TERMINATOR}
     @body << "\n  " << "    "*(new_level-1) << "  " << str
     @level_of_state = new_level
@@ -87,7 +74,7 @@ class Table_of_Contents
   include Itemize
   def initialize()
     @body = ''
-    @subs_rules = []
+    @subs_rules = lambda{|s| return s}
     cb_itemize_begin()
   end
   attr_reader :body
@@ -195,7 +182,7 @@ class Ulmul
   end
 
   def cb_paragraph_add(filename=nil, lnumber=nil, line=nil)
-    @body << line.apply_subs_rules(@subs_rules)
+    @body << @subs_rules.call(line)
   end
 
   def cb_paragraph_end(filename=nil, lnumber=nil, line=nil)
@@ -302,7 +289,6 @@ class Ulmul
     @figures         = []
     @tables          = []
     @codes           = []
-    @subs_rules = []
   end
   attr_accessor :subs_rules
 end
@@ -350,7 +336,7 @@ module HTML
   def cb_env_end2table()
       @body << "<table  id=\"#{@env_label}\">\n"
       @body << "  <caption>\n"
-      @body << "  Table #{@tables.length}: " << @env_caption.apply_subs_rules(@subs_rules)
+      @body << "  Table #{@tables.length}: " << @subs_rules.call(@env_caption)
       @body << "  </caption>\n"
       @body << "  <thead><tr><th>       TABLE           </th></tr></thead>\n"
       @body << "  <tbody><tr><td>Not yet implemented</td></tr></tbody>\n"
@@ -359,7 +345,7 @@ module HTML
 
   def cb_env_end2code()
     @body << "<p id=\"#{@env_label}\" class=\"code caption\">\n"
-    @body << "  Code #{@codes.length}: " << @env_caption.apply_subs_rules(@subs_rules) << "(download: <a href=\"#{@env_file}\">#{File.basename(@env_file)}</a>)" << "</p>\n"
+    @body << "  Code #{@codes.length}: " << @subs_rules.call(@env_caption) << "(download: <a href=\"#{@env_file}\">#{File.basename(@env_file)}</a>)" << "</p>\n"
     @body << "<pre class=\"prettyprint\">\n"
     f = open(@env_file)
     @body << f.read.gsub(/&/,'&amp;').gsub(/</,'&lt;').gsub(/>/,'&gt;')
@@ -382,7 +368,7 @@ module HTML5
     when /^Fig:/
       @body << "<figure id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
       @body << "  <figcaption>\n"
-      @body << "  Figure #{@figures.length}: " << @env_caption.apply_subs_rules(@subs_rules)
+      @body << "  Figure #{@figures.length}: " << @subs_rules.call(@env_caption)
       @body << "  </figcaption>\n" << '</figure>' << "\n"
     when /^Table:/
       cb_env_end2table()
@@ -426,7 +412,7 @@ module XHTML
     when /^Fig:/
       @body << "<div class=\"figure\" id=\"#{@env_label}\">\n" << "  <img src=\"#{@env_file}\" alt=\"#{@env_file}\" />\n"
       @body << "  <div class=\"figcaption\">\n"
-      @body << "  Figure #{@figures.length}. " << @env_caption.apply_subs_rules(@subs_rules)
+      @body << "  Figure #{@figures.length}. " << @subs_rules.call(@env_caption)
       @body << "  </div>\n"
       @body << '</div>' << "\n"
     when /^Table:/
@@ -491,17 +477,17 @@ module LaTeX
       width  = EXIFR::JPEG.new(@env_file).width
       height = EXIFR::JPEG.new(@env_file).height
       @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 #{width} #{height}]{#{@env_file}}\n"
-      @body << '  \caption{' << @env_caption.apply_subs_rules(@subs_rules).strip << "}\n"
+      @body << '  \caption{' << @subs_rules.call(@env_caption).strip << "}\n"
       @body << "  \\label{#{@env_label}}\n" << "\\end{figure}\n"
     when /^Table:/
       @body << "\\begin{table}\n"
-      @body << '  \caption{' << @env_caption.apply_subs_rules(@subs_rules).strip << "}\n"
+      @body << '  \caption{' << @subs_rules.call(@env_caption).strip << "}\n"
       @body << "  \\label{#{@env_label}}\n"
       @body << "  \\center\n"
       @body << "  {TABLE is not yet implemented.}\n"
       @body << "\\end{table}\n"
     when /^Code:/
-      @body << "\\begin{lstlisting}[caption={#{@env_caption.apply_subs_rules(@subs_rules).strip}},label=#{@env_label}]\n"
+      @body << "\\begin{lstlisting}[caption={#{@subs_rules.call(@env_caption).strip}},label=#{@env_label}]\n"
       f = open(@env_file)
       @body << f.read
       f.close
@@ -591,8 +577,18 @@ if $0 == __FILE__ || /ulmul2(html5|xhtml|mathjax)$/ =~ $0
     end
   end
   u=Ulmul.new()
-  u.subs_rules = [[/(http:\S*)(\s|$)/, '<a href="\1">\1</a>\2'],
-                 [/(https:\S*)(\s|$)/, '<a href="\1">\1</a>\2']]
+  if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
+    u.subs_rules = lambda{|s| s.gsub(/&/,'&amp;').
+                                gsub(/</,'&lt;').
+                                gsub(/>/,'&gt;').
+                                gsub(/(http:\S*|https:\S*)(\s|$)/, '<a href="\1">\1</a>\2').
+                                gsub(/\$(.*?)\$/){|s| Regexp.last_match[1].to_mathml}}
+  else
+    u.subs_rules = lambda{|s| s.gsub(/&/,'&amp;').
+                                gsub(/</,'&lt;').
+                                gsub(/>/,'&gt;').
+                                gsub(/(http:\S*|https:\S*)(\s|$)/, '<a href="\1">\1</a>\2')}
+  end
   u.parse(ARGF)
   puts u.file(stylesheets,javascripts,name,language)
 end
