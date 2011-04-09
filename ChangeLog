@@ -1,3 +1,15 @@
+2011-04-09 13:46  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja: \Eq:foo and /Eq:foo -> "\Eq:foo" and "/Eq:foo"
+
+2011-04-09 13:41  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
+
+	* Rakefile: for ulmul2latex
+
+2011-04-09 13:11  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul2latex: fix packages, add Version, fix compile-command, u.subs_rules = lambda{|s| return s}
+
 2011-04-09 12:15  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
 
 	* ulmul.gemspec: add Chages to s.files
