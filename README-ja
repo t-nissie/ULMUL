@@ -9,7 +9,7 @@ Rubyで書かれています。ulmul.rbをライブラリとして利用する�
 ダウンロード: http://rubygems.org/gems/ulmul または http://rubyforge.org/projects/ulmul/
 
 == 特徴
- * 文章中の２つのドル記号($)で挟まれた部分と\Eq:fooと/Eq:fooとで挟まれた行が
+ * 文章中の２つのドル記号($)で挟まれた部分と"\Eq:foo"と"/Eq:foo"とで挟まれた行が
    数式としてTeX形式からMathML形式に変換されます。MathMLとはXMLで数式を記述
    するための規格です。込み入った規格なので人間が直接MathMLを記述する
    ことは想定されていませんが、ULMULでやっているようにTeXなどからの変換により

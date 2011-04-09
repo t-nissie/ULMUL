@@ -11,7 +11,7 @@ Homepage of ULMUL: http://ulmul.rubyforge.org/
 Download ULMUL from: http://rubygems.org/gems/ulmul or http://rubyforge.org/projects/ulmul
 
 == Features
- * TeX style equations between two dollar marks ($) and between \Eq:foo and /Eq:foo
+ * TeX style equations between two dollar marks ($) and between "\Eq:foo" and "/Eq:foo"
    will be converted into MathML. You can use Firefox 4, IE9, etc. to read MathML.
  * ulmul2html5 output is good with the Slidy presentation environment
    http://www.w3.org/Talks/Tools/Slidy/ using Firefox+CSS+XHTML+JavaScript.
