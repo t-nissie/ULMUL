@@ -1,3 +1,11 @@
+2011-04-09 14:50  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja: Usage of ulmul2mathjax
+
+2011-04-09 14:49  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
+
+	* TODO: Figures, not only JPEG
+
 2011-04-09 13:46  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
 
 	* README-en, README-ja: \Eq:foo and /Eq:foo -> "\Eq:foo" and "/Eq:foo"
