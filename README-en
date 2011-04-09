@@ -186,6 +186,12 @@ If you do not need the Table of Contents, specify 1.
 === ulmul2xhtml is obsolete
 ulmul2xhtml will be removed from next version 0.6.x.
 
+== Usage of ulmul2mathjax
+It uses MathJax http://www.mathjax.org/ to show equations.
+ $ ulmul2mathjax --help
+ $ ulmul2mathjax -s ulmul2html5.css -s google-code-prettify/src/prettify.css -j google-code-prettify/src/prettify.js \
+   -j 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default' README-en > README-en-mathjax.html
+
 == Usage of ulmul2latex
  $ ulmul2latex --help
  $ ulmul2latex test.ulmul | tee test.tex
