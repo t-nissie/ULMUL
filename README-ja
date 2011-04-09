@@ -109,14 +109,16 @@ Mass $m$ can be converted into energy $E$ as
 
 入力:
  \Fig:ruby ruby.jpg
-   The is a dummy figure for an example.
-   Cute red logo of Ruby, isn't it?
+   これは図のキャプションの例です。
+   Rubyのロゴを描いてみました。
+   キャプションに数式を$ax^2+bx+c=0$と書くこともできます。
  /Fig:ruby
 
 出力:
 \Fig:ruby ruby.jpg
-  The is a dummy figure for an example.
-  Cute red logo of Ruby, isn't it?
+  これは図のキャプションの例です。
+  Rubyのロゴを描いてみました。
+  キャプションに数式を$ax^2+bx+c=0$と書くこともできます。
 /Fig:ruby
 
 === 表の挿入方法
@@ -171,7 +173,13 @@ JavaScriptのファイル名を指定します。
 === ulmul2xhtmlは消します
 次のバージョン (0.6.x) からulmul2xhtmlは消します。
 
-== Usage of ulmul2latex
+== ulmul2mathjaxの使用方法
+数式を MathJax http://www.mathjax.org/ で出力します。
+ $ ulmul2mathjax --help
+ $ ulmul2mathjax -s ulmul2html5.css -s google-code-prettify/src/prettify.css -j google-code-prettify/src/prettify.js \
+   -j 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default' README-en > README-en-mathjax.html
+
+== ulmul2latexの使用方法
  $ ulmul2latex --help
  $ ulmul2latex test.ulmul | tee test.tex
  $ latex test.tex
