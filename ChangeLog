@@ -1,15 +1,633 @@
-2010-06-06   Takeshi Nishimatsu  <t-nissie@imr.tohoku.ac.jp>
+2011-04-09 12:15  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
 
-	* ulmul.gemspec: mathml -> math_ml
-	                 Version 0.4.1.
+	* ulmul.gemspec: add Chages to s.files
 
-2010-05-26  Takeshi Nishimatsu  <t-nissie@imr.tohoku.ac.jp>
+2011-04-09 11:59  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
 
-	* ulmul.gemspec: slidy.js -> ulmul-slidy.js
-	                 Original slidy.js of 2009 is used.
-	                 Version 0.4.0.
+	* ChangeLog: rebuild
 
-2008-12-27  Takeshi Nishimatsu
+2011-04-08 17:34  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
 
-	* lib/ulmul.rb: documents for release.
+	* Changes: added
 
+2011-04-08 17:33  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* TODO: ChangeLog
+
+2011-04-08 17:33  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en: You can write equations even in a caption
+	  as $ax^2+bx+c=0$.
+
+2011-04-08 17:32  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb:
+	  u.subs_rules = lambda{|s| s.gsub(/&/,'&amp;').
+	  gsub(/</,'&lt;').
+	  gsub(/>/,'&gt;').
+	  gsub(/(http:\S*|https:\S*)(\s|$)/, '<a href="\1">\1</a>\2').
+	  gsub(/\$(.*?)\$/){|s| Regexp.last_match[1].to_mathml}}
+
+2011-04-07 06:57  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ruby.eps, ruby.obj, ulmul.gemspec: add ulmul2mathjax
+
+2011-04-06 16:42  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-ja: URL of RubyGems
+
+2011-04-05 22:20  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: " \\tag{#{@equations.length}}\n"
+
+2011-04-05 21:56  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul2mathjax: Added, though HTML5 Validator does not
+	  like existence of equations in a paragraph.
+
+2011-04-05 21:50  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: MathJax
+
+2011-04-05 20:56  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: result.gsub!(/\$(.*?)\$/){|s|
+	  Regexp.last_match[1].to_mathml}
+
+2011-04-05 04:01  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja: refer to Eq:Emc2
+
+2011-04-03 13:17  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en: spell check done.
+
+2011-04-03 12:58  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-ja: ignore line
+
+2011-04-03 10:36  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ulmul.gemspec: s.add_dependency('math_ml', '>=0.10')
+
+2011-04-02 11:38  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ulmul.gemspec: s.description, ulmul2xhtml -> ulmul2latex
+
+2011-04-02 11:14  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul: itemize
+
+2011-04-02 11:14  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: itemize
+
+2011-04-02 11:13  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* TODO: LaTeX
+
+2011-04-02 11:13  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja: itemize
+
+2011-04-02 11:11  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* Rakefile: README-en.tex
+
+2011-04-02 11:11  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ulmul.gemspec: google-code-prettify
+
+2011-04-02 09:01  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* google-code-prettify, google-code-prettify/CHANGES.html,
+	  google-code-prettify/COPYING,
+	  google-code-prettify/README-zh-Hans.html,
+	  google-code-prettify/README.html, google-code-prettify/src,
+	  google-code-prettify/src/lang-apollo.js,
+	  google-code-prettify/src/lang-css.js,
+	  google-code-prettify/src/lang-fortran.js,
+	  google-code-prettify/src/lang-hs.js,
+	  google-code-prettify/src/lang-lisp.js,
+	  google-code-prettify/src/lang-lua.js,
+	  google-code-prettify/src/lang-ml.js,
+	  google-code-prettify/src/lang-proto.js,
+	  google-code-prettify/src/lang-scala.js,
+	  google-code-prettify/src/lang-sql.js,
+	  google-code-prettify/src/lang-vb.js,
+	  google-code-prettify/src/lang-vhdl.js,
+	  google-code-prettify/src/lang-wiki.js,
+	  google-code-prettify/src/lang-yaml.js,
+	  google-code-prettify/src/prettify.css,
+	  google-code-prettify/src/prettify.js, google-code-prettify/tests,
+	  google-code-prettify/tests/large_input_test.html,
+	  google-code-prettify/tests/prettify_test.html,
+	  google-code-prettify/tests/test_base.js,
+	  google-code-prettify/tests/test_styles.css: syntax highlighting
+
+2011-04-02 08:57  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* hello.c, ulmul.gemspec: for example of syntax highlighting
+
+2011-04-02 08:14  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* test/unit/ulmul_test.rb: for 0.5.x
+
+2011-04-02 08:05  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-ja: update for 0.5.0
+
+2011-04-02 08:05  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* Rakefile: for README-ja
+
+2011-04-02 08:04  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en: ulmul2latex and something
+
+2011-04-02 08:01  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* TODO: done something
+
+2011-04-02 08:00  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: add (download: @env_file)
+
+2011-04-02 01:42  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul, lib/ulmul.rb: We do not need cb_env_begin2()
+
+2011-04-02 00:38  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul, lib/ulmul.rb: Code env for LaTeX
+
+2011-04-01 03:57  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en, Rakefile, ulmul-slidy.css: changes
+	  for figure and table
+
+2011-03-31 10:36  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul, lib/ulmul.rb: Code
+
+2011-03-31 10:33  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ulmul2html5.css, ulmul2xhtml.css: code caption
+
+2011-03-31 10:32  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul2xhtml: compile-command, google-code-prettify
+
+2011-03-31 06:17  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* TODO: update
+
+2011-03-31 06:03  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul, lib/ulmul.rb: refs for LaTeX and HTML
+
+2011-03-31 04:52  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: LaTeX, remove a4
+
+2011-03-31 04:47  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ulmul.gemspec: LaTeX uses JPEG-EXIF
+
+2011-03-31 04:47  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: LaTeX uses JPEG-EXIF
+
+2011-03-31 03:39  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul: Before and after equations, paragraph
+	  continues.
+
+2011-03-31 03:26  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: :st_equation
+
+2011-03-30 10:35  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul: \Eq:Emc2--/Eq:Emc2
+
+2011-03-30 09:57  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: Eq. for HTML
+
+2011-03-30 09:28  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: cb_env_end2() for LaTeX
+
+2011-03-30 03:25  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ulmul2html5.css, ulmul2xhtml.css: implement TABLE for HTML5 and XHTML
+
+2011-03-30 03:25  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul2html5, bin/ulmul2xhtml: implement TABLE for HTML5 and XHTML
+
+2011-03-30 03:23  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul, lib/ulmul.rb: implement TABLE for HTML5 and XHTML
+
+2011-03-30 00:35  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul: $E=mc^2$
+
+2011-03-30 00:34  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: XHTML
+
+2011-03-29 12:36  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: figcaption
+
+2011-03-29 12:14  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: Error messages for env
+
+2011-03-29 04:02  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* TODO: add "Done"
+
+2011-03-29 04:00  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: Error message: STDERR << filename << ":#{lnumber}:
+	  Still in an environment: #{line}"
+
+2011-03-28 21:33  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* TODO: Error messages
+
+2011-03-28 21:30  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul, lib/ulmul.rb: apply_subs_rules(@subs_rules)
+
+2011-03-28 11:43  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ulmul2html5.css, ulmul2xhtml.css: div.table.of.contents
+
+2011-03-28 11:27  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: file for LaTeX
+
+2011-03-28 11:26  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul2latex: file
+
+2011-03-28 08:46  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul2latex: Constants
+
+2011-03-28 08:44  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: Constants
+
+2011-03-28 08:22  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: cb_env_begin()
+
+2011-03-26 11:01  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul, lib/ulmul.rb: Fig
+
+2011-03-26 09:21  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: u.file(stylesheets,javascripts,name,language)
+
+2011-03-26 04:59  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul, lib/ulmul.rb: table of contents
+
+2011-03-25 05:33  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul2latex: LaTeX!
+
+2011-03-25 05:29  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: $ULMUL_VERBATIM_INITIATOR
+
+2011-03-25 05:16  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul, lib/ulmul.rb: verbatim
+
+2011-03-25 02:16  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul2html5: moved to lib/ulmul.rb
+
+2011-03-25 02:09  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: opts = OptionParser.new
+
+2011-03-25 00:57  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul, lib/ulmul.rb: ev_ignore
+
+2011-03-25 00:38  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: Itemize::ITEMIZE_INITIATOR
+
+2011-03-24 13:17  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/test.ulmul: a text file for test
+
+2011-03-24 13:16  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: start to use aasm
+
+2011-02-07 01:35  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ajt-manuscript/nishimatsu-ajt.tex:
+	  ajt-manuscript/nishimatsu-ajt.tex: [Development of a Ultra
+	  Lightweight MarkUp Language (ULMUL)]{An implementation of markup
+	  language to markup language converter}
+
+2011-01-07 00:16  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* texconf10.txt: unit test
+
+2011-01-07 00:13  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* TODO: New ToDo list
+
+2010-11-23 14:43  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ajt-manuscript/Makefile, ajt-manuscript/nishimatsu-ajt.bib,
+	  ajt-manuscript/nishimatsu-ajt.bst,
+	  ajt-manuscript/nishimatsu-ajt.tex: could not
+	  submit it
+
+2010-11-08 03:12  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ajt-manuscript/nishimatsu-ajt.tex: TeX-PDF-mode: t
+
+2010-11-05 14:16  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ajt-manuscript, ajt-manuscript/00MEMO.txt,
+	  ajt-manuscript/Makefile, ajt-manuscript/ajt.cls,
+	  ajt-manuscript/ajt.cls.original,
+	  ajt-manuscript/nishimatsu-ajt.bib,
+	  ajt-manuscript/nishimatsu-ajt.bst,
+	  ajt-manuscript/nishimatsu-ajt.tex: start to edit
+
+2010-10-23 03:10  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* texconf10.xhtml: using HTML Slidy
+
+2010-10-23 00:40  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* texconf10.txt, ulmul-slidy.css: final version?
+
+2010-10-21 04:58  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* TODO, texconf10.txt, texconf10abstract,
+	  texconf10abstract/Makefile, texconf10abstract/abst.tex,
+	  texconf10abstract/dvipdfmx.map, texconf10abstract/ulmul.bib,
+	  texconf10abstract/ulmul.bst: for presentation
+
+2010-10-07 12:32  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* test/unit/ulmul_test.rb: assert(Ulmul.method_defined?(:parse))
+
+2010-10-06 12:04  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb, test/unit/ulmul_test.rb, ulmul.gemspec: require "aasm"
+
+2010-10-06 11:19  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* test/test_helper.rb: We do not need it.
+
+2010-10-06 11:16  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* test/unit/ulmul_test.rb: No test_helper
+
+2010-10-06 10:35  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* test/test_helper.rb, test/unit/ulmul_test.rb: for
+	  1.9.x (minitest) and 1.8.x (test/unit)
+
+2010-10-06 08:28  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* test/ulmul_test.rb, test/unit/ulmul_test.rb: moved from
+	  test/ulmul_test.rb to test/unit/ulmul_test.rb
+
+2010-10-06 08:26  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* Rakefile, test/unit: directory test/unit
+
+2010-10-06 07:46  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* test, tests: rename from tests to test
+
+2010-09-27 05:51  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb, ulmul2html5.css, ulmul2xhtml.css: div.contents
+
+2010-08-12 10:43  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: <div class="contents">
+
+2010-06-16 01:44  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: [ruby-list:47159]
+
+2010-06-16 01:11  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja, lib/ulmul.rb: Encoding for
+	  m17n of Ruby 1.9.x. Thanks, Masayoshi Takahashi-san.
+
+2010-06-15 04:26  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja: Ruby 1.9.x "invalid byte
+	  sequence in US-ASCII (ArgumentError)"
+
+2010-06-06 11:15  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ChangeLog, README-en, README-ja, lib/ulmul.rb, ulmul.gemspec: 0.4.0 -> 0.4.1
+
+2010-06-02 01:47  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja: typo
+
+2010-05-30 14:50  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ulmul.gemspec: forgotten EOF
+
+2010-05-30 14:44  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja, ulmul.gemspec: longer
+	  description
+
+2010-05-27 14:27  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja: in the package
+
+2010-05-26 08:59  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ChangeLog: Version 0.4.0
+
+2010-05-26 08:52  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb, ulmul.gemspec: version 0.4.0
+	  slidy.js -> ulmul-slidy.js
+
+2010-05-26 08:48  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* Rakefile: presentation.en.xhtml
+
+2010-05-26 08:43  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-ja: add URL
+
+2010-05-26 08:33  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en: slidy.js -> ulmul-slidy.js done
+
+2010-05-26 08:18  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* slidy.js, ulmul-slidy.js: new ulmul-slidy.js
+
+2010-04-11 23:40  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja: ulmul-slidy.js
+
+2010-04-10 10:28  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en, XHTML-vs-HTML5.ja.txt: slidy.js ->
+	  ulmul-slidy.js
+
+2010-04-10 08:41  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* Rakefile, ulmul2html5.css, ulmul2xhtml.css: for 0.3.0
+
+2010-04-10 07:48  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja: for 0.3.0
+
+2010-04-10 02:39  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en: reform
+
+2010-04-08 10:07  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en: start to write
+
+2010-04-07 08:18  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: for html5
+
+2010-04-01 06:36  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ulmul.gemspec: README-en
+
+2010-04-01 00:18  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* XHTML-vs-HTML5.ja.txt: mode
+
+2010-04-01 00:16  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-en: new file in English
+
+2010-04-01 00:14  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: move the description to README-en
+
+2010-04-01 00:06  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* Rakefile: html2xhtml, README-en
+
+2010-03-31 23:16  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-ja: presentation.xhtml
+
+2010-03-31 10:26  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-ja: changed largely
+
+2010-03-30 15:30  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* Rakefile, lib/ulmul.rb, ulmul.gemspec: Ulmul::VERSION
+
+2010-03-30 09:58  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-ja, Rakefile, bin/ulmul2html5, bin/ulmul2xhtml: ulmul2xhtml and ulmul2html5
+
+2010-03-30 03:42  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb, ulmul2html5.css: compile-command
+
+2010-03-30 03:21  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* Rakefile, ulmul2html5.css: figure figcaption
+
+2010-03-30 03:05  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* ulmul2html5.css: added
+
+2010-03-30 03:04  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul2html5, bin/ulmul2xhtml, lib/ulmul.rb, ulmul2xhtml.css: style.css -> ulmul2xhtml.css
+
+2010-03-29 06:33  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: just a library
+
+2010-03-29 06:31  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* Rakefile: -l ja (natural language)
+
+2010-03-29 06:29  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* Rakefile, index.html, style.css, ulmul.gemspec: README-ja.xhtml -> index.ja.html
+
+2010-03-25 07:31  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* XHTML-vs-HTML5.ja.txt: root element
+
+2010-03-25 07:14  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* XHTML-vs-HTML5.ja.txt: compare XHTML and HTML5
+
+2010-03-25 06:19  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul2xhtml: distinguish XHTML from HTML5
+
+2010-03-25 06:16  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul2html, bin/ulmul2html5: renamed from
+	  ulmul2html
+
+2010-02-25 02:09  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* index.html: You may need Firefox to browse XHTML
+	  files with MathML.
+
+2010-02-11 15:35  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* Rakefile, bin/ulmul2html, lib/ulmul.rb, ulmul.gemspec:
+	  bin/ulmul.rb -> bin/ulmul2html
+
+2010-02-11 15:12  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* bin/ulmul.rb: delete bin/ulmul.rb
+
+2010-01-08 08:44  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* dot.htaccess, index.var: for content negotiation
+
+2009-01-04 09:18  Takeshi Nishimatsu <t_nissie@yahoo.co.jp>
+
+	* README-ja, lib/ulmul.rb: how to use svn(1)
+
+Local variables:
+add-log-time-format: (lambda ()
+  (let* ((time (current-time))
+	 (system-time-locale "C")
+	 (diff (+ (cadr time) 32400))
+	 (lo (% diff 65536))
+	 (hi (+ (car time) (/ diff 65536))))
+  (format-time-string "%Y-%m-%d %H:%M" (list hi lo) t)))
+indent-tabs-mode: t
+tab-width: 8
+end:
