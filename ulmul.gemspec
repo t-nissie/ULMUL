@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2011-04-07 15:57:07 takeshi>
+# Time-stamp: <2011-04-09 10:09:51 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
                         'ulmul2xhtml.css' << 'favicon.ico' <<
                         'ulmul2html5.css' << 'XHTML-vs-HTML5.ja.txt' <<
                         'ChangeLog' <<
+                        'Changes' <<
                         'README-en' << 'index.en.html' <<
                         'README-ja' << 'index.ja.html' <<
                         'Rakefile' << 'ulmul.gemspec' << 'setup.rb' <<
