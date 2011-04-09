@@ -18,7 +18,9 @@
  * Implementation
 
 == Figures
- * Not only JPEG but EPS  
+ * Not only JPEG
+   HTML:  SVG, PNG, JPEG, GIF, ...
+   LaTeX: EPS, PDF, JPEG, ...
 
 == Ref in Japanese
  * In Japanese, spaces are needed before and after "Env:foo".
