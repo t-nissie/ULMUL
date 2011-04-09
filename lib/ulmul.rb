@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-04-09 02:23:55 takeshi>
+# Time-stamp: <2011-04-09 12:53:43 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -83,7 +83,7 @@ end
 class Ulmul
   include AASM
   include Itemize
-  VERSION = '0.5.0'
+  VERSION = '0.5.1'
  
   aasm_initial_state :st_ground
  
@@ -540,6 +540,7 @@ module LaTeX
 end
 
 if $0 == __FILE__ || /ulmul2(html5|xhtml|mathjax)$/ =~ $0
+  Version = Ulmul::VERSION
   require "optparse"
   name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
   language = "en"
