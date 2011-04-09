@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2011-04-02 19:31:51 takeshi>
+# Time-stamp: <2011-04-09 13:38:30 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -85,8 +85,7 @@ end
 
 desc "Create README-en.tex"
 file "README-en.tex" => ["bin/ulmul2latex", "README-en", "lib/ulmul.rb", "Rakefile"] do |t|
-  sh "ruby -I lib #{t.prerequisites[0]} #{t.prerequisites[1]} | sed -e 's/\(\$\)/(\\\\$)/' -e 's/#/\\\\#/' \
+  sh "ruby -I lib #{t.prerequisites[0]} #{t.prerequisites[1]} | sed -e 's/\(\$\)/(\\\\$)/' -e 's/\"#/\"\\\\#/' \
       -e 's/subs_/subs\\\\_/' -e 's/eim_/eim\\\\_/' -e 's/math_/math\\\\_/' -e 's/ulmul_/ulmul\\\\_/' \
-      -e 's/t_nissie/t\\\\_nissie/' -e 's/\\\\Eq/\\\\\\\\Eq/' \
-      -e 's/\\\\Fig/\\\\\\\\Fig/' -e 's/\\\\Table/\\\\\\\\Table/' -e 's/\\\\Code/\\\\\\\\Code/' > #{t.name}"
+      -e 's/t_nissie/t\\\\_nissie/' -e 's/\"\\\\Eq/\"$\\\\backslash$Eq/' -e 's/\"\\\\Fig/\"$\\\\backslash$Fig/' -e 's/\"\\\\Table/\"$\\\\backslash$Table/' -e 's/\"\\\\Code/\"$\\\\backslash$Code/' > #{t.name}"
 end
