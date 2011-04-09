@@ -1,20 +1,20 @@
 #!/usr/bin/env ruby
 # ulmul2latex
-# Time-stamp: <2011-03-28 19:47:33 takeshi>
+# Time-stamp: <2011-04-09 13:15:37 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "ulmul"
+Version = Ulmul::VERSION
 name = ENV['USER'] || ENV['LOGNAME'] || Etc.getlogin || Etc.getpwuid.name
 packages = []
 $MAX_TABLE_OF_CONTENTS = 3
 opts = OptionParser.new
-opts.on("-p PACKAGE_FILENAME","--style PACKAGE_FILENAME","Specify package filename."){|v| stylesheets<<v}
+opts.on("-p PACKAGE_FILENAME","--package PACKAGE_FILENAME","Specify package filename."){|v| packages<<v}
 opts.on("-n YOUR_NAME","--name YOUR_NAME","Specify your name."){|v| name=v}
 opts.on("-m MAX_TABLE_OF_CONTENTS","--max-table-of-contents  MAX_TABLE_OF_CONTENTS",Integer,
         "Specify the maximum level for table of contents."){|v| $MAX_TABLE_OF_CONTENTS=v}
 opts.on_tail("-h", "--help", "Show this message."){puts opts.to_s.sub(/options/,'options] [filename'); exit}
 opts.parse!(ARGV)
-stylesheets=['ulmul2html5.css'] if stylesheets==[]
 Itemize::ITEMIZE_INITIATOR  = '\begin{itemize}'
 Itemize::ITEMIZE_TERMINATOR =   '\end{itemize}'
 Itemize::ITEM_INITIATOR     = '\item '
@@ -27,8 +27,9 @@ class Ulmul
   include LaTeX
 end
 u=Ulmul.new()
+u.subs_rules = lambda{|s| return s}
 u.parse(ARGF)
 puts u.file(packages,name)
 # Local variables:
-#   compile-command: "ruby -I ../lib ulmul2latex ../lib/test.ulmul | tee test.tex && latex test.tex && dvipdfmx test.dvi"
+#   compile-command: "ruby -I ../lib ulmul2latex ../lib/test.ulmul | tee test.tex && latex test.tex && latex test.tex && dvipdfmx test.dvi"
 # End:
