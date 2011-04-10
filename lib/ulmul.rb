@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-04-09 12:53:43 takeshi>
+# Time-stamp: <2011-04-10 14:44:23 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -321,10 +321,14 @@ module HTML
 
   def body
     b = @body.dup
-    @equations.each_with_index{|r,i| b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),  "\\1<a href=\"##{r}\">Eq. (#{i+1})</a>\\2")}
-    @figures.each_with_index{|r,i|   b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),   "\\1<a href=\"##{r}\">Fig. #{i+1}</a>\\2")}
-    @tables.each_with_index{|r,i|    b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),  "\\1<a href=\"##{r}\">Table #{i+1}</a>\\2")}
-    @codes.each_with_index{|r,i|     b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),   "\\1<a href=\"##{r}\">Code #{i+1}</a>\\2")}
+    [@equations, @figures, @tables, @codes].each do |ary|
+      ary.each_with_index do |r,i|
+        s = r.sub(/:.*/,'')
+        if /Eq|Fig/ =~ s then s << '.' end
+        if /Eq/     =~ s then no = "(#{i+1})" else no = "#{i+1}" end
+        b.gsub!(Regexp.new('(?![A-Za-z0-9_"\'#%\\\\])(.)'+r+'(?![A-Za-z0-9_"\'#%])(.)'),"\\1<a href=\"##{r}\">#{s} #{no}</a>\\2")
+      end
+    end
     if $MAX_TABLE_OF_CONTENTS>=2
       b.sub(CONTENTS_HERE, "<br />\n<div class=\"table of contents\">\nTable of Contents:" +
                 @toc.body + "</div>\n")
@@ -531,10 +535,14 @@ module LaTeX
 
   def body
     b = @body.dup
-    @equations.each{|r| b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),  "\\1Eq.~(\\ref{#{r}})\\2")}
-    @figures.each{|r|   b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),   "\\1Fig.~\\ref{#{r}}\\2")}
-    @tables.each{|r|    b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),  "\\1Table~\\ref{#{r}}\\2")}
-    @codes.each{|r|     b.gsub!(Regexp.new('(^|\s+)'+r+'(\s+|\.|\,|\!|\?|$)'),   "\\1Code~\\ref{#{r}}\\2")}
+    [@equations, @figures, @tables, @codes].each do |ary|
+      ary.each_with_index do |r,i|
+        s = r.sub(/:.*/,'')
+        if /Eq|Fig/ =~ s then s << '.' end
+        if /Eq/     =~ s then no = "(\\ref{#{r}})" else no = "\\ref{#{r}}" end
+        b.gsub!(Regexp.new('(?![A-Za-z0-9_"\'#%\\\\{\=])(.)'+r+'(?![A-Za-z0-9_"\'#%}])(.)'), "\\1#{s}~#{no}\\2")
+      end
+    end
     return b
   end
 end
