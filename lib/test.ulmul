@@ -54,6 +54,8 @@ A table. See Table:example!
 /Table:example
 === Code
 Code. Can you read Code:hello?
+#日本語に挟まれたCode:helloもちゃんと参照されるかな？
+In parentheses (Code:hello) ?
 \Code:hello ../hello.c
   Ordinary hello.c.
   Can you see stdio.h?
