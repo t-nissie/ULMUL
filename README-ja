@@ -79,7 +79,7 @@ EOF と "=end" が出てくると処理が終了します。
 
 === 数式の書き方
 文章中の２つのドル記号($)で挟まれた部分がTeX形式からMathML形式に変換されます。
-また、\Eq:fooと/Eq:fooとで挟まれた行も次の例のように処理されます。
+また、"\Eq:foo"と"/Eq:foo"とで挟まれた行も次の例のように処理されます。
 
 入力:
  Mass $m$ can be converted into energy $E$ as
@@ -94,7 +94,7 @@ Mass $m$ can be converted into energy $E$ as
            E=mc^2.
 /Eq:Emc2
 
-数式は"Eq:Einstein"のように参照します。こんなかんじ Eq:Emc2 。
+数式は"Eq:Einstein"のように参照します。こんなかんじEq:Emc2。
 
 数式を正しくご覧いただくには
  * Firefox 4  http://mozilla.jp/firefox/
@@ -105,7 +105,7 @@ Mass $m$ can be converted into energy $E$ as
 「図環境」は "\Fig:foo FILENAME.jpg" で始めて "/Fig:foo" で閉じてください。
 間に図のキャプションを書くことができます。
 ここで "foo" は図のタグです。
-"Fig:foo"で図を参照することができます。こんな具合です Fig:ruby 。
+"Fig:foo"で図を参照することができます。こんな具合ですFig:ruby。
 
 入力:
  \Fig:ruby ruby.jpg
@@ -128,7 +128,7 @@ Table環境はまだインプリメントされていません。
 「コード環境」は "\Code:baz FILENAME" で始めて "/Code:baz" で閉じてください。
 間にキャプションを書くことができます。
 ここで "baz" は図のタグです。
-"Code:baz"で当該コードを参照することができます。こんな具合です Code:hello 。
+"Code:baz"で当該コードを参照することができます。こんな具合ですCode:hello。
 
 入力:
  \Code:hello hello.c
