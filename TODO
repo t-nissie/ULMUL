@@ -22,9 +22,6 @@
    HTML:  SVG, PNG, JPEG, GIF, ...
    LaTeX: EPS, PDF, JPEG, ...
 
-== Ref in Japanese
- * In Japanese, spaces are needed before and after "Env:foo".
-
 == Citation
  * Cite:Bohr
 
@@ -39,6 +36,7 @@
  * Error messages
 
 == LaTeX
+ * escape "~" if it is not in an equation
  * escape "_" if it is not in an equation
  * escape "#" if it is not in an equation
 
