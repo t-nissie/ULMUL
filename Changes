@@ -1,4 +1,7 @@
 = Changes in each version
+== 0.5.2
+ * Now, in Japanese, spaces are NOT required before and after "Env:foo".
+
 == 0.5.1
  * ulmul2mathjax, a new command, converts ulmul texts into MathJax documents.
  * Way to give @subs_rules is changed.
