@@ -1,3 +1,7 @@
+2011-04-10 14:56  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb (HTML#body, LaTeX#body): refs
+
 2011-04-09 14:50  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
 
 	* README-en, README-ja: Usage of ulmul2mathjax
