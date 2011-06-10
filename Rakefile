@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2011-04-09 13:38:30 takeshi>
+# Time-stamp: <2011-06-10 18:07:01 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -67,21 +67,15 @@ file "presentation.en.html" => ["bin/ulmul2html5", "README-en", "ulmul-slidy.css
       -j #{t.prerequisites[4]} -j #{t.prerequisites[5]} -m 2 -l en #{t.prerequisites[1]} > #{t.name}"
 end
 
-desc "Create index.en.html"
-file "index.en.html" => ["bin/ulmul2html5", "README-en", "ulmul2html5.css", "google-code-prettify/src/prettify.css",
-                         "google-code-prettify/src/prettify.js", "lib/ulmul.rb"] do |t|
-  sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -s #{t.prerequisites[2]} -s #{t.prerequisites[3]} \
-      -j #{t.prerequisites[4]} -l en #{t.prerequisites[1]} | \
+["en", "ja"].each{|lang|
+  desc "Create index.#{lang}.html"
+  file "index.#{lang}.html" => ["bin/ulmul2html5", "README-#{lang}", "ulmul2html5.css", "google-code-prettify/src/prettify.css",
+                           "google-code-prettify/src/prettify.js", "lib/ulmul.rb"] do |t|
+    sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -s #{t.prerequisites[2]} -s #{t.prerequisites[3]} \
+      -j #{t.prerequisites[4]} -l #{lang} #{t.prerequisites[1]} | \
       sed -e 's%</h1>%</h1><div class=\"navi\">[<a href=\"index.en.html\">English</a>/<a href=\"index.ja.html\">Japanese</a>]</div>%' > #{t.name}"
-end
-
-desc "Create index.ja.html"
-file "index.ja.html" => ["bin/ulmul2html5", "README-ja", "ulmul2html5.css", "google-code-prettify/src/prettify.css",
-                         "google-code-prettify/src/prettify.js", "lib/ulmul.rb"] do |t|
-  sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -s #{t.prerequisites[2]} -s #{t.prerequisites[3]} \
-      -j #{t.prerequisites[4]} -l ja #{t.prerequisites[1]} | \
-      sed -e 's%</h1>%</h1><div class=\"navi\">[<a href=\"index.en.html\">English</a>/<a href=\"index.ja.html\">Japanese</a>]</div>%' > #{t.name}"
-end
+  end
+}
 
 desc "Create README-en.tex"
 file "README-en.tex" => ["bin/ulmul2latex", "README-en", "lib/ulmul.rb", "Rakefile"] do |t|
