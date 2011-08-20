@@ -21,6 +21,7 @@
  * Not only JPEG
    HTML:  SVG, PNG, JPEG, GIF, ...
    LaTeX: EPS, PDF, JPEG, ...
+ * Refs (Eq:foo, Fig:bar, etc.) in figure caption
 
 == Citation
  * Cite:Bohr
@@ -36,7 +37,6 @@
  * Error messages
 
 == LaTeX
- * escape "~" if it is not in an equation
  * escape "_" if it is not in an equation
  * escape "#" if it is not in an equation
 
@@ -46,3 +46,4 @@
  * foo.ulmul:55:Illegal environment. [Error message]
  * jpeg file -> bb for \includegraphics
  * syntax highlighting with google-code-prettify http://code.google.com/p/google-code-prettify/
+ * Now, "~" in equations is treated in math_ml properly. 
