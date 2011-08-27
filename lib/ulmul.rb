@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-04-10 14:44:23 takeshi>
+# Time-stamp: <2011-08-27 15:56:58 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -194,7 +194,7 @@ class Ulmul
   end
 
   def cb_verbatim_add(filename=nil, lnumber=nil, line=nil)
-      @body << line[1..-1] #.gsub(/</,'&lt;').gsub(/>/,'&gt;')
+      @body << line[1..-1].gsub(/</,'&lt;').gsub(/>/,'&gt;')
   end
 
   def cb_verbatim_end(filename=nil, lnumber=nil, line=nil)
@@ -392,7 +392,6 @@ module HTML5
   <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
   <title>#{@title}</title>
   <meta name=\"author\" content=\"#{name}\" />
-  <meta name=\"copyright\" content=\"Copyright &#169; #{Date.today.year} #{name}\" />
   <script type=\"text/x-mathjax-config\">
     MathJax.Hub.Config({
       tex2jax: {
@@ -404,6 +403,8 @@ module HTML5
 </head>
 <body onload=\"prettyPrint()\">
 #{body()}
+<hr />
+<address>Copyright &#169; #{Date.today.year} #{name}</address>
 </body>
 </html>
 "
