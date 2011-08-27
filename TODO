@@ -22,6 +22,7 @@
    HTML:  SVG, PNG, JPEG, GIF, ...
    LaTeX: EPS, PDF, JPEG, ...
  * Refs (Eq:foo, Fig:bar, etc.) in figure caption
+ * Refs (Eq:foo, Fig:bar, etc.) in the beginning of a line
 
 == Citation
  * Cite:Bohr
