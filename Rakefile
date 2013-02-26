@@ -1,12 +1,12 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2011-06-10 18:07:01 takeshi>
+# Time-stamp: <2013-02-26 14:43:04 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
 
 require 'rubygems'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
 require 'rake/testtask'
 require 'rake/clean'
 require 'ulmul.rb'
@@ -22,7 +22,7 @@ ULMUL_PACKAGE_DIR = '..'
 
 desc "Build a gem for ulmul"
 task :gem => [ :test ]
-Rake::GemPackageTask.new(spec) do |g|
+Gem::PackageTask.new(spec) do |g|
   g.need_tar    = true
   g.need_zip    = true
   g.package_dir = ULMUL_PACKAGE_DIR
