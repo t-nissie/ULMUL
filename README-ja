@@ -176,7 +176,7 @@ JavaScriptのファイル名を指定します。
 == ulmul2mathjaxの使用方法
 数式を MathJax http://www.mathjax.org/ で出力します。
  $ ulmul2mathjax --help
- $ ulmul2mathjax -s ulmul2html5.css -s google-code-prettify/src/prettify.css -j google-code-prettify/src/prettify.js \
+ $ ulmul2mathjax -s ulmul2html5.css -j https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js \
    -j 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default' README-en > README-en-mathjax.html
 
 == ulmul2latexの使用方法
@@ -209,11 +209,6 @@ You can download the original package, slidy.zip, from
 http://www.w3.org/Talks/Tools/Slidy/ . You can find
 their licenses at http://www.w3.org/Consortium/Legal/copyright-documents
 and http://www.w3.org/Consortium/Legal/copyright-software .
-
-Google Inc. has copyrights for files under google-code-prettify
-directory. Package prettify-21-Jul-2010.zip is distributed
-from http://code.google.com/p/google-code-prettify/ under the
-Apache License, Version 2.0.
 
 == 作者
 西松タケシ (t_nissie{at}yahoo.co.jp) http://t-nissie.users.sourceforge.net/

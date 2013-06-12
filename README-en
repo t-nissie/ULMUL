@@ -137,10 +137,8 @@ Start a Code environment with "\Code:baz FILENAME"
 and terminate it with "/Code:baz", where "baz" is a tag for the code.
 You can write a figure caption between them.
 You can refer the figure with "Code:baz" as Code:hello.
-Code will be highlighted with
-google-code-prettify http://code.google.com/p/google-code-prettify/ ,
-when options of -s google-code-prettify/src/prettify.css and
--j google-code-prettify/src/prettify.js are given.
+Code will be highlighted with google-code-prettify when
+-j https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js is given.
 
 Input:
  \Code:hello hello.c
@@ -189,7 +187,7 @@ ulmul2xhtml will be removed from next version 0.6.x.
 == Usage of ulmul2mathjax
 It uses MathJax http://www.mathjax.org/ to show equations.
  $ ulmul2mathjax --help
- $ ulmul2mathjax -s ulmul2html5.css -s google-code-prettify/src/prettify.css -j google-code-prettify/src/prettify.js \
+ $ ulmul2mathjax -s ulmul2html5.css -j https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js \
    -j 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default' README-en > README-en-mathjax.html
 
 == Usage of ulmul2latex
@@ -228,11 +226,6 @@ You can download the original package, slidy.zip, from
 http://www.w3.org/Talks/Tools/Slidy/ . You can find
 their licenses at http://www.w3.org/Consortium/Legal/copyright-documents
 and http://www.w3.org/Consortium/Legal/copyright-software .
-
-Google Inc. has copyrights for files under google-code-prettify
-directory. Package prettify-21-Jul-2010.zip is distributed
-from http://code.google.com/p/google-code-prettify/ under the
-Apache License, Version 2.0.
 
 == Author of ULMUL
 Takeshi Nishimatsu (t_nissie{at}yahoo.co.jp) http://t-nissie.users.sourceforge.net/

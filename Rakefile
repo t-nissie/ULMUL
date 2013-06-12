@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2013-02-26 14:43:04 takeshi>
+# Time-stamp: <2013-06-12 17:43:01 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -61,16 +61,14 @@ task :rubyforge => ["index.en.html",
 end
 
 desc "Create presentation.en.html from README-en"
-file "presentation.en.html" => ["bin/ulmul2html5", "README-en", "ulmul-slidy.css", "google-code-prettify/src/prettify.css",
-                                "google-code-prettify/src/prettify.js", "ulmul-slidy.js", "lib/ulmul.rb"] do |t|
+file "presentation.en.html" => ["bin/ulmul2html5", "README-en", "ulmul-slidy.css", "ulmul-slidy.js", "lib/ulmul.rb"] do |t|
   sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -s #{t.prerequisites[2]} -s #{t.prerequisites[3]} \
       -j #{t.prerequisites[4]} -j #{t.prerequisites[5]} -m 2 -l en #{t.prerequisites[1]} > #{t.name}"
 end
 
 ["en", "ja"].each{|lang|
   desc "Create index.#{lang}.html"
-  file "index.#{lang}.html" => ["bin/ulmul2html5", "README-#{lang}", "ulmul2html5.css", "google-code-prettify/src/prettify.css",
-                           "google-code-prettify/src/prettify.js", "lib/ulmul.rb"] do |t|
+  file "index.#{lang}.html" => ["bin/ulmul2html5", "README-#{lang}", "ulmul2html5.css", "lib/ulmul.rb"] do |t|
     sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -s #{t.prerequisites[2]} -s #{t.prerequisites[3]} \
       -j #{t.prerequisites[4]} -l #{lang} #{t.prerequisites[1]} | \
       sed -e 's%</h1>%</h1><div class=\"navi\">[<a href=\"index.en.html\">English</a>/<a href=\"index.ja.html\">Japanese</a>]</div>%' > #{t.name}"
