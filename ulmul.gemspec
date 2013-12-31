@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2013-06-12 17:44:13 takeshi>
+# Time-stamp: <2013-12-31 18:00:35 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -11,20 +11,20 @@ Gem::Specification.new do |s|
   s.default_executable=  'ulmul2html5'
 
   s.summary           = 'ULMUL is an Ultra Lightweight Mark-Up Language'
-  s.files             = 'lib/ulmul.rb' << 'test/unit/ulmul_test.rb' <<
-                        'ulmul2xhtml.css' << 'favicon.ico' <<
-                        'ulmul2html5.css' << 'XHTML-vs-HTML5.ja.txt' <<
-                        'ChangeLog' <<
-                        'Changes' <<
-                        'README-en' << 'index.en.html' <<
-                        'README-ja' << 'index.ja.html' <<
-                        'Rakefile' << 'ulmul.gemspec' << 'setup.rb' <<
-                        'ruby.jpg' <<
-                        'ruby.eps' <<
-                        'ruby.obj' <<
-                        'hello.c' <<
-                        'ulmul-slidy.js' <<
-                        'ulmul-slidy.css'
+  s.files             = ['lib/ulmul.rb', 'test/unit/ulmul_test.rb',
+                        'ulmul2xhtml.css', 'favicon.ico',
+                        'ulmul2html5.css', 'XHTML-vs-HTML5.ja.txt',
+                        'ChangeLog',
+                        'Changes',
+                        'README-en', 'index.en.html',
+                        'README-ja', 'index.ja.html',
+                        'Rakefile', 'ulmul.gemspec', 'setup.rb',
+                        'ruby.jpg',
+                        'ruby.eps',
+                        'ruby.obj',
+                        'hello.c',
+                        'ulmul-slidy.js',
+                        'ulmul-slidy.css']
   s.author            = 'Takeshi Nishimatsu'
   s.email             = 't_nissie@yahoo.co.jp'
   s.rubyforge_project = 'ulmul'

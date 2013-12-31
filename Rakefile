@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2013-06-12 17:43:01 takeshi>
+# Time-stamp: <2013-12-31 17:59:06 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -10,7 +10,6 @@ require 'rubygems/package_task'
 require 'rake/testtask'
 require 'rake/clean'
 require 'ulmul.rb'
-require 'archive/tar/minitar'
 require 'zlib'
 
 spec = eval(File.read("ulmul.gemspec"))

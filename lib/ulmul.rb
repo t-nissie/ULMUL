@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2013-12-31 16:49:43 takeshi>
+# Time-stamp: <2013-12-31 17:16:29 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -83,7 +83,7 @@ end
 class Ulmul
   include AASM
   include Itemize
-  VERSION = '0.5.1'
+  VERSION = '0.5.2'
 
   aasm.initial_state :st_ground
 
