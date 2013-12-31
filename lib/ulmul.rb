@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2011-08-27 15:56:58 takeshi>
+# Time-stamp: <2013-12-31 16:49:43 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -32,7 +32,7 @@ module Itemize
     if new_level>@level_of_state+1
       STDERR << filename << ":#{lnumber}: Illegal jump of itemize level from #{@level_of_state} to #{new_level}: #{line}"
       exit 1
-      raise 
+      raise
     elsif new_level==@level_of_state+1
       @body << "\n" << "    "*@level_of_state << ITEMIZE_INITIATOR << "\n"
       @body <<              "    "*(new_level-1) << "  " << ITEM_INITIATOR << str
@@ -84,26 +84,26 @@ class Ulmul
   include AASM
   include Itemize
   VERSION = '0.5.1'
- 
-  aasm_initial_state :st_ground
- 
-  aasm_state :st_ground
-  aasm_state :st_itemize
-  aasm_state :st_verbatim
-  aasm_state :st_paragraph
-  aasm_state :st_env
-  aasm_state :st_equation
- 
-  aasm_event :ev_ignore do
-    transitions :from => :st_ground,    :to => :st_ground    
-    transitions :from => :st_itemize,   :to => :st_itemize   
+
+  aasm.initial_state :st_ground
+
+  aasm.state :st_ground
+  aasm.state :st_itemize
+  aasm.state :st_verbatim
+  aasm.state :st_paragraph
+  aasm.state :st_env
+  aasm.state :st_equation
+
+  aasm.event :ev_ignore do
+    transitions :from => :st_ground,    :to => :st_ground
+    transitions :from => :st_itemize,   :to => :st_itemize
     transitions :from => :st_verbatim,  :to => :st_verbatim
-    transitions :from => :st_paragraph, :to => :st_paragraph 
-    transitions :from => :st_env,       :to => :st_env    
+    transitions :from => :st_paragraph, :to => :st_paragraph
+    transitions :from => :st_env,       :to => :st_env
     transitions :from => :st_equation,  :to => :st_equation
   end
 
-  aasm_event :ev_asterisk do
+  aasm.event :ev_asterisk do
     transitions :from => :st_ground,    :to => :st_itemize,   :on_transition =>                    [:cb_itemize_begin, :cb_itemize_add_item]
     transitions :from => :st_itemize,   :to => :st_itemize,   :on_transition =>                                       [:cb_itemize_add_item]
     transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition => [:cb_verbatim_add]
@@ -111,8 +111,8 @@ class Ulmul
     transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
     transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_continues]
   end
- 
-  aasm_event :ev_offset do
+
+  aasm.event :ev_offset do
     transitions :from => :st_ground,    :to => :st_verbatim,  :on_transition =>                    [:cb_verbatim_begin, :cb_verbatim_add]
     transitions :from => :st_itemize,   :to => :st_itemize,   :on_transition => [:cb_itemize_continue_item]
     transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition =>                                        [:cb_verbatim_add]
@@ -120,8 +120,8 @@ class Ulmul
     transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
     transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_continues]
   end
- 
-  aasm_event :ev_heading do
+
+  aasm.event :ev_heading do
     transitions :from => :st_ground,    :to => :st_ground,    :on_transition =>                    [:cb_heading]
     transitions :from => :st_itemize,   :to => :st_ground,    :on_transition =>   [:cb_itemize_end, :cb_heading]
     transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end, :cb_heading]
@@ -129,8 +129,8 @@ class Ulmul
     transitions :from => :st_env,       :to => :st_ground,    :on_transition => [:cb_env_in_env_error]
     transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_in_equation_error]
   end
- 
-  aasm_event :ev_empty do
+
+  aasm.event :ev_empty do
     transitions :from => :st_ground,    :to => :st_ground
     transitions :from => :st_itemize,   :to => :st_ground,    :on_transition =>   [:cb_itemize_end]
     transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end]
@@ -139,7 +139,7 @@ class Ulmul
     transitions :from => :st_equation,  :to => :st_equation
   end
 
-  aasm_event :ev_env_begin do
+  aasm.event :ev_env_begin do
     transitions :from => :st_ground,    :to => :st_env,       :on_transition =>                    [:cb_env_begin]
     transitions :from => :st_itemize,   :to => :st_env,       :on_transition =>   [:cb_itemize_end, :cb_env_begin]
     transitions :from => :st_verbatim,  :to => :st_env,       :on_transition =>  [:cb_verbatim_end, :cb_env_begin]
@@ -147,28 +147,28 @@ class Ulmul
     transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_in_env_error]
     transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_in_equation_error]
   end
- 
-  aasm_event :ev_env_end do
+
+  aasm.event :ev_env_end do
     transitions :from => [:st_ground, :st_itemize, :st_verbatim, :st_paragraph, :st_equation],
                                         :to => :st_ground,    :on_transition => [:cb_env_not_in_env_error]
     transitions :from => :st_env,       :to => :st_ground,    :on_transition => [:cb_env_end]
   end
- 
-  aasm_event :ev_equation_begin do
+
+  aasm.event :ev_equation_begin do
     transitions :from => :st_ground,    :to => :st_equation,  :on_transition =>                    [:cb_paragraph_begin, :cb_equation_begin]
     transitions :from => :st_itemize,   :to => :st_equation,  :on_transition =>   [:cb_itemize_end, :cb_paragraph_begin, :cb_equation_begin]
     transitions :from => :st_verbatim,  :to => :st_equation,  :on_transition =>  [:cb_verbatim_end, :cb_paragraph_begin, :cb_equation_begin]
     transitions :from => :st_paragraph, :to => :st_equation,  :on_transition =>                                         [:cb_equation_begin]
     transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_in_equation_error]
   end
- 
-  aasm_event :ev_equation_end do
+
+  aasm.event :ev_equation_end do
     transitions :from => [:st_ground, :st_itemize, :st_verbatim, :st_paragraph, :st_env],
                                         :to => :st_ground,    :on_transition => [:cb_equation_not_in_equation_error]
     transitions :from => :st_equation,  :to => :st_paragraph, :on_transition => [:cb_equation_end]
   end
- 
-  aasm_event :ev_normal do
+
+  aasm.event :ev_normal do
     transitions :from => :st_ground,    :to => :st_paragraph, :on_transition =>                   [:cb_paragraph_begin, :cb_paragraph_add]
     transitions :from => :st_itemize,   :to => :st_paragraph, :on_transition =>  [:cb_itemize_end, :cb_paragraph_begin, :cb_paragraph_add]
     transitions :from => :st_verbatim,  :to => :st_paragraph, :on_transition => [:cb_verbatim_end, :cb_paragraph_begin, :cb_paragraph_add]
@@ -426,7 +426,7 @@ module XHTML
       cb_env_end2code()
     end
   end
-  
+
   def file(stylesheets=["ulmul2xhtml.css"],javascripts=[],name="",language="en")
     style_lines=""
     stylesheets.each{|s| style_lines << "  <link rel=\"stylesheet\" href=\"#{s}\" type=\"text/css\" />\n"}
