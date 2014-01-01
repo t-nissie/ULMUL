@@ -1,3 +1,8 @@
+2013-12-31 16:17  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: aasm_initial_state -> aasm.initial_state,
+	aasm_state -> aasm.state, aasm_event -> aasm.event
+
 2011-04-10 14:56  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
 
 	* lib/ulmul.rb (HTML#body, LaTeX#body): refs

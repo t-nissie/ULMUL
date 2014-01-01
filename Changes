@@ -1,6 +1,7 @@
 = Changes in each version
 == 0.5.2
  * Now, in Japanese, spaces are NOT required before and after "Env:foo".
+ * Preparation for aasm-4.0.0
 
 == 0.5.1
  * ulmul2mathjax, a new command, converts ulmul texts into MathJax documents.
