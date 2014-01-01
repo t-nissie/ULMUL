@@ -194,7 +194,7 @@ svn(1)コマンドを使って
 と匿名でcheckoutできます。
 
 == 著作権表示
-Copyright © 2008-2011 by Takeshi Nishimatsu
+Copyright © 2008-2014 by Takeshi Nishimatsu
 
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.

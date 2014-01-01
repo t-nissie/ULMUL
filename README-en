@@ -211,7 +211,7 @@ with svn(1) command:
  $ svn co svn://rubyforge.org/var/svn/ulmul/ulmul/trunk ulmul
 
 == Copying
-Copyright © 2008-2011 by Takeshi Nishimatsu
+Copyright © 2008-2014 by Takeshi Nishimatsu
 
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
