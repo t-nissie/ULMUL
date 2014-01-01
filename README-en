@@ -118,8 +118,8 @@ Output:
 Table environment is NOT IMPLEMENTED yet.
 Start a Table environment with "\Table:bar"
 and terminate it with "/Table:bar", where "bar" is a tag for the table.
-You can write a figure caption between them.
-You can refer the figure with "Table:bar" as Table:diamond.
+You can write a table caption between them.
+You can refer the table with "Table:bar" as Table:diamond.
 
 Input:
  \Table:diamond
@@ -134,8 +134,8 @@ Output:
 === Code
 Start a Code environment with "\Code:baz FILENAME"
 and terminate it with "/Code:baz", where "baz" is a tag for the code.
-You can write a figure caption between them.
-You can refer the figure with "Code:baz" as Code:hello.
+You can write a caption between them.
+You can refer the code with "Code:baz" as Code:hello.
 Code will be highlighted with google-code-prettify when
 -j https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js is given.
 
