@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2013-12-31 17:59:06 takeshi>
+# Time-stamp: <2014-01-01 16:37:55 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -68,8 +68,7 @@ end
 ["en", "ja"].each{|lang|
   desc "Create index.#{lang}.html"
   file "index.#{lang}.html" => ["bin/ulmul2html5", "README-#{lang}", "ulmul2html5.css", "lib/ulmul.rb"] do |t|
-    sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -s #{t.prerequisites[2]} -s #{t.prerequisites[3]} \
-      -j #{t.prerequisites[4]} -l #{lang} #{t.prerequisites[1]} | \
+    sh "ruby -I lib #{t.prerequisites[0]} -n 'Takeshi Nishimatsu' -s #{t.prerequisites[2]} -j https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js -l #{lang} #{t.prerequisites[1]} | \
       sed -e 's%</h1>%</h1><div class=\"navi\">[<a href=\"index.en.html\">English</a>/<a href=\"index.ja.html\">Japanese</a>]</div>%' > #{t.name}"
   end
 }
