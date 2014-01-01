@@ -1,7 +1,8 @@
 = ULMUL取扱説明書
 ULMULは独自の軽量マークアップ言語 (Ultra Lightweight MarkUp Language) です。
-コマンドulmul2html5でHTML5に、ulmul2latexでLaTeXに変換できます。
-文章中のTeXスタイルで書かれた数式をMathMLに変換できるのが特徴です。
+文章中のTeXスタイルで書かれた数式をMathMLかMathJaxに変換できるのが特徴です。
+コマンドulmul2html5でMathMLを使ったHTML5に、ulmul2mathjaxでMathJaxを使ったHTML5に変換します。
+ulmul2latexでLaTeXにも変換できます。
 Rubyで書かれています。ulmul.rbをライブラリとして利用することも可能です。
 
 ホームページ: http://ulmul.rubyforge.org/

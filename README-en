@@ -1,9 +1,8 @@
 = ULMUL (Ultra Lightweight MarkUp Language)
 "ULMUL" is an original Ultra Lightweight MarkUp Language.
-ULMUL texts can be converted into HTML5 with "ulmul2html5"
-command and into LaTeX with "ulmul2latex" command.
-TeX style equations are converted into MathML.
-ULMUL is written in Ruby.
+Using "ulmul2html5" or "ulmul2mathjax" commands, You can convert a
+ULMUL text with TeX style equations into HTML5 documents with
+MathML or MathJax, respectively. ULMUL is written in Ruby.
 You can also use ulmul.rb as a library.
 
 Homepage of ULMUL: http://ulmul.rubyforge.org/
