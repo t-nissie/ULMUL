@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2014-01-01 15:06:13 takeshi>
+# Time-stamp: <2014-01-05 10:55:36 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
                         'ulmul-slidy.css']
   s.author            = 'Takeshi Nishimatsu'
   s.email             = 't_nissie@yahoo.co.jp'
+  s.license           = 'GPLv3'
   s.rubyforge_project = 'ulmul'
   s.homepage          = 'http://ulmul.rubyforge.org/'
   s.test_files        = ['test/unit/ulmul_test.rb']
