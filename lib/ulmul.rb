@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2013-12-31 17:16:29 takeshi>
+# Time-stamp: <2014-07-24 22:58:26 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -194,7 +194,7 @@ class Ulmul
   end
 
   def cb_verbatim_add(filename=nil, lnumber=nil, line=nil)
-      @body << line[1..-1].gsub(/</,'&lt;').gsub(/>/,'&gt;')
+      @body << line[1..-1].gsub(/&/,'&amp;').gsub(/</,'&lt;').gsub(/>/,'&gt;')
   end
 
   def cb_verbatim_end(filename=nil, lnumber=nil, line=nil)
@@ -399,7 +399,7 @@ module HTML5
       }
     });
   </script>
-#{style_lines}#{javascript_lines}  <link rel=\"shortcut icon\" href=\"favicon.ico\" />
+#{style_lines}#{javascript_lines}  <link rel=\"icon\" href=\"favicon.ico\" />
 </head>
 <body onload=\"prettyPrint()\">
 #{body()}
@@ -443,7 +443,7 @@ module XHTML
   <title>#{@title}</title>
   <meta name=\"author\" content=\"#{name}\" />
   <meta name=\"copyright\" content=\"Copyright &#169; #{Date.today.year} #{name}\" />
-  #{style_lines}#{javascript_lines}  <link rel=\"shortcut icon\" href=\"favicon.ico\" />
+  #{style_lines}#{javascript_lines}  <link rel=\"icon\" href=\"favicon.ico\" />
 </head>
 <body onload=\"prettyPrint()\">
 #{body()}
