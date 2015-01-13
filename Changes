@@ -1,4 +1,7 @@
 = Changes in each version
+== 0.5.3
+ * For aasm-4.0.8, :on_transition is replaced by :after
+
 == 0.5.2
  * Now, in Japanese, spaces are NOT required before and after "Env:foo".
  * Preparation for aasm-4.0.0
