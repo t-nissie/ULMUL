@@ -1,9 +1,8 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2014-01-05 10:55:36 takeshi>
+# Time-stamp: <2015-01-13 22:49:36 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
-  s.autorequire       = 'lib/ulmul.rb'
   s.name              = 'ulmul'
 
   s.bindir            = 'bin'
@@ -28,16 +27,15 @@ Gem::Specification.new do |s|
   s.author            = 'Takeshi Nishimatsu'
   s.email             = 't_nissie@yahoo.co.jp'
   s.license           = 'GPLv3'
-  s.rubyforge_project = 'ulmul'
   s.homepage          = 'http://ulmul.rubyforge.org/'
   s.test_files        = ['test/unit/ulmul_test.rb']
 
   s.has_rdoc          = true
 # s.extra_rdoc_files  = %w(README)
 
-  s.add_dependency('math_ml', '>=0.14')
-  s.add_dependency('aasm',    '>=3.0.25')
-  s.add_dependency('exifr',   '>=1.1.3')
+  s.add_dependency('math_ml', '~> 0.14')
+  s.add_dependency('aasm',    '~> 4.0', '>= 4.0.8')
+  s.add_dependency('exifr',   '~> 1.2', '>= 1.2.0')
 
   s.description       = <<-EOF
      "ULMUL" is an original Ultra Lightweight MarkUp Language.
