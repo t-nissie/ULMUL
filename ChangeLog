@@ -1,3 +1,7 @@
+2015-01-13 22:04  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
+
+	* lib/ulmul.rb: for aasm-4.0.8, :on_transition -> :after
+
 2013-12-31 16:17  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
 
 	* lib/ulmul.rb: aasm_initial_state -> aasm.initial_state,
