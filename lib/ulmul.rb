@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2014-07-24 22:58:26 takeshi>
+# Time-stamp: <2015-01-13 18:41:00 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -104,77 +104,77 @@ class Ulmul
   end
 
   aasm.event :ev_asterisk do
-    transitions :from => :st_ground,    :to => :st_itemize,   :on_transition =>                    [:cb_itemize_begin, :cb_itemize_add_item]
-    transitions :from => :st_itemize,   :to => :st_itemize,   :on_transition =>                                       [:cb_itemize_add_item]
-    transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition => [:cb_verbatim_add]
-    transitions :from => :st_paragraph, :to => :st_itemize,   :on_transition => [:cb_paragraph_end, :cb_itemize_begin, :cb_itemize_add_item]
-    transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
-    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_continues]
+    transitions :from => :st_ground,    :to => :st_itemize,   :after =>                    [:cb_itemize_begin, :cb_itemize_add_item]
+    transitions :from => :st_itemize,   :to => :st_itemize,   :after =>                                       [:cb_itemize_add_item]
+    transitions :from => :st_verbatim,  :to => :st_verbatim,  :after => [:cb_verbatim_add]
+    transitions :from => :st_paragraph, :to => :st_itemize,   :after => [:cb_paragraph_end, :cb_itemize_begin, :cb_itemize_add_item]
+    transitions :from => :st_env,       :to => :st_env,       :after => [:cb_env_continues]
+    transitions :from => :st_equation,  :to => :st_equation,  :after => [:cb_equation_continues]
   end
 
   aasm.event :ev_offset do
-    transitions :from => :st_ground,    :to => :st_verbatim,  :on_transition =>                    [:cb_verbatim_begin, :cb_verbatim_add]
-    transitions :from => :st_itemize,   :to => :st_itemize,   :on_transition => [:cb_itemize_continue_item]
-    transitions :from => :st_verbatim,  :to => :st_verbatim,  :on_transition =>                                        [:cb_verbatim_add]
-    transitions :from => :st_paragraph, :to => :st_verbatim,  :on_transition => [:cb_paragraph_end, :cb_verbatim_begin, :cb_verbatim_add]
-    transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
-    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_continues]
+    transitions :from => :st_ground,    :to => :st_verbatim,  :after =>                    [:cb_verbatim_begin, :cb_verbatim_add]
+    transitions :from => :st_itemize,   :to => :st_itemize,   :after => [:cb_itemize_continue_item]
+    transitions :from => :st_verbatim,  :to => :st_verbatim,  :after =>                                        [:cb_verbatim_add]
+    transitions :from => :st_paragraph, :to => :st_verbatim,  :after => [:cb_paragraph_end, :cb_verbatim_begin, :cb_verbatim_add]
+    transitions :from => :st_env,       :to => :st_env,       :after => [:cb_env_continues]
+    transitions :from => :st_equation,  :to => :st_equation,  :after => [:cb_equation_continues]
   end
 
   aasm.event :ev_heading do
-    transitions :from => :st_ground,    :to => :st_ground,    :on_transition =>                    [:cb_heading]
-    transitions :from => :st_itemize,   :to => :st_ground,    :on_transition =>   [:cb_itemize_end, :cb_heading]
-    transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end, :cb_heading]
-    transitions :from => :st_paragraph, :to => :st_ground,    :on_transition => [:cb_paragraph_end, :cb_heading]
-    transitions :from => :st_env,       :to => :st_ground,    :on_transition => [:cb_env_in_env_error]
-    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_in_equation_error]
+    transitions :from => :st_ground,    :to => :st_ground,    :after =>                    [:cb_heading]
+    transitions :from => :st_itemize,   :to => :st_ground,    :after =>   [:cb_itemize_end, :cb_heading]
+    transitions :from => :st_verbatim,  :to => :st_ground,    :after =>  [:cb_verbatim_end, :cb_heading]
+    transitions :from => :st_paragraph, :to => :st_ground,    :after => [:cb_paragraph_end, :cb_heading]
+    transitions :from => :st_env,       :to => :st_ground,    :after => [:cb_env_in_env_error]
+    transitions :from => :st_equation,  :to => :st_equation,  :after => [:cb_equation_in_equation_error]
   end
 
   aasm.event :ev_empty do
     transitions :from => :st_ground,    :to => :st_ground
-    transitions :from => :st_itemize,   :to => :st_ground,    :on_transition =>   [:cb_itemize_end]
-    transitions :from => :st_verbatim,  :to => :st_ground,    :on_transition =>  [:cb_verbatim_end]
-    transitions :from => :st_paragraph, :to => :st_ground,    :on_transition => [:cb_paragraph_end]
+    transitions :from => :st_itemize,   :to => :st_ground,    :after =>   [:cb_itemize_end]
+    transitions :from => :st_verbatim,  :to => :st_ground,    :after =>  [:cb_verbatim_end]
+    transitions :from => :st_paragraph, :to => :st_ground,    :after => [:cb_paragraph_end]
     transitions :from => :st_env,       :to => :st_env
     transitions :from => :st_equation,  :to => :st_equation
   end
 
   aasm.event :ev_env_begin do
-    transitions :from => :st_ground,    :to => :st_env,       :on_transition =>                    [:cb_env_begin]
-    transitions :from => :st_itemize,   :to => :st_env,       :on_transition =>   [:cb_itemize_end, :cb_env_begin]
-    transitions :from => :st_verbatim,  :to => :st_env,       :on_transition =>  [:cb_verbatim_end, :cb_env_begin]
-    transitions :from => :st_paragraph, :to => :st_env,       :on_transition => [:cb_paragraph_end, :cb_env_begin]
-    transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_in_env_error]
-    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_in_equation_error]
+    transitions :from => :st_ground,    :to => :st_env,       :after =>                    [:cb_env_begin]
+    transitions :from => :st_itemize,   :to => :st_env,       :after =>   [:cb_itemize_end, :cb_env_begin]
+    transitions :from => :st_verbatim,  :to => :st_env,       :after =>  [:cb_verbatim_end, :cb_env_begin]
+    transitions :from => :st_paragraph, :to => :st_env,       :after => [:cb_paragraph_end, :cb_env_begin]
+    transitions :from => :st_env,       :to => :st_env,       :after => [:cb_env_in_env_error]
+    transitions :from => :st_equation,  :to => :st_equation,  :after => [:cb_equation_in_equation_error]
   end
 
   aasm.event :ev_env_end do
     transitions :from => [:st_ground, :st_itemize, :st_verbatim, :st_paragraph, :st_equation],
-                                        :to => :st_ground,    :on_transition => [:cb_env_not_in_env_error]
-    transitions :from => :st_env,       :to => :st_ground,    :on_transition => [:cb_env_end]
+                                        :to => :st_ground,    :after => [:cb_env_not_in_env_error]
+    transitions :from => :st_env,       :to => :st_ground,    :after => [:cb_env_end]
   end
 
   aasm.event :ev_equation_begin do
-    transitions :from => :st_ground,    :to => :st_equation,  :on_transition =>                    [:cb_paragraph_begin, :cb_equation_begin]
-    transitions :from => :st_itemize,   :to => :st_equation,  :on_transition =>   [:cb_itemize_end, :cb_paragraph_begin, :cb_equation_begin]
-    transitions :from => :st_verbatim,  :to => :st_equation,  :on_transition =>  [:cb_verbatim_end, :cb_paragraph_begin, :cb_equation_begin]
-    transitions :from => :st_paragraph, :to => :st_equation,  :on_transition =>                                         [:cb_equation_begin]
-    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_in_equation_error]
+    transitions :from => :st_ground,    :to => :st_equation,  :after =>                    [:cb_paragraph_begin, :cb_equation_begin]
+    transitions :from => :st_itemize,   :to => :st_equation,  :after =>   [:cb_itemize_end, :cb_paragraph_begin, :cb_equation_begin]
+    transitions :from => :st_verbatim,  :to => :st_equation,  :after =>  [:cb_verbatim_end, :cb_paragraph_begin, :cb_equation_begin]
+    transitions :from => :st_paragraph, :to => :st_equation,  :after =>                                         [:cb_equation_begin]
+    transitions :from => :st_equation,  :to => :st_equation,  :after => [:cb_equation_in_equation_error]
   end
 
   aasm.event :ev_equation_end do
     transitions :from => [:st_ground, :st_itemize, :st_verbatim, :st_paragraph, :st_env],
-                                        :to => :st_ground,    :on_transition => [:cb_equation_not_in_equation_error]
-    transitions :from => :st_equation,  :to => :st_paragraph, :on_transition => [:cb_equation_end]
+                                        :to => :st_ground,    :after => [:cb_equation_not_in_equation_error]
+    transitions :from => :st_equation,  :to => :st_paragraph, :after => [:cb_equation_end]
   end
 
   aasm.event :ev_normal do
-    transitions :from => :st_ground,    :to => :st_paragraph, :on_transition =>                   [:cb_paragraph_begin, :cb_paragraph_add]
-    transitions :from => :st_itemize,   :to => :st_paragraph, :on_transition =>  [:cb_itemize_end, :cb_paragraph_begin, :cb_paragraph_add]
-    transitions :from => :st_verbatim,  :to => :st_paragraph, :on_transition => [:cb_verbatim_end, :cb_paragraph_begin, :cb_paragraph_add]
-    transitions :from => :st_paragraph, :to => :st_paragraph, :on_transition =>                                        [:cb_paragraph_add]
-    transitions :from => :st_env,       :to => :st_env,       :on_transition => [:cb_env_continues]
-    transitions :from => :st_equation,  :to => :st_equation,  :on_transition => [:cb_equation_continues]
+    transitions :from => :st_ground,    :to => :st_paragraph, :after =>                   [:cb_paragraph_begin, :cb_paragraph_add]
+    transitions :from => :st_itemize,   :to => :st_paragraph, :after =>  [:cb_itemize_end, :cb_paragraph_begin, :cb_paragraph_add]
+    transitions :from => :st_verbatim,  :to => :st_paragraph, :after => [:cb_verbatim_end, :cb_paragraph_begin, :cb_paragraph_add]
+    transitions :from => :st_paragraph, :to => :st_paragraph, :after =>                                        [:cb_paragraph_add]
+    transitions :from => :st_env,       :to => :st_env,       :after => [:cb_env_continues]
+    transitions :from => :st_equation,  :to => :st_equation,  :after => [:cb_equation_continues]
   end
 
   def cb_paragraph_begin(filename=nil, lnumber=nil, line=nil)
