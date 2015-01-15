@@ -5,9 +5,11 @@ ULMUL text with TeX style equations into HTML5 documents with
 MathML or MathJax, respectively. ULMUL is written in Ruby.
 You can also use ulmul.rb as a library.
 
-Homepage of ULMUL: http://ulmul.rubyforge.org/
+Homepage of ULMUL: http://t-nissie.users.sourceforge.net/ULMUL/
 
-Download ULMUL from: http://rubygems.org/gems/ulmul or http://rubyforge.org/projects/ulmul
+Ruby Gem of ULMUL: http://rubygems.org/gems/ulmul
+
+Repository of ULMUL: https://github.com/t-nissie/ULMUL
 
 == Features
  * TeX style equations between two dollar marks ($) and between "\Eq:foo" and "/Eq:foo"
@@ -177,8 +179,8 @@ If you do not need the Table of Contents, specify 1.
    * Its source is http://loto.sourceforge.net/feram/README
  * http://loto.sourceforge.net/feram/doc/film.xhtml
    * It is a Slidy presentation made from http://loto.sourceforge.net/feram/doc/film.txt
- * http://ulmul.rubyforge.org/index.en.html
-   * Its source is http://ulmul.rubyforge.org/README-en (this document)
+ * http://t-nissie.users.sourceforge.net/ULMUL/index.en.html
+   * Its source is http://t-nissie.users.sourceforge.net/ULMUL/README-en (this document)
 
 === ulmul2xhtml is obsolete
 ulmul2xhtml will be removed from next version 0.6.x.
@@ -204,13 +206,12 @@ ulmul2latex is still under development. Sorry.
  * Citation.
 For more, see TODO file.
 
-== Subversion repository
-You can checkout the latest source tree of ULMUL anonymously from RubyForge
-with svn(1) command:
- $ svn co svn://rubyforge.org/var/svn/ulmul/ulmul/trunk ulmul
+== Repository in GitHub
+You can clone the source tree of ULMUL from GitHub with git(1) command:
+ $ git clone git@github.com:t-nissie/ULMUL.git ulmul
 
 == Copying
-Copyright © 2008-2014 by Takeshi Nishimatsu
+Copyright © 2008,2009,2010,2011,2012,2013,2014,2015 by Takeshi Nishimatsu
 
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
