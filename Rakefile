@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2014-01-01 16:37:55 takeshi>
+# Time-stamp: <2015-01-15 19:51:09 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -47,16 +47,16 @@ end
 #   end
 # end
 
-desc "Publish to RubyForge"
-task :rubyforge => ["index.en.html",
-                    "index.ja.html",
-                    "index.var",
-                    "ulmul2xhtml.css", "favicon.ico", "ruby.jpg"] do |t|
+desc "Publish to SourceForge"
+task :sourceforge => ["index.en.html",
+                      "index.ja.html",
+                      "index.var",
+                      "ulmul2xhtml.css", "favicon.ico", "ruby.jpg"] do |t|
   t.prerequisites.each do |f|
-    sh "scp #{f}          t-nissie@rubyforge.org:/var/www/gforge-projects/ulmul/"
+    sh "scp #{f}          web.sourceforge.net:/home/users/t/t-/t-nissie/userweb/htdocs/ULMUL/"
   end
-  sh   "scp index.en.html t-nissie@rubyforge.org:/var/www/gforge-projects/ulmul/index.html"
-  sh   "scp dot.htaccess  t-nissie@rubyforge.org:/var/www/gforge-projects/ulmul/.htaccess"
+  sh   "scp index.en.html web.sourceforge.net:/home/users/t/t-/t-nissie/userweb/htdocs/ULMUL/index.html"
+  sh   "scp dot.htaccess  web.sourceforge.net:/home/users/t/t-/t-nissie/userweb/htdocs/ULMUL/.htaccess"
 end
 
 desc "Create presentation.en.html from README-en"
