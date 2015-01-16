@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2015-01-13 22:49:36 takeshi>
+# Time-stamp: <2015-01-16 11:23:39 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.author            = 'Takeshi Nishimatsu'
   s.email             = 't_nissie@yahoo.co.jp'
   s.license           = 'GPLv3'
-  s.homepage          = 'http://ulmul.rubyforge.org/'
+  s.homepage          = 'http://t-nissie.users.sourceforge.net/ULMUL/'
   s.test_files        = ['test/unit/ulmul_test.rb']
 
   s.has_rdoc          = true
@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
      ULMUL is written in Ruby.
      "ulmul2mathjax" convert ULMUL texts into MathJax style HTML files.
      You can also use ulmul.rb as a library.
-     Visit its project homepage http://ulmul.rubyforge.org/ .
+     Visit its project homepage http://t-nissie.users.sourceforge.net/ULMUL/ .
      Please use ulmul-slidy.js and ulmul-slidy.css in the
      ulmul package for your presentations using Firefox.
      EOF
