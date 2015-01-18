@@ -1,6 +1,6 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2015-01-15 19:51:09 takeshi>
+# Time-stamp: <2015-01-18 18:16:14 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -51,7 +51,7 @@ desc "Publish to SourceForge"
 task :sourceforge => ["index.en.html",
                       "index.ja.html",
                       "index.var",
-                      "ulmul2xhtml.css", "favicon.ico", "ruby.jpg"] do |t|
+                      "ulmul2xhtml.css", "favicon.ico", "ruby.jpg", "hello.c"] do |t|
   t.prerequisites.each do |f|
     sh "scp #{f}          web.sourceforge.net:/home/users/t/t-/t-nissie/userweb/htdocs/ULMUL/"
   end
