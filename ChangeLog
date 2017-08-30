@@ -1,3 +1,7 @@
+2017-08-31 06:13  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
+
+	* README-en, README-ja, Rakefile: Update the URL of google-code-prettify
+
 2015-01-13 22:04  Takeshi Nishimatsu  <t_nissie@yahoo.co.jp>
 
 	* lib/ulmul.rb: for aasm-4.0.8, :on_transition -> :after

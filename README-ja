@@ -179,7 +179,7 @@ JavaScriptのファイル名を指定します。
 == ulmul2mathjaxの使用方法
 数式を MathJax http://www.mathjax.org/ で出力します。
  $ ulmul2mathjax --help
- $ ulmul2mathjax -s ulmul2html5.css -j https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js \
+ $ ulmul2mathjax -s ulmul2html5.css -j https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js \
    -j 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default' README-en > README-en-mathjax.html
 
 == ulmul2latexの使用方法
@@ -197,7 +197,7 @@ git(1)コマンドを使って
 と匿名でcloneできます。
 
 == 著作権表示
-Copyright © 2008,2009,2010,2011,2012,2013,2014,2015 by Takeshi Nishimatsu
+Copyright © 2008,2009,2010,2011,2012,2013,2014,2015,2017 by Takeshi Nishimatsu
 
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
