@@ -1,4 +1,13 @@
-/* slidy.css
+/* ulmul-slidy.css
+
+   Original slidy.css is modified by Takeshi NISHIMATSU
+   Time-stamp: <2017-09-01 06:09:59 takeshi>
+
+   References:
+    http://daily-expo.com/csslite/
+    Links in http://blog.webcreativepark.net/2007/02/28-232842.html
+
+   Original Copyright notice:
 
    Copyright (c) 2005-2010 W3C (MIT, ERCIM, Keio), All Rights Reserved.
    W3C liability, trademark, document use and software licensing
@@ -183,6 +192,26 @@ pre {
 li pre { margin-left: 0; }
 
 blockquote { font-style: italic }
+
+figure img { width:50%;
+             margin-left:auto;
+             margin-right:auto;
+             display: block;}
+
+figure figcaption { width:60%;
+                    margin-left:auto;
+                    margin-right:auto;}
+
+table {
+    border: blue 2px solid;
+    text-align: center;
+    margin: auto;}
+
+p.code.caption {
+    width: 80%;
+    margin: auto;
+    display: block;
+}
 
 img { background-color: transparent }
 
