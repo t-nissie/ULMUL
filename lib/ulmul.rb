@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2015-01-13 18:50:55 takeshi>
+# Time-stamp: <2017-09-01 06:15:03 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -403,8 +403,6 @@ module HTML5
 </head>
 <body onload=\"prettyPrint()\">
 #{body()}
-<hr />
-<address>Copyright &#169; #{Date.today.year} #{name}</address>
 </body>
 </html>
 "
