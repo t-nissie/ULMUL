@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2017-09-01 06:15:03 takeshi>
+# Time-stamp: <2017-09-17 06:45:57 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -263,19 +263,19 @@ class Ulmul
         line = "=end\n"
       end
       case line
-      when /^=begin/,/^#/ then    ev_ignore(nil, $FILENAME, lnumber, line)
-      when /^=end/        then   ev_heading(nil, $FILENAME, lnumber, line); break
-      when /^=+ /         then   ev_heading(nil, $FILENAME, lnumber, line)
-      when /^ +\*/        then  ev_asterisk(nil, $FILENAME, lnumber, line)
-      when /^$/           then     ev_empty(nil, $FILENAME, lnumber, line)
-      when /^\s+/         then    ev_offset(nil, $FILENAME, lnumber, line)
+      when /^=begin/,/^#/ then    ev_ignore($FILENAME, lnumber, line)
+      when /^=end/        then   ev_heading($FILENAME, lnumber, line); break
+      when /^=+ /         then   ev_heading($FILENAME, lnumber, line)
+      when /^ +\*/        then  ev_asterisk($FILENAME, lnumber, line)
+      when /^$/           then     ev_empty($FILENAME, lnumber, line)
+      when /^\s+/         then    ev_offset($FILENAME, lnumber, line)
       when /^\\(Fig|Table|Code):/
-                          then ev_env_begin(nil, $FILENAME, lnumber, line)
+                          then ev_env_begin($FILENAME, lnumber, line)
       when /^\/(Fig|Table|Code):/
-                          then   ev_env_end(nil, $FILENAME, lnumber, line)
-      when /^\\Eq:/  then ev_equation_begin(nil, $FILENAME, lnumber, line)
-      when /^\/Eq:/  then   ev_equation_end(nil, $FILENAME, lnumber, line)
-      else                        ev_normal(nil, $FILENAME, lnumber, line)
+                          then   ev_env_end($FILENAME, lnumber, line)
+      when /^\\Eq:/  then ev_equation_begin($FILENAME, lnumber, line)
+      when /^\/Eq:/  then   ev_equation_end($FILENAME, lnumber, line)
+      else                        ev_normal($FILENAME, lnumber, line)
       end
     end
   end
