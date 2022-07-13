@@ -1,5 +1,5 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2015-01-19 12:44:52 takeshi>
+# Time-stamp: <2022-07-13 06:53:14 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -34,8 +34,8 @@ Gem::Specification.new do |s|
 # s.extra_rdoc_files  = %w(README)
 
   s.add_dependency('math_ml', '~> 0.14')
-  s.add_dependency('aasm',    '~> 4.0', '>= 4.0.8')
-  s.add_dependency('exifr',   '~> 1.2', '>= 1.2.0')
+  s.add_dependency('aasm',    '~> 5.2', '>= 5.2.0')
+  s.add_dependency('exifr',   '~> 1.3', '>= 1.3.9')
 
   s.description       = <<-EOF
      ULMUL is an original Ultra Lightweight MarkUp Language.
