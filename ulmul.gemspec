@@ -1,5 +1,4 @@
 # ulmul.gemspec -*-ruby-*-
-# Time-stamp: <2022-07-13 06:53:14 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 Gem::Specification.new do |s|
@@ -30,7 +29,6 @@ Gem::Specification.new do |s|
   s.homepage          = 'http://t-nissie.users.sourceforge.net/ULMUL/'
   s.test_files        = ['test/unit/ulmul_test.rb']
 
-  s.has_rdoc          = true
 # s.extra_rdoc_files  = %w(README)
 
   s.add_dependency('math_ml', '~> 0.14')
