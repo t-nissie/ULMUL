@@ -6,7 +6,6 @@ Gem::Specification.new do |s|
 
   s.bindir            = 'bin'
   s.executables       = ['ulmul2html5', 'ulmul2xhtml', 'ulmul2latex', 'ulmul2mathjax']
-  s.default_executable=  'ulmul2html5'
 
   s.summary           = 'ULMUL is an Ultra Lightweight Mark-Up Language'
   s.files             = ['lib/ulmul.rb', 'test/unit/ulmul_test.rb',
