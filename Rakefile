@@ -1,6 +1,5 @@
 #! /usr/bin/env rake
 # -*-Ruby-*-
-# Time-stamp: <2017-08-31 06:08:40 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 $LOAD_PATH.unshift('lib')
@@ -35,6 +34,7 @@ Rake::TestTask.new do |t|
   t.libs << 'lib' << 'test'
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
+  t.warning = false
 end
 
 # Rake::RDocTask.new do |rdoc|
