@@ -182,9 +182,6 @@ If you do not need the Table of Contents, specify 1.
  * http://t-nissie.users.sourceforge.net/ULMUL/index.en.html
    * Its source is http://t-nissie.users.sourceforge.net/ULMUL/README-en (this document)
 
-=== ulmul2xhtml is obsolete
-ulmul2xhtml will be removed from next version 0.6.x.
-
 == Usage of ulmul2mathjax
 It uses MathJax http://www.mathjax.org/ to show equations.
  $ ulmul2mathjax --help
@@ -208,10 +205,10 @@ For more, see TODO file.
 
 == Repository in GitHub
 You can clone the source tree of ULMUL from GitHub with git(1) command:
- $ git clone git@github.com:t-nissie/ULMUL.git ulmul
+ $ git clone https://github.com/t-nissie/ULMUL.git ulmul
 
 == Copying
-Copyright © 2008,2009,2010,2011,2012,2013,2014,2015,2017,2022 by Takeshi Nishimatsu
+Copyright © 2008,2009,2010,2011,2012,2013,2014,2015,2017,2022,2024 by Takeshi Nishimatsu
 
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.
