@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.license           = 'GPLv3'
   s.homepage          = 'http://t-nissie.users.sourceforge.net/ULMUL/'
   s.test_files        = ['test/unit/ulmul_test.rb']
+  s.required_ruby_version = '>= 3.2.0'
 
 # s.extra_rdoc_files  = %w(README)
 
