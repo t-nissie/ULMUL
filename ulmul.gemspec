@@ -30,9 +30,9 @@ Gem::Specification.new do |s|
 
 # s.extra_rdoc_files  = %w(README)
 
-  s.add_dependency('math_ml', '~> 0.14')
-  s.add_dependency('aasm',    '~> 5.2', '>= 5.2.0')
-  s.add_dependency('exifr',   '~> 1.3', '>= 1.3.9')
+  s.add_dependency('math_ml', "~> 1.0", '>= 1.0.0')
+  s.add_dependency('aasm',    "~> 5.5", '>= 5.5.0')
+  s.add_dependency('exifr',   "~> 1.4", '>= 1.4.0')
 
   s.description       = <<-EOF
      ULMUL is an original Ultra Lightweight MarkUp Language.
