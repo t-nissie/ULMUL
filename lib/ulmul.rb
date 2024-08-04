@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # ulmul.rb
-# Time-stamp: <2022-07-13 07:03:30 takeshi>
 # Author: Takeshi Nishimatsu
 ##
 require "rubygems"
@@ -351,9 +350,12 @@ module HTML
     @body << "<p id=\"#{@env_label}\" class=\"code caption\">\n"
     @body << "  Code #{@codes.length}: " << @subs_rules.call(@env_caption) << "(download: <a href=\"#{@env_file}\">#{File.basename(@env_file)}</a>)" << "</p>\n"
     @body << "<pre class=\"prettyprint\">\n"
-    f = open(@env_file)
-    @body << f.read.gsub(/&/,'&amp;').gsub(/</,'&lt;').gsub(/>/,'&gt;')
-    f.close
+    begin
+      open(@env_file){|f| @body << f.read.gsub(/&/,'&amp;').gsub(/</,'&lt;').gsub(/>/,'&gt;')}
+    rescue Errno::ENOENT => ex
+      STDERR << ex << "\n"
+      exit 1
+    end
     @body << "</pre>\n"
   end
 
@@ -477,8 +479,13 @@ module LaTeX
   def cb_env_end2()
     case @env_label
     when /^Fig:/
-      width  = EXIFR::JPEG.new(@env_file).width
-      height = EXIFR::JPEG.new(@env_file).height
+      begin
+        width  = EXIFR::JPEG.new(@env_file).width
+        height = EXIFR::JPEG.new(@env_file).height
+      rescue Errno::ENOENT => ex
+        STDERR << ex << "\n"
+        exit 1
+      end
       @body << "\\begin{figure}\n" << "  \\center\n  \\includegraphics[width=5cm,bb=0 0 #{width} #{height}]{#{@env_file}}\n"
       @body << '  \caption{' << @subs_rules.call(@env_caption).strip << "}\n"
       @body << "  \\label{#{@env_label}}\n" << "\\end{figure}\n"
@@ -491,9 +498,12 @@ module LaTeX
       @body << "\\end{table}\n"
     when /^Code:/
       @body << "\\begin{lstlisting}[caption={#{@subs_rules.call(@env_caption).strip}},label=#{@env_label}]\n"
-      f = open(@env_file)
-      @body << f.read
-      f.close
+      begin
+        open(@env_file){|f| @body << f.read}
+      rescue Errno::ENOENT => ex
+        STDERR << ex << "\n"
+        exit 1
+      end
       @body << "\\end{lstlisting}\n"
     end
   end
