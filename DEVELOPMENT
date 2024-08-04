@@ -1,0 +1,20 @@
+= How to develop ULMUL
+A memo.
+== release
+How to release:
+ rake gem
+ gem push ulmul-0.7.0.gem
+
+== test
+How to test:
+ rake
+
+== tag
+Tag each version.
+ git tag -a 'v0.7.0' -m 'release a gem of version 0.7.0'
+ git push --tags
+ git l
+
+#local variables:
+#  compile-command: "ulmul2html5 -n 'Takeshi Nishimatsu' -s ulmul2html5.css DEVELOPMENT > DEVELOPMENT.html"
+#End:
