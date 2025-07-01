@@ -53,7 +53,10 @@ module Itemize
                 when     /^       (\S.*)/ then 3
                 when   /^         (\S.*)/ then 4
                 when /^           (\S.*)/ then 5
-                else raise 'Illegal astarisk line for itemize'
+                else
+                  STDERR << filename << ":" << lnumber <<
+                      ": Illegal astarisk line in itemize (There may be an illegal indent.): \"#{line}\"\n"
+                  raise 'Illegal astarisk line in itemize'
                 end
     str = @subs_rules.call(Regexp.last_match[1])
     (@level_of_state-1).downto(new_level){|i| @body << ITEM_TERMINATOR << "\n" << "    "*i << ITEMIZE_TERMINATOR}

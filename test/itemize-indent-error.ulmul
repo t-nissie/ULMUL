@@ -1,0 +1,22 @@
+= Itemize indent error
+There is a illegal indent
+
+ * TeX style equations between two dollar marks ($)
+   will be converted into MathML.
+ * First
+   * Second
+     * Third
+       * Fourth
+       * more for Fourth
+     second continue
+     * More for third
+ * More for first
+ * Here is an
+    illegal indent.
+ * TeX style equations between two dollar marks ($)
+   will be converted into MathML.
+
+# Local variables:
+#   mode: rd
+#   compile-command: "cd .. ; rake illegalLineInItemize"
+# End:
