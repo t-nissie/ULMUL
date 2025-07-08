@@ -16,6 +16,9 @@ Ruby Gem of ULMUL: http://rubygems.org/gems/ulmul
 
 Repository of ULMUL: https://github.com/t-nissie/ULMUL
 
+ulmul is under continuous integration (CI) at GitHub Actions:
+[![CI](https://github.com/t-nissie/ulmul/workflows/CI/badge.svg)](https://github.com/t-nissie/ulmul/actions)
+
 <!--
 Local variables:
   compile-command: "gfm2html.rb -r -s ulmul2html5.css -n 'Takeshi Nishimatsu' README.md > README.html"
