@@ -24,10 +24,7 @@ jobs:
         with:
           ruby-version: '3.2' # Not needed with a .ruby-version, .tool-versions or mise.toml
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - run: touch Gemfile
       - run: bundle install
-      - run: bundle exec rake
-      - run: sudo gem install aasm exifr math_ml concurrent-ruby eim_xml
 
       - name: Rake test
-        run: rake test
+        run: bundle exec rake test
