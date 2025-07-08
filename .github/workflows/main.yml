@@ -25,7 +25,7 @@ jobs:
           ruby-version: '3.4' # Not needed with a .ruby-version file
       - run: bundle install
       - run: bundle exec rake
-        run: sudo gem install aasm exifr math_ml concurrent-ruby eim_xml
+      - run: sudo gem install aasm exifr math_ml concurrent-ruby eim_xml
 
       - name: Rake test
         run: rake test
