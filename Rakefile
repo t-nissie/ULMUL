@@ -29,7 +29,8 @@ end
 task :default => [ :test ]
 
 desc "Run the unit and functional tests"
-task :test => [ :illegalLineInItemize ]
+task :test => [ :illegallyIndentedAstariskLineInItemize,
+                :illegallyIndentedLineInItemize ]
 Rake::TestTask.new do |t|
   t.libs << 'lib' << 'test'
   t.pattern = 'test/**/*_test.rb'
@@ -80,9 +81,16 @@ file "README-en.tex" => ["bin/ulmul2latex", "README-en", "lib/ulmul.rb", "Rakefi
       -e 's/t_nissie/t\\\\_nissie/' -e 's/\"\\\\Eq/\"$\\\\backslash$Eq/' -e 's/\"\\\\Fig/\"$\\\\backslash$Fig/' -e 's/\"\\\\Table/\"$\\\\backslash$Table/' -e 's/\"\\\\Code/\"$\\\\backslash$Code/' > #{t.name}"
 end
 
-desc "Illegal astarisk line in itemize"
-task :illegalLineInItemize =>
+desc "Illegally indented astarisk line in itemize"
+task :illegallyIndentedAstariskLineInItemize =>
+     ["bin/ulmul2html5", "test/itemize-astarisk-error.ulmul", "lib/ulmul.rb", "Rakefile"] do |t|
+  sh "ruby -I lib #{t.prerequisites[0]} #{t.prerequisites[1]} 2>&1 |\
+      grep --color '#{t.prerequisites[1]}:9: Illegally indented astarisk line in itemize:'"
+end
+
+desc "Illegally indented line in itemize"
+task :illegallyIndentedLineInItemize =>
      ["bin/ulmul2html5", "test/itemize-indent-error.ulmul", "lib/ulmul.rb", "Rakefile"] do |t|
   sh "ruby -I lib #{t.prerequisites[0]} #{t.prerequisites[1]} 2>&1 |\
-      grep '#{t.prerequisites[1]}:15: Illegal astarisk line in itemize'"
+      grep --color '#{t.prerequisites[1]}:15: Illegally indented line in itemize:'"
 end

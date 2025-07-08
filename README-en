@@ -44,6 +44,7 @@ Starting with "= ", "== ", "=== ", "==== ", "===== ", and "====== ".
 "= " will be used for the title.
 ==== asterisk
 Lines starting with asterisks become itemizing list.
+Indent lines by two characters.
 For example,
  # Nesting is allowed up to 4th--5th level.
   * First

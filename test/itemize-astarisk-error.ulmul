@@ -6,13 +6,13 @@ There is a illegal indent
  * First
    * Second
      * Third
-       * Fourth
+      * Illegally indented line with an asterisk is here!
        * more for Fourth
      second continue
      * More for third
  * More for first
- * Here is an
-    illegal indent!!!
+ * Here is a
+   legal indent!!!
  * TeX style equations between two dollar marks ($)
    will be converted into MathML.
 
