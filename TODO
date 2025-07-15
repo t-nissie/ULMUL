@@ -4,7 +4,9 @@
 
 == Formats
  * HTML5 (done)
+ * HTML with MathJax
  * LaTeX (done)
+ * GFM
  * EPUB
  * CASIO Electric Dictionary
  * Evernote export format (enex)
