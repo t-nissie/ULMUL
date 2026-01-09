@@ -1,4 +1,8 @@
 = Changes in each version
+== 0.8.0
+ * Now ulmul2html5 can read GFM tables in files and write HTML tables.
+
+= Changes in each version
 == 0.7.1
  * Report illegal indent errors in itemize
 
