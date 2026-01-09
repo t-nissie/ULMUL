@@ -121,7 +121,21 @@ Mass $m$ can be converted into energy $E$ as
 /Fig:ruby
 
 === 表の挿入方法
-Table環境はまだインプリメントされていません。
+表Tableは外部に例えばbenchmark.tableを用意してTable:mercaribenchmarkのように挿入できます。
+benchmark.tableはGFMと同じ形式で書いてください。
+外部に置くのは表の自動生成を想定しているためです。
+
+入力:
+ \Table:mercaribenchmark benchmark.table
+   Benchmark results of a Ruby script mercari.rb and a Crystal code mercari.cr.
+   For more details, see the gist page of https://gist.github.com/t-nissie/22a4a9525d423208c7f784ce507d0bc5
+ /Table:mercaribenchmark
+
+出力:
+\Table:mercaribenchmark benchmark.table
+  Benchmark results of a Ruby script mercari.rb and a Crystal code mercari.cr.
+  For more details, see the gist page of https://gist.github.com/t-nissie/22a4a9525d423208c7f784ce507d0bc5
+/Table:mercaribenchmark
 
 === コードの挿入方法
 「コード環境」は "\Code:baz FILENAME" で始めて "/Code:baz" で閉じてください。
@@ -190,7 +204,7 @@ git(1)コマンドを使って
 と匿名でcloneできます。
 
 == 著作権表示
-Copyright © 2008,2009,2010,2011,2012,2013,2014,2015,2017,2022,2024,2025 by Takeshi Nishimatsu
+Copyright © 2008,2009,2010,2011,2012,2013,2014,2015,2017,2022,2024,2025,2026 by Takeshi Nishimatsu
 
 ulmul.rb is distributed in the hope that
 it will be useful, but WITHOUT ANY WARRANTY.

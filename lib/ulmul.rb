@@ -7,6 +7,8 @@ require "rubygems"
 require "date"
 require "math_ml/string"
 require "aasm"
+require "kramdown"
+require "kramdown-parser-gfm"
 
 # For m17n of Ruby 1.9.x. Thanks, Masayoshi Takahashi-san [ruby-list:47159].
 if defined?(Encoding) && Encoding.respond_to?("default_external")
@@ -88,7 +90,7 @@ end
 class Ulmul
   include AASM
   include Itemize
-  VERSION = '0.7.1'
+  VERSION = '0.8.0'
 
   aasm.initial_state :st_ground
 
@@ -343,13 +345,17 @@ module HTML
   end
 
   def cb_env_end2table()
-      @body << "<table  id=\"#{@env_label}\">\n"
-      @body << "  <caption>\n"
-      @body << "  Table #{@tables.length}: " << @subs_rules.call(@env_caption)
-      @body << "  </caption>\n"
-      @body << "  <thead><tr><th>       TABLE           </th></tr></thead>\n"
-      @body << "  <tbody><tr><td>Not yet implemented</td></tr></tbody>\n"
-      @body << '</table>' << "\n"
+    begin
+      @body << Kramdown::Document.new(File.read(@env_file), input: 'GFM', hard_wrap: false).to_html.sub(
+          "<table>", "<table   id=\"#{@env_label}\">\n" +
+                     "  <tablecaption>\n" +
+                     "    Table #{@tables.length}: " +
+                     @subs_rules.call(@env_caption) +
+                     "  </tablecaption>")
+    rescue Errno::ENOENT => ex
+      STDERR << ex << "\n"
+      exit 1
+    end
   end
 
   def cb_env_end2code()

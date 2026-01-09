@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
   s.add_dependency('math_ml', "~> 1.0", '>= 1.0.0')
   s.add_dependency('aasm',    "~> 5.5", '>= 5.5.0')
   s.add_dependency('exifr',   "~> 1.4", '>= 1.4.0')
+  s.add_dependency('kramdown-parser-gfm',   "~> 1.1", '>= 1.1.0')
 
   s.description       = <<-EOF
      ULMUL is an original Ultra Lightweight MarkUp Language.

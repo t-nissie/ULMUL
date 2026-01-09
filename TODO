@@ -35,6 +35,9 @@
 == CSS
  * more pretty style
 
+== Error report
+ * report filename and linenumber when we rescue Errno::ENOENT in cb_env_end2code() and cb_env_end2table().
+
 == Test
  * Unit test
  * Error messages
