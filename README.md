@@ -15,7 +15,7 @@ Ruby Gem of ULMUL: [![Gem Version](https://badge.fury.io/rb/ulmul.svg)](https://
 Repository of ULMUL: https://github.com/t-nissie/ULMUL
 
 Documents of ULMUL, index.ja.html and index.en.html,
-will be installed ...SOMEWHERE/LIKE.../lib/ruby/gems/4.0.0/gems/ulmul-0.8.0/.
+will be installed ...SOMEWHERE.../lib/ruby/gems/4.0.0/gems/ulmul-0.8.1/.
 
 ulmul is under continuous integration (CI) at GitHub Actions:
 [![CI](https://github.com/t-nissie/ulmul/workflows/CI/badge.svg)](https://github.com/t-nissie/ulmul/actions)
