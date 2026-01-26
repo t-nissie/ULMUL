@@ -16,9 +16,6 @@
  * ordered list
  * definition list
 
-== Tables
- * Implementation
-
 == Figures
  * Not only JPEG
    HTML:  SVG, PNG, JPEG, GIF, ...
@@ -40,7 +37,6 @@
 
 == Test
  * Unit test
- * Error messages
 
 == LaTeX
  * escape "_" if it is not in an equation
@@ -53,3 +49,5 @@
  * jpeg file -> bb for \includegraphics
  * syntax highlighting with google-code-prettify http://code.google.com/p/google-code-prettify/
  * Now, "~" in equations is treated in math_ml properly. 
+ * Implementation of table using kramdown-parser-gfm
+
