@@ -1,4 +1,7 @@
 = Changes in each version
+== 0.8.1
+ * All equations have numberings.
+
 == 0.8.0
  * Now ulmul2html5 can read GFM tables in files and write HTML tables.
 
