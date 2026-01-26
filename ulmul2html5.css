@@ -1,6 +1,5 @@
 /* -*-CSS-*-
  * style.css for index.??.html of ulmul
- * Time-stamp: <2026-01-09 19:28:07 takeshi>
  * Author: Takeshi NISHIMATSU
  */
 body
@@ -90,6 +89,11 @@ tablecaption{
 table {
     text-align: center;
     margin: auto;
+}
+
+
+.eqno {
+    margin-left: 2.0rem;
 }
 
 div.navi { text-align: right;

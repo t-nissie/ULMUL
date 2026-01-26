@@ -90,7 +90,7 @@ end
 class Ulmul
   include AASM
   include Itemize
-  VERSION = '0.8.0'
+  VERSION = '0.8.1'
 
   aasm.initial_state :st_ground
 
@@ -373,7 +373,9 @@ module HTML
 
   def cb_equation_end2()
     if $0 == __FILE__ || /ulmul2(html5|xhtml)$/ =~ $0
-      @body << @equation_contents.to_mathml('block').to_s.sub(/<math /,"<math id=\"#{@equation_label}\" ") << "\n"
+      @body << @equation_contents.to_mathml('block').to_s.
+                 sub(/<math /,"<math id=\"#{@equation_label}\" ").
+                 sub(/<\/math>/, "<ms class=\"eqno\">(#{@equations.length})</ms></math>") << "\n"
     elsif /ulmul2mathjax$/ =~ $0
       @body << "<div id=\"#{@equation_label}\">\n\\begin{equation}\n" << @equation_contents << "  \\tag{#{@equations.length}}\n" << "\\end{equation}\n</div>\n"
     end
