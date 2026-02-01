@@ -19,7 +19,7 @@ jobs:
       # Ruby をセットアップ
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.2"   # 必要に応じて変更
+          ruby-version: "3.4"   # 必要に応じて変更
 
       # 依存関係インストール、HTMLファイルを作成、出力をdist/にまとめる
       - run: |
