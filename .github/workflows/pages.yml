@@ -21,17 +21,18 @@ jobs:
         with:
           ruby-version: "3.2"   # 必要に応じて変更
 
-      # 依存関係インストール（ULMUL は rake が必要）
+      # 依存関係インストール、HTMLファイルを作成、出力をdist/にまとめる
       - run: |
           gem install rake aasm exifr kramdown-parser-gfm math_ml
           rake index.ja.html
           rake index.en.html
+          mkdir dist
+          mv index.ja.html index.en.html dist/
 
       # Pages 用 artifact をアップロード
       - uses: actions/upload-pages-artifact@v3
-        with: |
-          path: ./index.ja.html
-          path: ./index.en.html
+        with:
+          path: dist
 
   deploy:
     needs: build
