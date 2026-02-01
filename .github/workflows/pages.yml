@@ -27,10 +27,10 @@ jobs:
           rake index.ja.html
           rake index.en.html
           mkdir dist
-          mv index.ja.html index.en.html index.var dist/
+          cp index.en.html index.ja.html dist/
           cp index.en.html dist/index.html
           cp dot.htaccess  dist/.htaccess
-          cp ruby.jpg hello.c favicon.ico ulmul2xhtml.css dist/
+          cp ruby.jpg hello.c favicon.ico ulmul2xhtml.css index.var dist/
 
       # Pages 用 artifact をアップロード
       - uses: actions/upload-pages-artifact@v3
