@@ -1,0 +1,45 @@
+name: Deploy ULMUL to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Ruby をセットアップ
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"   # 必要に応じて変更
+
+      # 依存関係インストール（ULMUL は rake が必要）
+      - run: |
+          gem install rake aasm exifr kramdown-parser-gfm math_ml
+          rake index.ja.html
+          rake index.en.html
+
+      # Pages 用 artifact をアップロード
+      - uses: actions/upload-pages-artifact@v3
+        with: |
+          path: ./index.ja.html
+          path: ./index.en.html
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
