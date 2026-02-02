@@ -5,7 +5,7 @@ ULMUL text with TeX style equations into HTML5 documents with
 MathML or MathJax, respectively. ULMUL is written in Ruby.
 You can also use ulmul.rb as a library.
 
-Homepage of ULMUL: https://t-nissie.users.sourceforge.net/ULMUL/
+Homepage of ULMUL: https://t-nissie.github.io/ULMUL/
 
 Ruby Gem: https://rubygems.org/gems/ulmul
 
@@ -227,7 +227,7 @@ their licenses at https://www.w3.org/Consortium/Legal/copyright-documents
 and https://www.w3.org/Consortium/Legal/copyright-software .
 
 == Author of ULMUL
-Takeshi Nishimatsu (t_nissie{at}yahoo.co.jp) https://t-nissie.users.sourceforge.net/
+Takeshi Nishimatsu (t_nissie{at}yahoo.co.jp) https://t-nissie.github.io/
 
 # Local variables:
 #   mode: rd

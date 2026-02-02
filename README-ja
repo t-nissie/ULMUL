@@ -5,7 +5,7 @@ ULMULは独自の軽量マークアップ言語 (Ultra Lightweight MarkUp Langua
 ulmul2latexでLaTeXにも変換できます。
 Rubyで書かれています。ulmul.rbをライブラリとして利用することも可能です。
 
-ホームページ: https://t-nissie.users.sourceforge.net/ULMUL/
+ホームページ: https://t-nissie.github.io/ULMUL/
 
 Ruby Gem: https://rubygems.org/gems/ulmul
 
@@ -221,7 +221,7 @@ their licenses at https://www.w3.org/Consortium/Legal/copyright-documents
 and https://www.w3.org/Consortium/Legal/copyright-software .
 
 == 作者
-西松タケシ (t_nissie{at}yahoo.co.jp) https://t-nissie.users.sourceforge.net/
+西松タケシ (t_nissie{at}yahoo.co.jp) https://t-nissie.github.io/
 
 # Local variables:
 #   mode: rd

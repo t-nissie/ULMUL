@@ -10,12 +10,14 @@ You can also generate
 [Slidy](http://www.w3.org/Talks/Tools/Slidy2/ "HTML Slidy") presentations.
 Its library `ulmul.rb` is written in Ruby.
 
+Homepage: https://t-nissie.github.io/ULMUL/
+
 Ruby Gem of ULMUL: [![Gem Version](https://badge.fury.io/rb/ulmul.svg)](https://rubygems.org/gems/ulmul)
 
 Repository of ULMUL: https://github.com/t-nissie/ULMUL
 
 Documents of ULMUL, index.ja.html and index.en.html,
-will be installed ...SOMEWHERE.../lib/ruby/gems/4.0.0/gems/ulmul-0.8.1/.
+will be installed into ...SOMEWHERE.../lib/ruby/gems/4.0.0/gems/ulmul-0.8.1/.
 
 ulmul is under continuous integration (CI) at GitHub Actions:
 [![CI](https://github.com/t-nissie/ulmul/workflows/CI/badge.svg)](https://github.com/t-nissie/ulmul/actions)

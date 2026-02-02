@@ -15,6 +15,11 @@ Tag each version.
  git push --tags
  git l
 
+== Deploy ULMUL to GitHub Pages
+* Add .github/workflows/pages.yml
+* Set Settings -> Pages -> Build and deployment -> Source to "GitHub Actions"
+* Go to https://github.com/t-nissie/ULMUL/actions/workflows/pages.yml and click [Run workflow].
+
 #local variables:
 #  compile-command: "ulmul2html5 -n 'Takeshi Nishimatsu' -s ulmul2html5.css DEVELOPMENT > DEVELOPMENT.html"
 #End:
