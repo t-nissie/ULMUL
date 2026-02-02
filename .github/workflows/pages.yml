@@ -22,15 +22,12 @@ jobs:
           ruby-version: "3.4"   # 必要に応じて変更
 
       # 依存関係インストール、HTMLファイルを作成、出力をdist/にまとめる
+      # GitHub Pages は Apache ではなく Jekyll + Nginx 系の静的ホスティング
       - run: |
           gem install rake aasm exifr kramdown-parser-gfm math_ml
-          rake index.ja.html
-          rake index.en.html
+          rake index.ja.html index.en.html
           mkdir dist
-          cp index.en.html index.ja.html dist/
-          cp index.en.html dist/index.html
-          cp dot.htaccess  dist/.htaccess
-          cp ruby.jpg hello.c favicon.ico ulmul2html5.css index.var dist/
+          cp index.html index.en.html index.ja.html ruby.jpg hello.c favicon.ico ulmul2html5.css dist/
 
       # Pages 用 artifact をアップロード
       - uses: actions/upload-pages-artifact@v3
