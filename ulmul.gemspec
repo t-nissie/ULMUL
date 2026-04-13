@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.author            = 'Takeshi Nishimatsu'
   s.email             = 't_nissie@yahoo.co.jp'
   s.license           = 'GPL-3.0-only'
-  s.homepage          = 'http://t-nissie.users.sourceforge.net/ULMUL/'
+  s.homepage          = 'https://t-nissie.github.io/ULMUL/'
   s.test_files        = ['test/unit/ulmul_test.rb']
   s.required_ruby_version = '>= 3.2.0'
 
