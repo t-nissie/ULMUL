@@ -89,6 +89,7 @@ tablecaption{
 table {
     text-align: center;
     margin: auto;
+    margin-bottom: 20px;
 }
 
 

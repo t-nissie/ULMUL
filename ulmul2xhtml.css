@@ -92,6 +92,7 @@ table {
     border: blue 2px solid;
     text-align: center;
     margin: auto;
+    margin-bottom: 20px;
 }
 
 .eqno {
